@@ -238,9 +238,9 @@ namespace MVC.Models
         public int? ParentID { get; set; }
     }
 
-    public partial class DatabaseDetailsContext : DbContext
+    public partial class ApplicationContext : DbContext
     {
-        public DatabaseDetailsContext() : base("name=DatabaseDetailsContext") { }
+        public ApplicationContext() : base("name=DatabaseDetailsContext") { }
 
         public virtual DbSet<Comment> Comments { get; set; }
         public virtual DbSet<Order> Orders { get; set; }

@@ -18,7 +18,7 @@ namespace MVC.Areas.Admin.Controllers
     [Authorize(Roles ="Admin")]
     public class UsersController : ApplicationController, IAdminController<User>
     {
-        private DatabaseDetailsContext db = new DatabaseDetailsContext();
+        private ApplicationContext db = new ApplicationContext();
 
         // GET: Users
         public ActionResult Index(string searchString, int page = 1, int sizePage = 10)

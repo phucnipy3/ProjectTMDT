@@ -11,7 +11,7 @@ namespace MVC.Controllers
     public class LoginController : ApplicationController
     {
         // GET: Login
-        private DatabaseDetailsContext db = new DatabaseDetailsContext();
+        private ApplicationContext db = new ApplicationContext();
         [HttpPost]
         public ActionResult Login(LoginViewModel model)
         {

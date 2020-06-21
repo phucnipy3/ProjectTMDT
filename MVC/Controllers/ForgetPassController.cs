@@ -11,7 +11,7 @@ namespace MVC.Controllers
 {
     public class ForgetPassController : ApplicationController
     {
-        private DatabaseDetailsContext db = new DatabaseDetailsContext();
+        private ApplicationContext db = new ApplicationContext();
         // GET: ForgetPass
         [HttpPost]
         public ActionResult ForgetPass(ForgetPassViewModel model)

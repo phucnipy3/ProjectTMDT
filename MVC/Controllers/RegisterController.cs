@@ -9,7 +9,7 @@ namespace MVC.Controllers
 {
     public class RegisterController : ApplicationController
     {
-        private DatabaseDetailsContext db = new DatabaseDetailsContext();
+        private ApplicationContext db = new ApplicationContext();
         // GET: Register
         [HttpPost]
         public ActionResult Register(RegisterViewModel model)
