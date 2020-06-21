@@ -1,0 +1,218 @@
+﻿@model MVC.Models.ShoppingCart
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+    <div class="modal fade" id="modalOrderSuccess" tabindex="-1" role="dialog" aria-labelledby="phucni" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Thông báo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-auto mx-auto">
+                            <p class="text-center">
+                                <h5 id="TextSuccess">Bạn đã đặt hàng thành công!</h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto mx-auto">
+                            <a data-dismiss="modal" class="btn btn-primary ">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@if (Model.Count == 0)
+{
+    <h2 class="m-5"> Không có sản phẩm nào trong giỏ hàng!</h2>
+}
+else
+{
+        <h2 class="m-5">Giỏ hàng của bạn</h2>
+        <div class="mx-5">
+
+            <div class="cart table-responsive-lg">
+                <form action="/Cart/UpdateCartQuantity" method="post" id="formCart">
+
+                    <table class="table">
+
+                        <thead class="bg-info text-white">
+                            <tr>
+
+                                <th class="first-cell"> </th>
+
+                                <th colspan="2" class="flex-nowrap">Tên sản phẩm</th>
+                                <th>Giá</th>
+                                <th>Số lượng</th>
+                                <th>Thành tiền</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td class="first-cell">
+                                        <div class="row">
+                                            <div class="col-auto align-self-center">
+                                                <a href="/Cart/RemoveFromCart/@Model.Items.IndexOf(item)" class="close float-left text-danger">
+                                                    x
+                                                </a>
+                                            </div>
+
+                                            <div class="col-8 h-100">
+                                                <a href="/Product/Detail/@item.Product.ID">
+                                                    <img src="@Url.Content("~/"+item.Product.Image)" alt="Alternate Text" class="image-on-cart" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2">
+                                        <div class="name-cell my-auto">
+                                            @item.Product.Name
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="price-cell">
+                                            @item.ProductPrice <u>đ</u>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            @Html.TextBoxFor(x => x.Items[Model.Items.IndexOf(item)].Count, new { type = "number", min = "1" })
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="sub-total-cell">
+                                            @item.StringSubTotal <u>đ</u>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                            <tr>
+                                <td colspan="6">
+                                    <div class="row">
+                                        <div class="col-auto ml-auto pr-4">
+                                            <a href="#" onclick="return UpdateCart()" class="btn btn-success">Cập nhật giỏ hàng</a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="row text-total">
+                                        <div class="col-auto ml-auto pr-4">
+                                            Tổng tiền
+                                        </div>
+                                        <div class="col-auto pr-4">
+                                            @Model.StringGrantTotal <u>đ</u>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="6">
+                                    <div class="row">
+                                        <div class="col-auto ml-auto pr-4">
+                                            <a href="#checkOut" data-toggle="collapse" role="button" aria-expanded="false" aria-controls="checkOut" class="btn btn-primary btn-checkout">Đi đến đặt hàng <i class="fa fa-arrow-circle-right"></i></a>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </form>
+                
+                        <div id="checkOut" class="collapse row">
+                            <div class="col-12 col-md-8" id="containerInfo">
+                                @Html.Partial("FormInfo", new MVC.Models.OrderInfomation())
+                            </div>
+                        </div>
+                    
+            </div>
+    </div>
+
+
+}
+<div class="container-fluid">
+    <div class="modal fade" id="modalMessage" tabindex="-1" role="dialog" aria-labelledby="phucni" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-auto mx-auto">
+                            <p class="text-center">
+                                <h5> Please login to order</h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto mx-auto">
+                            <a data-dismiss="modal" class="btn btn-primary ">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        @if(@User.Identity.IsAuthenticated)
+        {
+            <text>var authen = true;</text>
+        }
+        else
+        {
+            <text>var authen = false;</text>
+        }
+        $("input[type='number']").inputSpinner();
+        function UpdateCart() {
+            $("#formCart").submit();
+        }
+        $(document).ready(function () {
+            $("#modalOrderSuccess").on("hidden.bs.modal", function () {
+                window.open("/Home", '_self');
+            });
+            $("#containerInfo").on("submit", "#formInfo", function (e) {
+                e.preventDefault();  // prevent standard form submission
+                if (!authen) {
+                    $("#modalMessage").modal('show');
+                    return false;
+                }
+                var form = $(this);
+                $.ajax({
+                    url: form.attr("action"),
+                    method: form.attr("method"),  // post
+                    data: form.serialize(),
+                    success: function (partialResult) {
+                        if (partialResult == "success")
+                            $("#modalOrderSuccess").modal("show");
+                        else
+                            $("#containerInfo").html(partialResult);
+                    }
+                });
+            });
+            
+        });
+    </script>
+
+}

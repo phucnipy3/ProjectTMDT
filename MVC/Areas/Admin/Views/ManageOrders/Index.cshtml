@@ -1,0 +1,158 @@
+﻿@model IPagedList<MVC.Models.OrderManagementViewModel>
+@using PagedList;
+@using PagedList.Mvc;
+@{
+                /**/
+
+                ViewBag.Title = "Manage Orders";
+                Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="navbar navbar-light bg-dark-light  navbar-expand-md">
+    <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarOrderContent" aria-controls="navbarOrderContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarOrderContent">
+        <ul class="navbar-nav mr-auto order-navbar-nav">
+            <li class="nav-item order-bar" id="All"><a class="nav-link" href="#" onclick="GoTo('All')">Tất cả</a></li>
+            <li class="nav-item order-bar" id="Ordered"><a class="nav-link" href="#" onclick="GoTo('Ordered')">Chờ xác nhận</a></li>
+            <li class="nav-item order-bar" id="Confirmed"> <a class="nav-link" href="#" onclick="GoTo('Confirmed')">Chờ lấy hàng</a></li>
+            <li class="nav-item order-bar" id="TookProducts"> <a class="nav-link" href="#" onclick="GoTo('TookProducts')">Đang giao hàng</a></li>
+            <li class="nav-item order-bar" id="Complete"> <a class="nav-link" href="#" onclick="GoTo('Complete')">Đã giao</a></li>
+            <li class="nav-item order-bar" id="Canceled"> <a class="nav-link" href="#" onclick="GoTo('Canceled')">Đã hủy</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container px-5 py-4 ">
+    <form action="/Admin/ManageOrders/Index" method="post" class="my-3" id="formOrder">
+        <div class="form-row">
+            <div class="col-3">
+                <input type="text" name="Status" value="@ViewBag.Status" hidden id="status" />
+                <input class="form-control" type="text" name="SearchString" value="@ViewBag.SearchString" placeholder="Tìm kiếm..." id="TextOrder" />
+            </div>
+        </div>
+    </form>
+    @foreach (var item in Model)
+        {
+    <div class="container py-2 bg-dark-light my-3">
+        <div class="row">
+            <div class="col-12 px-4">
+                <span class="text-danger float-right h6">
+                    @item.OrderViewModel.Status
+                </span>
+            </div>
+        </div>
+        <div class="row pb-1">
+            <div class="col-1">
+                <div class="row">
+                    <div class="col-auto mx-auto">
+                        <img src="@Url.Content("~/"+item.Image)" alt="Alternate Text" width="80" height="80" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-9 px-4 m-3">
+                <span class="h5">@item.Name</span>
+                <br />
+                <span class="text-danger pt-2">@item.OrderViewModel.TotalMoney<u>đ</u></span>
+            </div>
+
+        </div>
+
+
+        <div class="row">
+            <div class="col-12 px-4">
+                <div class="row">
+                    <div class="col-auto ml-auto pr-0">
+                        <form action="/Admin/ManageOrders/Detail" method="post" class="w-auto">
+                            <input type="text" name="OrderID" value="@item.OrderViewModel.ID" hidden />
+                            <button type="submit" class="btn btn-info float-right">Xem chi tiết</button>
+                        </form>
+                    </div>
+                    @if (!(item.OrderViewModel.Tag == "Canceled") && !(item.OrderViewModel.Tag == "Complete"))
+                    {
+                        <div class="col-auto pr-0">
+                            <a href="#" onclick="Confirm(@item.OrderViewModel.ID)" class="btn btn-success float-right">Xác nhận</a>
+                        </div>
+                        <div class="col-auto pr-0">
+                            <a href="#" onclick="Cancel(@item.OrderViewModel.ID)" class="btn btn-danger float-right">Hủy</a>
+                        </div>
+                    }
+
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    }
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions
+        {
+                LiElementClasses = new string[] { "page-item" },
+                UlElementClasses = new string[] { "pagination", "justify-content-center" },
+                Display = PagedListDisplayMode.IfNeeded,
+            ContainerDivClasses = new[] { "my-paging" },
+                MaximumPageNumbersToDisplay = 5
+                })
+</div>
+@section scripts{
+    <script>
+        function Confirm(id) {
+            $.ajax({
+                url: '/Admin/ManageOrders/Confirm/' + id,
+                method: 'post',
+                success: function (result) {
+                    if (result == "success") {
+                        $("#TextSuccess").html('Confirm succesfully!');
+                        $("#modalSuccess").modal();
+                    }
+                    else {
+                        $("#TextFailure").html('Confirm fail!');
+                        $("#modalFailure").modal();
+                    }
+                }
+            });
+            return false;
+        };
+        function Cancel(id) {
+            $.ajax({
+                url: '/Admin/ManageOrders/Cancel/' + id,
+                method: 'post',
+                success: function (result) {
+                    if (result == "success") {
+                        $("#TextSuccess").html('Cancel succesfully!');
+                        $("#modalSuccess").modal();
+                    }
+                    else {
+                        $("#TextFailure").html('Cancel fail!');
+                        $("#modalFailure").modal();
+                    }
+                }
+            });
+            return false;
+        };
+        $(document).ready(function () {
+            $("li.order-bar").removeClass("active");
+            $("@ViewBag.OrderActive").addClass("active");
+            $(".my-paging ul li a").addClass("page-link");
+            $("#TextOrder").bind("keyup", function (event) {
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    $("#formOrder").submit();
+                }
+            });
+            $("#modalSuccess").on("hidden.bs.modal", function () {
+                window.location.reload();
+            });
+        });
+    </script>
+}
+
+<script>
+    function GoTo(str) {
+        $("#status").val(str);
+        $("#formOrder").submit();
+        return false;
+    }
+</script>
+

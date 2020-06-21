@@ -1,0 +1,647 @@
+﻿@model MVC.Models.DetailViewModel
+@using MVC.Models;
+@{
+    ViewBag.Title = "Detail - Product";
+    ViewBag.Active = "#ProductBtn";
+}
+
+<div class="container-fluid">
+    <div class="modal fade" id="modalMessage" tabindex="-1" role="dialog" aria-labelledby="phucni" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Message</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-auto mx-auto">
+                            <p class="text-center">
+                                <h5> Please login to do this</h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-auto mx-auto">
+                            <a data-dismiss="modal" class="btn btn-primary ">OK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container pt-5">
+    <div class="row">
+        <div class="col-lg-3 col-6 mx-auto">
+            <img src="@Url.Content("~/"+Model.MainProduct.Image)" alt="Alternate Text" width="100% " />
+        </div>
+        <div class="">
+
+        </div>
+        <div class="col-lg-8 col-12 pt-3">
+            <div class="row">
+                <div class="col-lg-7 col-md-6 col-9 mx-auto">
+                    <h3 class="text-success">Giới thiệu</h3>
+                    <p class="h2 text-info py-3">
+                        @Model.MainProduct.Name
+                    </p>
+                    <p>Thiết kế: <span class="text-success">@Model.MainProduct.Author</span></p>
+                    <hr />
+                    <h3>Thông tin kèm theo</h3>
+                    <ul>
+                        @for (int i = 0; i < Model.MainProduct.Detail.Count; i++)
+                        {
+                            <li>@Model.MainProduct.Detail[i]</li>
+                        }
+                    </ul>
+                </div>
+                <div class="col-lg-5 col-md-6 col-9 mx-auto">
+                    <h5>Thông tin thanh toán</h5>
+                    <hr />
+                    @if (Model.MainProduct.PromotionPrice != Model.MainProduct.Price)
+                    {
+                        <p>Giá gốc: <del>@Model.MainProduct.Price</del></p>
+                        <p>Giá bán: <span class="h2 text-danger">@Model.MainProduct.PromotionPrice</span></p>
+                        <p>Tiết kiệm: @Model.MainProduct.SavePersent</p>
+                    }
+                    else
+                    {
+                        <p>Giá bán: <span class="h2 text-danger">@Model.MainProduct.Price</span></p>
+                    }
+                    <hr />
+                    <a href="#" onclick="AddToCart(@Model.MainProduct.ID)" class="btn btn-info text-black btn-buy">Mua ngay</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row pt-5">
+        <div class="col-12 col-lg-8">
+            <div class="row p-3 border-dark">
+                <div class="rate-point col-2 align-self-center text-warning px-0 offset-lg-1">
+                    @Model.Rate.RatePoint <i class="fas fa-star"></i>
+                </div>
+                <div class="col-5">
+                    <ul class="navbar-nav">
+                        <li class="">
+                            5 <i class="fas fa-star text-warning"></i>
+                            <div style="width:80%" class="float-right pt-1">
+                                <div class="progress bg">
+                                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:@(Model.Rate.PercentPoint[4])%"></div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="">
+                            4 <i class="fas fa-star text-warning"></i>
+                            <div style="width:80%" class="float-right pt-1">
+                                <div class="progress bg">
+                                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:@(Model.Rate.PercentPoint[3])%"></div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li class="">
+                            3 <i class="fas fa-star text-warning"></i>
+                            <div style="width:80%" class="float-right pt-1">
+                                <div class="progress bg">
+                                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:@(Model.Rate.PercentPoint[2])%"></div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li class="">
+                            2 <i class="fas fa-star text-warning"></i>
+                            <div style="width:80%" class="float-right pt-1">
+                                <div class="progress bg">
+                                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:@(Model.Rate.PercentPoint[1])%"></div>
+                                </div>
+                            </div>
+
+                        </li>
+                        <li class="">
+                            1 <i class="fas fa-star text-warning"></i>
+                            <div style="width:80%" class="float-right pt-1">
+                                <div class="progress bg">
+                                    <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width:@(Model.Rate.PercentPoint[0])%"></div>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-auto align-self-center mx-auto">
+                    <a href="#RateBar" data-toggle="collapse" aria-controls="RateBar" class="btn btn-primary" id="OpenRate">Rate your point</a>
+                </div>
+                <div class="col-12 offset-lg-1 rate-pick p-3 collapse" id="RateBar">
+                    <span class="mr-3">Please rate us</span>
+                    <span>
+                        <a href="#" id="star1" class="text-decoration-none star-link" data-point="1"><i class="far fa-star star " id="iconstar1"></i> </a>
+                        <a href="#" id="star2" class="text-decoration-none star-link" data-point="2"><i class="far fa-star star " id="iconstar2"></i> </a>
+                        <a href="#" id="star3" class="text-decoration-none star-link" data-point="3"><i class="far fa-star star " id="iconstar3"></i> </a>
+                        <a href="#" id="star4" class="text-decoration-none star-link" data-point="4"> <i class="far fa-star star " id="iconstar4"></i> </a>
+                        <a href="#" id="star5" class="text-decoration-none star-link" data-point="5"><i class="far fa-star star " id="iconstar5"></i> </a>
+                    </span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <button class="btn btn-info mb-3" id="newComment" data-toggle="collapse" data-target="#create-new">New Comment</button>
+                </div>
+            </div>
+            <div class="row comment-create collapse " id="create-new">
+                <form action="/Product/Comment" method="post" class="w-100">
+                    <input type="text" name="idProduct" value="@Model.MainProduct.ID" hidden />
+                    <div class="col-12">
+                        <textarea style="width:100%" rows="4" name="content"></textarea>
+                    </div>
+                    <div class="row w-100">
+                        <div class="col-auto ml-auto p-0">
+                            <button href="#" id="btnComment" class="btn btn-secondary" type="submit">comment</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="row comment-section text-justify">
+                <div class="col-12">
+                    @foreach (var comment in Model.Comments)
+                    {
+
+                        <div class="row comment" id="comment-@comment.Comment.ID">
+                            <div class="col-auto">
+                                <img src="@Url.Content("~/"+comment.Image)" alt="Alternate Text" class="rounded-circle comment-image d-block" />
+                            </div>
+                            <div class="col pl-0 comment-body" >
+                                <div class="row">
+                                    <div class="col-12 ">
+                                        <div class="row">
+                                            <div class="col-auto comment-name">
+                                                <span class="">@comment.Name
+                                                    @if (comment.Manager)
+                                                    {<span class="text-qtv">Quản trị viên</span>}
+                                                </span>
+
+                                            </div>
+                                            <div class="col-auto ml-auto">
+                                                @if (comment.Modify)
+                                                {
+                                                    <a href="/Product/DeleteComment/?id=@comment.Comment.ID&&idProduct=@Model.MainProduct.ID" class="text-decoration-none text-dark">x</a>
+                                                }
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-12 comment-text">
+                                        <p>@comment.Comment.Content</p>
+                                    </div>
+                                    <div class="col-12 comment-tools">
+                                        <ul class="p-0">
+                                            <li class="d-inline-block"><i class="fa fa-clock-o"></i> @comment.Comment.CreateDate.Value.ToShortTimeString() &emsp;</li>
+                                            <li class="d-inline-block"><i class="fa fa-calendar"></i> @comment.Comment.CreateDate.Value.Date.ToShortDateString() &emsp;</li>
+                                            <li class="d-inline-block"><a href="#create-new-@comment.Comment.ID" class="text-decoration-none text-info" data-parent-id="@comment.Comment.ID" data-toggle="collapse">reply</a> &emsp;</li>
+                                            @if (comment.Modify)
+                                            {
+                                                <li class="d-inline-block"><a href="#edit-@comment.Comment.ID" class="text-decoration-none text-info edit" data-toggle="collapse" data-id="@comment.Comment.ID">edit</a></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                    <div class="col-12 comment-replies">
+                                        @foreach (var reply in comment.ReplyComment)
+                                        {
+                                            <div class="row comment" id="comment-@reply.Comment.ID">
+                                                <div class="col-auto">
+                                                    <img src="@Url.Content("~/"+reply.Image)" alt="Alternate Text" class="rounded-circle comment-image d-block" />
+                                                </div>
+                                                <div class="col pl-0 comment-body">
+                                                    <div class="row">
+                                                        <div class="col-auto comment-name">
+                                                            <span class="">@reply.Name
+                                                                @if (reply.Manager)
+                                                                {<span class="text-qtv text-qtv-reply">Quản trị viên</span>}
+                                                            </span>
+
+                                                        </div>
+                                                        <div class="col-auto ml-auto">
+                                                            @if (reply.Modify)
+                                                            {
+                                                                <a href="/Product/DeleteComment/?id=@reply.Comment.ID&&idProduct=@Model.MainProduct.ID" class="text-decoration-none text-dark">x</a>
+                                                            }
+                                                        </div>
+                                                        <div class="col-12 comment-text">
+                                                            <p>@reply.Comment.Content</p>
+                                                        </div>
+                                                        <div class="col-12 comment-tools">
+                                                            <ul class="p-0">
+                                                                <li class="d-inline-block"><i class="fa fa-clock-o"></i> @reply.Comment.CreateDate.Value.ToShortTimeString() &emsp;</li>
+                                                                <li class="d-inline-block"><i class="fa fa-calendar"></i> @reply.Comment.CreateDate.Value.Date.ToShortDateString() &emsp;</li>
+                                                                <li class="d-inline-block"><a href="#create-new-@comment.Comment.ID" class="text-decoration-none text-info" data-parent-id="@comment.Comment.ID" data-toggle="collapse">reply</a> &emsp;</li>
+                                                                @if (reply.Modify)
+                                                                {
+                                                                    <li class="d-inline-block"><a href="#edit-reply-@reply.Comment.ID" class="text-decoration-none text-info edit-reply" data-toggle="collapse" data-id="@reply.Comment.ID">edit</a></li>
+                                                                }
+
+                                                            </ul>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row comment-create collapse pb-2 " id="edit-reply-@reply.Comment.ID">
+                                                <form action="/Product/Edit" method="post" class="w-100">
+                                                    <input type="text" name="idComment" value="@reply.Comment.ID" hidden />
+                                                    <input type="text" name="idProduct" value="@Model.MainProduct.ID" hidden />
+                                                    <div class="col-12">
+                                                        <textarea style="width:100%" rows="4" name="content"></textarea>
+                                                    </div>
+                                                    <div class="row w-100">
+                                                        <div class="col-auto ml-auto p-0">
+                                                            <button href="#" class="btn btn-secondary btn-edit" type="submit">update</button>
+                                                        </div>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        }
+                                        <div class="row comment-create collapse" id="create-new-@comment.Comment.ID">
+                                            <form action="/Product/Reply" method="post" class="w-100">
+                                                <input type="text" name="idProduct" value="@Model.MainProduct.ID" hidden />
+                                                <input type="text" name="idParent" value="@comment.Comment.ID" hidden />
+                                                <div class="col-12">
+                                                    <textarea style="width:100%" rows="4" name="content"></textarea>
+                                                </div>
+                                                <div class="row w-100">
+                                                    <div class="col-auto ml-auto p-0">
+                                                        <button href="#" id="btnComment" class="btn btn-secondary btn-reply" type="submit">comment</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row comment-create collapse pt-2" id="edit-@comment.Comment.ID">
+                            <form action="/Product/Edit" method="post" class="w-100">
+                                <input type="text" name="idComment" value="@comment.Comment.ID" hidden />
+                                <input type="text" name="idProduct" value="@Model.MainProduct.ID" hidden />
+                                <div class="col-12">
+                                    <textarea style="width:100%" rows="4" name="content"></textarea>
+                                </div>
+                                <div class="row w-100">
+                                    <div class="col-auto ml-auto p-0">
+                                        <button href="#" class="btn btn-secondary btn-edit" type="submit">update</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    }
+                </div>
+            </div>
+
+        </div>
+        <div class="col-12 col-lg-4 ">
+            <div class="row">
+                <div class="col-auto mr-auto">
+                    <h3>Liên quan</h3>
+                </div>
+                @for (int i = 0; i < 5 && i<Model.RelateProducts.Count; i++)
+                {
+                    var item = Model.RelateProducts[i];
+                    <div class="col-12 pb-1 border-bottom mb-1" >
+
+                        <div class="view view-eighth">
+
+                            <a href="/Product/Detail/@item.ProductID" class="text-decoration-none text-dark product">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="card border-0">
+                                            <img src="@Url.Content("~/"+item.ImageLink)" alt="Alternate Text" class="image-on-home m-auto" />
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="card-body p-0">
+                                            <div class="row">
+                                                <div class="col-12 pt-2 product-name overflow-hidden">
+                                                    <p>@item.ProductName</p>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 pt-2 product-price">
+                                                    @if (item.PromotionPrice != item.Price)
+                                                    {
+                                                        <p>
+                                                            @item.PromotionPrice <u>đ</u>
+                                                        </p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>
+                                                            @item.Price <u>đ</u>
+                                                        </p>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 pt-2 product-discount">
+                                                    @if (item.PromotionPrice != item.Price)
+                                                    {
+                                                        <del>
+                                                            @item.Price <u>đ</u>
+                                                        </del>
+                                                    }
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12 pt-2 product-rate">
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                            </a>
+                            <div class="mask">
+                                <div class="row h-custom-40 align-content-end">
+                                    <div class="col-auto mx-auto">
+                                        <a href="#" onclick="AddToCart(@item.ProductID)" class="add">Add To Cart</a>
+                                    </div>
+                                </div>
+                                <div class="row h-custom-15 align-content-center">
+                                    <div class="col-auto mx-auto">
+                                        <a href="/Product/Detail/@item.ProductID" class="info">View More</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container container-recommend">
+    <div class="row w-100 pr-0">
+        <a href="#" class="text-decoration-none"><h2 class="pl-4 pt-3 text-recommend">Ốp lưng đã xem</h2></a>
+
+    </div>
+
+    @{
+        List<ProductOnPage> lst = Session["RecentProducts"] as List<ProductOnPage>;
+        <div class="row mx-auto my-auto py-3">
+            <div class="col-12 overflow-hidden p-0 w-100 image-on-home">
+                <div id="carouselRecommend" class="carousel slide w-100 multi-item-carousel p-0 row m-0" data-ride="carousel">
+                    <div class="carousel-inner " role="listbox">
+                        <div class="carousel-item active">
+                            <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 d-block float-left">
+                                <a href="/Product/Detail/@lst[0].ProductID">
+                                    <img src="@Url.Content("~/"+lst[0].ImageLink)" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
+                                </a>
+                            </div>
+                        </div>
+                        @for (int i = 1; i < lst.Count; i++)
+                        {
+                            <div class="carousel-item ">
+                                <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 d-block float-left">
+                                    <a href="/Product/Detail/@lst[i].ProductID">
+                                        <img src="@Url.Content("~/"+lst[i].ImageLink)" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
+                                    </a>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <a class="carousel-control-prev" href="#carouselRecommend" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>  
+                    </a>
+                    <a class="carousel-control-next" href="#carouselRecommend" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+<script>
+    function SetAuthen() {
+        document.getElementById("btnComment").classList.add("authen");
+    }
+    function ClearAuthen() {
+        var element = document.getElementById("btnComment");
+        if (element.classList.contains("authen"))
+            element.classList.remove("authen");
+    }
+</script>
+@if (User.Identity.IsAuthenticated)
+{
+    <script>
+        SetAuthen();
+    </script>
+}
+else
+{
+    <script>
+        ClearAuthen();
+    </script>
+}
+@section scripts{
+    <script>
+        $('.multi-item-carousel').carousel({
+            interval: 3000
+        });
+        var count = $('.multi-item-carousel .carousel-item').length;
+        $('.multi-item-carousel .carousel-item').each(function () {
+            var x = 6;
+            if (count < x)
+                x = count;
+            appendSlide(($(this)), ($(this)).next(), x-1);
+        });
+        function appendSlide(node, next, n) {
+            if (n == 0)
+                return;
+            else {
+                if (!next.length) {
+                    next = node.siblings(':first');
+                }
+                next.children(':first-child').clone().appendTo(node);
+                appendSlide(node, next.next(), n - 1);
+            }
+        }
+    </script>
+    <script>
+
+        @if(@User.Identity.IsAuthenticated)
+        {
+            <text>var authen = true;</text>
+        }
+        else
+        {
+            <text>var authen = false;</text>
+        }
+        function starDefault() {
+            var x = @ViewBag.RatePoint;
+            switch (x) {
+                case 5:
+                    $(".star").removeClass("fas");
+                    $(".star").removeClass("far");
+                    $("#iconstar1").addClass("fas");
+                    $("#iconstar2").addClass("fas");
+                    $("#iconstar3").addClass("fas");
+                    $("#iconstar4").addClass("fas");
+                    $("#iconstar5").addClass("fas");
+                    break;
+                case 4:
+                    $(".star").removeClass("fas");
+                    $(".star").removeClass("far");
+                    $("#iconstar1").addClass("fas");
+                    $("#iconstar2").addClass("fas");
+                    $("#iconstar3").addClass("fas");
+                    $("#iconstar4").addClass("fas");
+                    $("#iconstar5").addClass("far");
+                    break;
+                case 3:
+                    $(".star").removeClass("fas");
+                    $(".star").removeClass("far");
+                    $("#iconstar1").addClass("fas");
+                    $("#iconstar2").addClass("fas");
+                    $("#iconstar3").addClass("fas");
+                    $("#iconstar4").addClass("far");
+                    $("#iconstar5").addClass("far");
+                    break;
+                case 2:
+                    $(".star").removeClass("fas");
+                    $(".star").removeClass("far");
+                    $("#iconstar1").addClass("fas");
+                    $("#iconstar2").addClass("fas");
+                    $("#iconstar3").addClass("far");
+                    $("#iconstar4").addClass("far");
+                    $("#iconstar5").addClass("far");
+                    break;
+                case 1:
+                    $(".star").removeClass("fas");
+                    $(".star").removeClass("far");
+                    $("#iconstar1").addClass("fas");
+                    $("#iconstar2").addClass("far");
+                    $("#iconstar3").addClass("far");
+                    $("#iconstar4").addClass("far");
+                    $("#iconstar5").addClass("far");
+                    break;
+                default:
+                    $(".star").removeClass("fas");
+                    $(".star").removeClass("far");
+                    break;
+            }
+        }
+        $(document).ready(function () {
+            starDefault();
+            $("#OpenRate").click(function () {
+                if ($("#OpenRate").html() == "Rate your point")
+                    $("#OpenRate").html('Close');
+                else
+                    $("#OpenRate").html("Rate your point");
+            });
+            $("#star5").hover(function () {
+
+                $(".star").removeClass("fas");
+                $(".star").removeClass("far");
+                $("#iconstar1").addClass("fas");
+                $("#iconstar2").addClass("fas");
+                $("#iconstar3").addClass("fas");
+                $("#iconstar4").addClass("fas");
+                $("#iconstar5").addClass("fas");
+                return false;
+            });
+            $("#star4").hover(function () {
+                $(".star").removeClass("fas");
+                $(".star").removeClass("far");
+                $("#iconstar1").addClass("fas");
+                $("#iconstar2").addClass("fas");
+                $("#iconstar3").addClass("fas");
+                $("#iconstar4").addClass("fas");
+                $("#iconstar5").addClass("far");
+            });
+            $("#star3").hover(function () {
+                $(".star").removeClass("fas");
+                $(".star").removeClass("far");
+                $("#iconstar1").addClass("fas");
+                $("#iconstar2").addClass("fas");
+                $("#iconstar3").addClass("fas");
+                $("#iconstar4").addClass("far");
+                $("#iconstar5").addClass("far");
+            });
+            $("#star2").hover(function () {
+                $(".star").removeClass("fas");
+                $(".star").removeClass("far");
+                $("#iconstar1").addClass("fas");
+                $("#iconstar2").addClass("fas");
+                $("#iconstar3").addClass("far");
+                $("#iconstar4").addClass("far");
+                $("#iconstar5").addClass("far");
+            });
+            $("#star1").hover(function () {
+                $(".star").removeClass("fas");
+                $(".star").removeClass("far");
+                $("#iconstar1").addClass("fas");
+                $("#iconstar2").addClass("far");
+                $("#iconstar3").addClass("far");
+                $("#iconstar4").addClass("far");
+                $("#iconstar5").addClass("far");
+            });
+            $(".star-link").mouseleave(function () {
+                $(".star").removeClass("fas");
+                $(".star").addClass("far");
+                starDefault();
+            });
+            $("#btnComment").click(function (e) {
+                if (!authen) {
+                    $("#modalMessage").modal('show');
+                    return false;
+                }
+            });
+            $(".star-link").click(function () {
+                if (!authen) {
+                    $("#modalMessage").modal('show');
+                    return false;
+                }
+                var star = $(this);
+                var point = star.attr("data-point");
+                $.ajax({
+                    url: '/Product/Rate/?id=@(Model.MainProduct.ID)&&Point=' + point,
+                    method: 'post',
+                    success: function (result) {
+                        if (result == "success")
+                            location.reload();
+                    }
+                })
+                return false;
+            });
+            $(".btn-reply").click(function () {
+                if (!authen) {
+                    $("#modalMessage").modal('show');
+                    return false;
+
+                }
+            });
+            $("a.edit").click(function () {
+                var id = $(this).attr("data-id");
+                $("#edit-" + id + " textarea").val($("#comment-" + id + " .comment-text p").html());
+            });
+            $("a.edit-reply").click(function () {
+                var id = $(this).attr("data-id");
+                $("#edit-reply-" + id + " textarea").val($("#comment-" + id + " .comment-text p").html());
+            });
+        });
+
+    </script>
+}
