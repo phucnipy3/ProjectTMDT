@@ -171,6 +171,10 @@
     <Compile Include="Migrations\201910160713160_InitialCreate.Designer.cs">
       <DependentUpon>201910160713160_InitialCreate.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202006261521185_Edit01.cs" />
+    <Compile Include="Migrations\202006261521185_Edit01.Designer.cs">
+      <DependentUpon>202006261521185_Edit01.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartItem.cs" />
     <Compile Include="Models\ChangePasswordInfo.cs" />
@@ -544,6 +548,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201910160713160_InitialCreate.resx">
       <DependentUpon>201910160713160_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006261521185_Edit01.resx">
+      <DependentUpon>202006261521185_Edit01.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
