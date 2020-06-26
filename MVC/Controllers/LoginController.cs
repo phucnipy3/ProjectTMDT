@@ -21,11 +21,9 @@ namespace MVC.Controllers
                 {
                     if(HttpContext.User.Identity.IsAuthenticated)
                     {
-                        UserHelper.ModifyActive(HttpContext.User.Identity.Name, false);
                         FormsAuthentication.SignOut();
                     }
                     FormsAuthentication.SetAuthCookie(model.Email, true);
-                    UserHelper.ModifyActive(model.Email, true);
                     return Content("success");
                 }
                 ModelState.AddModelError("","Wrong e-mail or password");

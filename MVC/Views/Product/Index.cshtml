@@ -52,7 +52,7 @@
                             <div class="view view-eighth">
                                 <a href="/Product/Detail/@item.ProductID" class="text-decoration-none text-dark product">
                                     <div class="card border-0 position-relative">
-                                        <img src="@Url.Content("~/"+item.ImageLink)" alt="Alternate Text" class="image-on-home m-auto" />
+                                        <img src="@item.ImageLink" alt="Alternate Text" class="image-on-home m-auto" />
                                         @if (item.Tag == "hot")
                                         {
                                             <img src="~/Resource/hot.gif" class="position-absolute" style="right:7px;width:40px;top:10px;transform:rotate(45deg) " />

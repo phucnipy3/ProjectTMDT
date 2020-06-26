@@ -369,12 +369,8 @@
                     method: form.attr("method"),  // post
                     data: form.serialize(),
                     success: function (partialResult) {
-                        if (partialResult == "success") {
-                            $("#formSignUpContent").html($("#saveEmptySignUpForm").html());
-                            $("#modalSignUp").modal("hide");
-                            $("#TextSuccess").html("Sign up successfully!");
-                            $("#modalSuccess").modal("show");
-                            SignUpSuccess = true;
+                        if (partialResult.split(",")[0] == "success") {
+                            window.location.href = "/Register/Confirm?userId=" + partialResult.split(",")[1];
                         }
                         else
                             $("#formSignUpContent").html(partialResult);

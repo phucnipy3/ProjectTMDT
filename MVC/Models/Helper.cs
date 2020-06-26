@@ -296,6 +296,15 @@ namespace MVC.Models
 
     public class UserHelper : Helper
     {
+        public static bool CheckValidCode(string userId, string code)
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var users = db.Users.ToList();
+
+                return users.Where(x => x.UserID == userId.Trim() && x.Verification == code.Trim() && DateTime.Now < x.ExprireTime).Any();
+            }
+        }
         public static List<User> GetUsers()
         {
             using (ApplicationContext db = new ApplicationContext())
@@ -353,7 +362,7 @@ namespace MVC.Models
             using (ApplicationContext db = new ApplicationContext())
             {
                 password = EncodePassword(password);
-                return db.Users.Any(x => x.Status.Value && x.UserID == userId && x.Password == password);
+                return db.Users.Any(x => x.Status.Value && x.UserID == userId && x.Password == password && x.Active.Value);
             }
         }
 
@@ -361,7 +370,7 @@ namespace MVC.Models
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                GetUserByUserID(userId).Active = active;
+                GetUserByUserID(userId.Trim()).Active = active;
                 db.SaveChanges();
             }
         }
