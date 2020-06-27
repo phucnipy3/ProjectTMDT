@@ -472,6 +472,29 @@ namespace MVC.Models
                 }
             }
         }
+
+        public static bool ChangePassword(string userId, string newPass)
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                try
+                {
+                    var user = GetUserByUserID(userId);
+                    if (user != null)
+                    {
+                        user.Password = EncodePassword(newPass);
+                        db.Users.AddOrUpdate(x => x.ID, user);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
     }
 
     public class ProductHelper : Helper

@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>@ViewBag.Title - Ốp xịn</title>
+    <title>@ViewBag.Title - Đồ xịn</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
     <script src="https://kit.fontawesome.com/d2b907b6c8.js" crossorigin="anonymous"></script>
@@ -153,24 +153,13 @@
             </div>
         </div>
     </div>
-    <div class="container position-relative ">
-        <div class="background-img">
-            <div class="row">
-                <div class="col">
-                    <a href="/Home">
-                        <img src="~/Resource/logo.png" height="100" width="225" alt="Alternate Text" />
-                    </a>
-                </div>
-            </div>
-        </div>
 
 
-
-    </div>
+    
     <div class="container sticky-top container-hard border-0">
 
         <nav class="navbar bg-info navbar-dark navbar-expand-lg ">
-            <a class="navbar-brand" href="/Home">Ốp xịn</a>
+            <a class="navbar-brand" href="/Home">Đồ xịn</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -178,7 +167,6 @@
                 <ul class="navbar-nav mr-auto topbar">
                     <li class="nav-item" id="HomeBtn"><a class="nav-link" href="/Home/Index">Home</a></li> 
                     <li class="nav-item" id="ProductBtn"><a class="nav-link" href="/Product/Index">Product</a></li>
-                    <li class="nav-item" id="DesignBtn"> <a class="nav-link" href="/Design/Index">Design</a></li>
                 </ul>
                 <ul class="navbar-nav ml-auto">
                     @if (User.Identity.IsAuthenticated)
@@ -348,12 +336,8 @@
                     method: form.attr("method"),  // post
                     data: form.serialize(),
                     success: function (partialResult) {
-                        if (partialResult == "success") {
-                            $("#formForgetPassContent").html($("#saveEmptyForgetPassForm").html());
-                            $("#modalForgetPass").modal("hide");
-                            $("#TextSuccess").html("Send email successfully!");
-                            $("#modalSuccess").modal("show");
-                            SendMailSuccess = true;
+                        if (partialResult.split(",")[0] == "success") {
+                            window.location.href = "/ForgetPass/ChangePassword?userId=" + partialResult.split(",")[1];
                         }
                         else
                             $("#formForgetPassContent").html(partialResult);

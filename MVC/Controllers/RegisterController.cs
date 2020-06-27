@@ -51,7 +51,7 @@ namespace MVC.Controllers
                     masage.ReplyToList.Add("phucnipy3@gmail.com");
                     masage.To.Add(new MailAddress(model.Email));
                     masage.Subject = "Confirm resgisitation";
-                    masage.Body = "We send mail from admin opxin.com. " +
+                    masage.Body = "We send mail from admin. " +
                                   "Your vertification code is " + user.Verification + ". Enter this code to confirm your regisitation. Thank you!";
                     masage.IsBodyHtml = true;
                     mail.Send(masage);

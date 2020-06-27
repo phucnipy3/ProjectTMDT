@@ -521,15 +521,14 @@
     <Content Include="Views\Cart\FormInfo.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Profile\ChangePassword.cshtml" />
-    <Content Include="Views\Design\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Register\Confirm.cshtml" />
+    <Content Include="Views\ForgetPass\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Application\" />
     <Folder Include="Views\Error\" />
-    <Folder Include="Views\ForgetPass\" />
     <Folder Include="Views\Login\" />
   </ItemGroup>
   <ItemGroup>
