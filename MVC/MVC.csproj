@@ -154,7 +154,6 @@
     <Compile Include="Areas\Admin\Models\StatisticalViewModel.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\CartController.cs" />
-    <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ForgetPassController.cs" />
     <Compile Include="Controllers\HomeController.cs" />

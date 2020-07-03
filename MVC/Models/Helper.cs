@@ -705,7 +705,7 @@ namespace MVC.Models
 
         private static string GetTag(Product product)
         {
-            if (product.PromotionPrice < product.Price)
+            if (product.PromotionPrice < product.Price/2)
                 return "hot";
             return "normal";
         }
