@@ -11,6 +11,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
     [ApiController]
     public class HomeController : ControllerBase
     {
+
         [HttpGet("GetVersion")]
         public IActionResult GetVersion()
         {
