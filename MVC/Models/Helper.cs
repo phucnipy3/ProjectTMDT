@@ -296,6 +296,15 @@ namespace MVC.Models
 
     public class UserHelper : Helper
     {
+        public static bool CheckValidCode(string userId, string code)
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var users = db.Users.ToList();
+
+                return users.Where(x => x.UserID == userId.Trim() && x.Verification == code.Trim() && DateTime.Now < x.ExprireTime).Any();
+            }
+        }
         public static List<User> GetUsers()
         {
             using (ApplicationContext db = new ApplicationContext())
@@ -353,7 +362,7 @@ namespace MVC.Models
             using (ApplicationContext db = new ApplicationContext())
             {
                 password = EncodePassword(password);
-                return db.Users.Any(x => x.Status.Value && x.UserID == userId && x.Password == password);
+                return db.Users.Any(x => x.Status.Value && x.UserID == userId && x.Password == password && x.Active.Value);
             }
         }
 
@@ -361,7 +370,7 @@ namespace MVC.Models
         {
             using (ApplicationContext db = new ApplicationContext())
             {
-                GetUserByUserID(userId).Active = active;
+                GetUserByUserID(userId.Trim()).Active = active;
                 db.SaveChanges();
             }
         }
@@ -450,6 +459,29 @@ namespace MVC.Models
                     {
                         if (user.Password != EncodePassword(oldPass))
                             return false;
+                        user.Password = EncodePassword(newPass);
+                        db.Users.AddOrUpdate(x => x.ID, user);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+        }
+
+        public static bool ChangePassword(string userId, string newPass)
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                try
+                {
+                    var user = GetUserByUserID(userId);
+                    if (user != null)
+                    {
                         user.Password = EncodePassword(newPass);
                         db.Users.AddOrUpdate(x => x.ID, user);
                         db.SaveChanges();
@@ -673,7 +705,7 @@ namespace MVC.Models
 
         private static string GetTag(Product product)
         {
-            if (product.PromotionPrice < product.Price)
+            if (product.PromotionPrice < product.Price/2)
                 return "hot";
             return "normal";
         }

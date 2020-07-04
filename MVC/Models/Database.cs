@@ -213,6 +213,10 @@ namespace MVC.Models
 
         public string Image { get; set; }
 
+        public string Verification { get; set; }
+
+        public DateTime? ExprireTime { get; set; }
+
         public bool? Active { get; set; }
 
         [DefaultValue("true")]
@@ -295,7 +299,3 @@ namespace MVC.Models
         }
     }
 }
-/*<add name="DatabaseDetailsContext"
-         providerName="System.Data.SqlClient"
-         connectionString="data source=(local);initial catalog=DatabaseWebOpxin;persist security info=True;user id=sa;password=123456;" />
-  </connectionStrings>*/

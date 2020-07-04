@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Nhom2.TMDT.Data.Entities
+{
+    public class Order
+    {
+        public int Id { get; set; }
+        public string Note { get; set; }
+        public int? DeliveryMethod { get; set; }
+        public int? PaymentMethod { get; set; }
+        public int? ShipmentDetailId { get; set; }
+        public int? CreatedBy { get; set; }
+        public DateTime? CreatedDate { get; set; }
+        public DateTime? Ordered { get; set; }
+        public DateTime? Confirmed { get; set; }
+        public DateTime? Transporting { get; set; }
+        public DateTime? Completed { get; set; }
+        public DateTime? Canceled { get; set; }
+        public DateTime? Deleted { get; set; }
+        public int? Status { get; set; }
+
+        public virtual User User { get; set; }
+        public virtual ShipmentDetail ShipmentDetail { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+    }
+}

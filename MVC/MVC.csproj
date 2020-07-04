@@ -154,7 +154,6 @@
     <Compile Include="Areas\Admin\Models\StatisticalViewModel.cs" />
     <Compile Include="Controllers\ApplicationController.cs" />
     <Compile Include="Controllers\CartController.cs" />
-    <Compile Include="Controllers\DesignController.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\ForgetPassController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -170,6 +169,10 @@
     <Compile Include="Migrations\201910160713160_InitialCreate.cs" />
     <Compile Include="Migrations\201910160713160_InitialCreate.Designer.cs">
       <DependentUpon>201910160713160_InitialCreate.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202006261521185_Edit01.cs" />
+    <Compile Include="Migrations\202006261521185_Edit01.Designer.cs">
+      <DependentUpon>202006261521185_Edit01.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\CartItem.cs" />
@@ -517,16 +520,15 @@
     <Content Include="Views\Cart\FormInfo.cshtml" />
     <Content Include="Views\Profile\Index.cshtml" />
     <Content Include="Views\Profile\ChangePassword.cshtml" />
-    <Content Include="Views\Design\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Register\Confirm.cshtml" />
+    <Content Include="Views\ForgetPass\ChangePassword.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Application\" />
     <Folder Include="Views\Error\" />
-    <Folder Include="Views\ForgetPass\" />
     <Folder Include="Views\Login\" />
-    <Folder Include="Views\Register\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config">
@@ -544,6 +546,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\201910160713160_InitialCreate.resx">
       <DependentUpon>201910160713160_InitialCreate.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202006261521185_Edit01.resx">
+      <DependentUpon>202006261521185_Edit01.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <PropertyGroup>
