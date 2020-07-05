@@ -1,0 +1,63 @@
+<ng-container *ngIf="product">
+  <div class="row post-feed">
+    <div class="col-6 col-md-4 col-xl-3 py-3 post ">
+      <div class="view view-eighth">
+        <a href="/Product/Detail/{{product.id}}" class="text-decoration-none text-dark product">
+          <div class="card border-0 position-relative">
+            <img src="{{product.image}}" alt="Alternate Text" class="image-on-home m-auto" />
+
+            <img *ngIf="product.tag == 'hot'" src="../../../../assets/image/hot.gif" class="position-absolute"
+              style="right:7px;width:40px;top:10px;transform:rotate(45deg) " />
+
+          </div>
+          <div class="card-body p-0">
+            <div class="row">
+              <div class="col-12 pt-2 product-name overflow-hidden">
+                <p>{{product.name}}</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 pt-2 product-price">
+                  <ng-container *ngIf="product.promotionPrice">
+                    {{product.promotionPrice}} <u>đ</u>
+                  </ng-container>
+                  <ng-container *ngIf="!product.promotionPrice">
+                    {{product.price}} <u>đ</u>
+                </ng-container>
+                  
+                
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 pt-2 product-discount">
+                  <ng-container *ngIf="product.promotionPrice">
+                    <del>
+                        {{product.price}} <u>đ</u>
+                      </del>
+                  </ng-container>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-12 pt-2 product-rate">
+
+              </div>
+            </div>
+          </div>
+        </a>
+        <div class="mask">
+          <div class="row h-custom-40 align-content-end">
+            <div class="col-auto mx-auto">
+              <a href="#" class="add">Add To Cart</a>
+            </div>
+          </div>
+          <div class="row h-custom-12 align-content-center">
+            <div class="col-auto mx-auto">
+              <a href="/Product/{{product.id}}" class="info">View More</a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-container>
