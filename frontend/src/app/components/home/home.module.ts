@@ -7,6 +7,8 @@ import { NgModule } from '@angular/core';
 
 const APP_COMPONENTS: any[] = [
     fromHome.BannerComponent,
+    fromHome.CommentComponent,
+    fromHome.CommentInputComponent,
     fromHome.FooterComponent,
     fromHome.HomeComponent,
     fromHome.LandingPageComponent,

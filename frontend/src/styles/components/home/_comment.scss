@@ -1,0 +1,28 @@
+comment{
+    .commment{
+        font-size: 14px;
+    }
+    .comment-image{
+        width:64px;
+        height: 64px;
+    }
+    .comment-name{
+        font-weight:bold;
+    }
+    .comment-replies{
+        font-size:13px;
+    }
+    .comment-replies .comment-image{
+        width:58px;
+        height: 58px;
+    }
+    .comment-tools{
+        font-size:10px;
+    }
+    .comment-tools:hover{
+        cursor:pointer;
+    }
+    .comment-tools ul li a{
+        font-size:14px;
+    }
+}

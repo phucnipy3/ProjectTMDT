@@ -1,0 +1,46 @@
+<div class="row comment" *ngIf="comment">
+  <div class="col-auto">
+    <img src="{{comment.image}}" alt="Alternate Text" class="rounded-circle comment-image d-block" />
+  </div>
+  <div class="col pl-0 comment-body">
+    <div class="row">
+      <div class="col-12">
+        <div class="row">
+          <div class="col-auto comment-name">
+            <span class=""> {{comment.author}}
+              <span *ngIf="comment.manager" class="text-qtv">Quản trị viên</span>
+            </span>
+          </div>
+          <div class="col-auto ml-auto">
+            <span *ngIf="comment.canDelete">x</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-12 comment-text">
+        <p>{{comment.content}}</p>
+      </div>
+      <div class="col-12 comment-tools">
+        <ul class="p-0">
+          <li class="d-inline-block mx-1"><i class="icon icon-clock-o"></i> {{comment.time}}
+            &emsp;</li>
+          <li class="d-inline-block mx-1"><i class="icon icon-calendar"></i>
+            {{comment.date}} &emsp;</li>
+          <li class="d-inline-block mx-1"><span class="text-info" (click) = "reply()">reply</span> &emsp;</li>
+        </ul>
+      </div>
+      <ng-container *ngIf="!isChild">
+        <div class="col-12 comment-replies">
+          <ng-container *ngFor="let child of comment.children">
+            <comment [isChild]=true (callback) = "showReply = !showReply" [comment] ="child">
+            </comment>
+          </ng-container>
+        </div>
+        <div class="col-12">
+          <comment-input [show] = "showReply">
+          </comment-input>
+        </div>
+      </ng-container>
+
+    </div>
+  </div>

@@ -1,4 +1,6 @@
 export * from './banner/banner.component';
+export * from './comment-input/comment-input.component';
+export * from './comment/comment.component';
 export * from './footer/footer.component';
 export * from './home.component';
 export * from './landing-page/landing-page.component';
