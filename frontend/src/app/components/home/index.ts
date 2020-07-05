@@ -1,3 +1,9 @@
-
+export * from './banner/banner.component';
+export * from './footer/footer.component';
 export * from './home.component';
 export * from './landing-page/landing-page.component';
+export * from './our-sevices/our-services.component';
+export * from './product-page/product-page.component';
+export * from './slide-show-banner/slide-show-banner.component';
+export * from './slide-show-product/slide-show-product.component';
+export * from './top-menu/top-menu.component';

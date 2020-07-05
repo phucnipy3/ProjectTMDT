@@ -5,8 +5,15 @@ import { HomeRoutingModule } from './home-routing.module';
 import * as fromHome from '../home';
 
 const APP_COMPONENTS: any[] = [
+    fromHome.BannerComponent,
+    fromHome.FooterComponent,
     fromHome.HomeComponent,
     fromHome.LandingPageComponent,
+    fromHome.OurServicesComponent,
+    fromHome.ProductPageComponent,
+    fromHome.SlideShowBannerComponent,
+    fromHome.SlideShowProductComponent,
+    fromHome.TopMenuComponent,
 ];
 
 const APP_POPUP_COMPONENTS: any[] = [];

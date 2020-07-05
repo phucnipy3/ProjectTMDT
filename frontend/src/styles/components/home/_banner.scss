@@ -1,0 +1,73 @@
+banner {
+  .clip-background {
+    background-image: url('../assets/image/ClipBG.svg');
+    background-size: cover;
+    background-repeat: no-repeat;
+  }
+
+  .big-header {
+    color: white;
+    font-weight: bold;
+    font-size: 45px;
+    line-height: 70px;
+    text-align: center;
+    margin-top: 25px;
+
+    @include medium {
+      font-size: 55px;
+    }
+
+    @include large {
+      font-size: 45px;
+      text-align: start;
+    }
+
+    @include desktop {
+      font-size: 55px;
+    }
+  }
+
+  .smaller-header {
+    color: white;
+    font-size: 20px;
+    font-weight: 200;
+    text-align: center;
+
+    @include medium {
+      font-size: 21px;
+    }
+
+    @include large {
+      text-align: start;
+      font-size: 20px;
+    }
+
+    @include desktop {
+      font-size: 22px;
+    }
+  }
+
+  .flow-card {
+    background-color: #FFFFFF;
+    padding: 15px 15px 15px 15px;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 15px;
+    box-shadow: 10px 11px 15px rgba(0, 0, 0, .31);
+    width: 400px;
+  }
+
+  .group-text {
+    font-size: 19px;
+    font-weight: 600;
+  }
+
+  .circle-bullet {
+    background-color: #6ADAEC;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+  }
+  
+
+}
