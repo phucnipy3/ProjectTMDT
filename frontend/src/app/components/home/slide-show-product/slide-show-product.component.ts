@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { ProductSildeViewModel } from '../../../../models/product/product-slide';
 
 @Component({
@@ -6,6 +6,8 @@ import { ProductSildeViewModel } from '../../../../models/product/product-slide'
     templateUrl: './slide-show-product.component.html',
 })
 export class SlideShowProductComponent implements OnInit {
+
+    @Input() id = '';
 
     products: ProductSildeViewModel[] = [];
     readonly itemCount = 6;

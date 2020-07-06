@@ -16,11 +16,13 @@ const APP_COMPONENTS: any[] = [
     fromHome.ProductCardComponent,
     fromHome.ProductDetailComponent,
     fromHome.ProductPageComponent,
+    fromHome.ProfileComponent,
     fromHome.RateComponent,
     fromHome.SideBarComponent,
     fromHome.SlideShowBannerComponent,
     fromHome.SlideShowProductComponent,
     fromHome.TopMenuComponent,
+    fromHome.CartComponent,
 ];
 
 const APP_POPUP_COMPONENTS: any[] = [];

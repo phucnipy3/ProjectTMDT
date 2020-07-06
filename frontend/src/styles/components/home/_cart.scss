@@ -1,0 +1,39 @@
+cart{
+    .image-on-cart{
+        width:80px;
+        height:175px;
+    }
+    .cart td,.cart th{
+        vertical-align:middle;
+    }
+    .btn-checkout{
+        font-size:19px;
+        padding: 15px 25px 15px 25px;
+    }
+    .first-cell{
+        display:none;
+    }
+    .quantity-cell {
+        width: 160px;
+    }
+    .name-cell{
+        width:250px;
+    }
+    .price-cell, .sub-total-cell{
+        width:120px;
+    }
+    @media (min-width:992px) {
+        .first-cell {
+            display: table-cell;
+            width:160px;
+        }
+        .name-cell{
+            width:initial;
+        }
+    }
+    .text-total{
+        font-size:18px;
+        color:#ff370a;
+        font-weight:700;
+    }
+}

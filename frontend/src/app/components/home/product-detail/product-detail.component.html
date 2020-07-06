@@ -20,7 +20,7 @@
         <h5>Thông tin thanh toán</h5>
         <hr />
         <ng-container *ngIf="product.promotionPrice">
-          <p>Giá gốc: <del>{{product.price}} <u>đ</u></del> </p>
+          <p>Giá gốc: <del>{{product.price | number}} <u>đ</u></del> </p>
           <p>Giá bán: <span class="h2 text-danger">{{product.promotionPrice}} <u>đ</u></span></p>
           <p>Tiết kiệm: {{product.savePersent}}</p>
         </ng-container>

@@ -1,0 +1,38 @@
+<div class="modal-dialog modal-dialog-centered">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h4 class="modal-title">Đăng nhập</h4>
+      <button type="button" class="close" (click)="close()">&times;</button>
+    </div>
+    <div class="modal-body py-0">
+      <div class="row my-3">
+        <div class="col-12">
+          <label>Địa chỉ e-mail:</label>
+        </div>
+        <div class="col-12">
+          <input type="text" class="form-control" placeholder="Nhập địa chỉ e-mail">
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-12">
+          <label>Mật khẩu:</label>
+        </div>
+        <div class="col-12">
+          <input type="password" class="form-control" placeholder="Nhập mật khẩu">
+        </div>
+        <div class="col-12">
+          <span class="forget-password">Quên mật khẩu?</span>
+        </div>
+      </div>
+      <div class="row my-3">
+        <div class="col-12">
+          Bạn chưa có tài khoản? <span class="sign-up-now">Đăng kí ngay!</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="close()">Hủy</button>
+      <button type="button" class="btn btn-primary">Đăng nhập</button>
+    </div>
+  </div>
+</div>
