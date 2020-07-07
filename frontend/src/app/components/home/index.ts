@@ -15,3 +15,8 @@ export * from './slide-show-banner/slide-show-banner.component';
 export * from './slide-show-product/slide-show-product.component';
 export * from './top-menu/top-menu.component';
 export * from './cart/cart.component';
+export * from './get-password/get-password.component';
+export * from './orders/orders.component';
+export * from './orders/order-detail/order-detail.component';
+export * from './shipping/shipping.component';
+export * from './shipping/shipping-input/shipping-input.component';

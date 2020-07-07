@@ -3,7 +3,7 @@
   <div class="row">
     <div class="col-8">
       <div class="form-group">
-        <label>Update Avatar</label>
+        <label>Cập nhật hình đại diện</label>
         <input type="file" class="form-control-file" />
       </div>
     </div>
@@ -19,14 +19,14 @@
   <div class="row">
     <div class="col-8">
       <div class="form-group">
-        <a>Click to change your password!</a>
+        <small class="text-info cursor-pointer" (click)="changePassword()">Đổi mật khẩu</small>
       </div>
     </div>
   </div>
   <div class="row">
     <div class="col-8">
       <div class="form-group">
-        <label>Full name</label>
+        <label>Họ và tên</label>
         <input type="text" class="form-control" [(ngModel)]="profile.fullName">
       </div>
     </div>
@@ -34,7 +34,7 @@
   <div class="row">
     <div class="col-8">
       <div class="form-group">
-        <label>Phone number</label>
+        <label>Số điện thoại</label>
         <input type="text" class="form-control" [(ngModel)]="profile.phoneNumber">
 
       </div>
@@ -42,25 +42,25 @@
   </div>
   <div class="row">
     <div class="col-2">
-      <label>Sex: </label>
+      <label>Giới tính: </label>
     </div>
     <div class="form-check form-check-inline">
       <input type="radio" [checked] = "profile.isMale" (change) = "setMale()" name="sex">
       <label class="form-check-label" for="MaleRadio">
-        Male
+        Nam
       </label>
     </div>
     <div class="form-check form-check-inline">
       <input type="radio" name="sex" [checked] = "!profile.isMale" (change) = "setFemale()">
       <label class="form-check-label" for="FemaleRadio">
-        Female
+        Nữ
       </label>
     </div>
   </div>
   <div class="row">
     <div class="col-8">
       <div class="form-group">
-        <label>Email address</label>
+        <label>Địa chỉ e-mail</label>
         <input type="text " class="form-control" [(ngModel)]="profile.email">
       </div>
     </div>
@@ -68,7 +68,7 @@
   <div class="row">
     <div class="col-8">
       <div class="form-group">
-        <label>Address</label>
+        <label>Địa chỉ</label>
         <input type="text " class="form-control" [(ngModel)]="profile.address">
 
       </div>
@@ -76,7 +76,7 @@
   </div>
   <div class="row">
     <div class="col-auto">
-      <button class="btn btn-primary" (click)="logData()">Update</button>
+      <button class="btn btn-primary" (click)="logData()">Cập nhật</button>
     </div>
   </div>
 </div>

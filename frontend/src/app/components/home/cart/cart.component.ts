@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CartItemViewModel } from '../../../../models/cart/cart-item';
 import { SessionHelper } from '../../../common/helper/SessionHelper';
 import { CartService } from '../../../../services/cart.service';
+import { MessageService } from '../../../../services/message.service';
 
 @Component({
     selector: 'cart',
@@ -11,7 +12,11 @@ export class CartComponent implements OnInit {
 
     cartItems: CartItemViewModel[] = [];
     total: number;
-    constructor(private cartService: CartService) { }
+    constructor(
+        private cartService: CartService,
+        private messageService: MessageService) {
+        this.messageService.clearActivePage();
+    }
 
     ngOnInit(): void {
         this.cartItems = SessionHelper.getCartFromStorage();

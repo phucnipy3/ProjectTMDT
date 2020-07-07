@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileViewModel } from '../../../../models/account/profile';
+import { SimpleModalService } from 'ngx-simple-modal';
+import { ChangePasswordPopupComponent } from '../../shareds/change-password/change-password-popup.component';
+import { MessageService } from '../../../../services/message.service';
 
 @Component({
     selector: 'profile',
@@ -9,7 +12,11 @@ export class ProfileComponent implements OnInit {
 
     profile: ProfileViewModel;
 
-    constructor() { }
+    constructor(
+        private simpleModalService: SimpleModalService,
+        private messageService: MessageService) {
+        this.messageService.clearActivePage();
+    }
 
     ngOnInit(): void {
         this.profile = new ProfileViewModel();
@@ -24,10 +31,13 @@ export class ProfileComponent implements OnInit {
     logData() {
         console.log(this.profile);
     }
-    setMale(){
+    setMale() {
         this.profile.isMale = true;
     }
-    setFemale(){
+    setFemale() {
         this.profile.isMale = false;
+    }
+    changePassword() {
+        this.simpleModalService.addModal(ChangePasswordPopupComponent);
     }
 }

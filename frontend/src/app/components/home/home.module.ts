@@ -23,6 +23,11 @@ const APP_COMPONENTS: any[] = [
     fromHome.SlideShowProductComponent,
     fromHome.TopMenuComponent,
     fromHome.CartComponent,
+    fromHome.GetPasswordComponent,
+    fromHome.OrdersComponent,
+    fromHome.OrderDetailComponent,
+    fromHome.ShippingComponent,
+    fromHome.ShippingInputComponent,
 ];
 
 const APP_POPUP_COMPONENTS: any[] = [];

@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProductViewModel } from '../../../../models/product/product';
 import { CommentViewModel } from '../../../../models/product/comment';
 import { ProductCardViewModel } from '../../../../models/product/product-card';
+import { MessageService } from '../../../../services/message.service';
 
 @Component({
     selector: 'product-detail',
@@ -16,7 +17,9 @@ export class ProductDetailComponent implements OnInit {
 
     relatedProducts: ProductCardViewModel[] = [];
 
-    constructor() { }
+    constructor(private messageService: MessageService) {
+        this.messageService.sendActivePage('product');
+    }
 
     ngOnInit(): void {
         this.product = new ProductViewModel();
@@ -46,7 +49,7 @@ export class ProductDetailComponent implements OnInit {
         x.price = 12435;
         x.promotionPrice = 1356;
         this.relatedProducts.push(x);
-        this.relatedProducts.push({...x});
+        this.relatedProducts.push({ ...x });
 
     }
 }

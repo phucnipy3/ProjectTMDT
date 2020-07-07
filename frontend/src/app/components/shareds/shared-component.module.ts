@@ -17,12 +17,11 @@ const APP_POPUP_COMPONENTS: any[] = [
         APP_POPUP_COMPONENTS,
     ],
     imports: [
-        CommonModule,
         FormsModule,
-
+        CommonModule,
     ],
     exports: [
-        APP_COMPONENTS
+        APP_COMPONENTS,
     ],
     entryComponents: [
         APP_POPUP_COMPONENTS

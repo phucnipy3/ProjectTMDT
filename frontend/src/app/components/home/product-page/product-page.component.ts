@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SideBarData } from '../side-bar/side-bar.component';
 import { ProductCardViewModel } from '../../../../models/product/product-card';
+import { MessageService } from '../../../../services/message.service';
 
 @Component({
     selector: 'product-page',
@@ -11,7 +12,8 @@ export class ProductPageComponent implements OnInit {
     data: SideBarData[] = [];
     products: ProductCardViewModel[] = [];
 
-    constructor() {
+    constructor(private messageService: MessageService) {
+        this.messageService.sendActivePage('product');
         for (let i = 0; i < 10; i++) {
             this.data.push(new SideBarData(i, 'somevalue', 'Mới nhất' + i));
         }
