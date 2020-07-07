@@ -2,15 +2,27 @@ import { Injectable } from '@angular/core';
 import { SessionHelper } from '../app/common/helper/SessionHelper';
 import { ProductCardViewModel } from '../models/product/product-card';
 import { CartItemViewModel } from '../models/cart/cart-item';
+import { MessageService } from './message.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable()
 export class CartService {
+
+    constructor(
+        private messageService: MessageService,
+        private toastr: ToastrService
+    ) {
+
+    }
+
     public addProductToCart(product: ProductCardViewModel): boolean {
         const cartItems = SessionHelper.getCartFromStorage();
         const item = cartItems.find((x) => x.id === product.id);
         if (item) {
             item.count += 1;
             SessionHelper.saveCartToStorage(cartItems);
+            this.messageService.sendItemCount(this.getItemCount());
+            this.toastr.success('Thêm vào giỏ hàng thành công');
             return true;
         }
         const cartItem = new CartItemViewModel();
@@ -21,6 +33,9 @@ export class CartService {
         cartItem.count = 1;
         cartItems.push(cartItem);
         SessionHelper.saveCartToStorage(cartItems);
+
+        this.toastr.success('Thêm vào giỏ hàng thành công');
+        this.messageService.sendItemCount(this.getItemCount());
     }
 
     public getItemCount(): number {
@@ -47,6 +62,8 @@ export class CartService {
         if (item) {
             item.count += 1;
             SessionHelper.saveCartToStorage(cartItems);
+
+            this.messageService.sendItemCount(this.getItemCount());
             return true;
         }
         return false;
@@ -61,15 +78,20 @@ export class CartService {
                 cartItems = cartItems.filter((x) => x !== item);
             }
             SessionHelper.saveCartToStorage(cartItems);
+            this.messageService.sendItemCount(this.getItemCount());
+
             return true;
+
         }
         return false;
     }
 
-    public removeProduct(productId: number){
+    public removeProduct(productId: number) {
         let cartItems = SessionHelper.getCartFromStorage();
         cartItems = cartItems.filter((x) => x.id !== productId);
         SessionHelper.saveCartToStorage(cartItems);
+        this.messageService.sendItemCount(this.getItemCount());
+
         return true;
     }
 }

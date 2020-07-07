@@ -17,7 +17,7 @@
         </ng-container>
         
         <ng-container *ngFor="let item of data">
-            <div class="ml-3 my-2 item-menu" [class.active] = "item.key == keyActive" (click)="onClick(item)">
+            <div class="ml-3 my-2 item-menu cursor-pointer" [class.active] = "item.key == keyActive" (click)="onClick(item)">
                 {{item.displayValue}}
             </div>
         </ng-container>

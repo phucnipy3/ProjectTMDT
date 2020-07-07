@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HomeRoutingModule } from './home-routing.module';
 import { NgModule } from '@angular/core';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToastrModule } from 'ngx-toastr';
 
 
 const APP_COMPONENTS: any[] = [
@@ -28,6 +30,7 @@ const APP_COMPONENTS: any[] = [
     fromHome.OrderDetailComponent,
     fromHome.ShippingComponent,
     fromHome.ShippingInputComponent,
+    fromHome.CheckoutComponent,
 ];
 
 const APP_POPUP_COMPONENTS: any[] = [];

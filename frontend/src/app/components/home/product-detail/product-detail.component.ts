@@ -3,6 +3,10 @@ import { ProductViewModel } from '../../../../models/product/product';
 import { CommentViewModel } from '../../../../models/product/comment';
 import { ProductCardViewModel } from '../../../../models/product/product-card';
 import { MessageService } from '../../../../services/message.service';
+import { ActivatedRoute } from '@angular/router';
+import { ViewedProductService } from '../../../../services/viewed-product.service';
+import { ProductSildeViewModel } from '../../../../models/product/product-slide';
+import { SessionHelper } from '../../../common/helper/SessionHelper';
 
 @Component({
     selector: 'product-detail',
@@ -17,11 +21,21 @@ export class ProductDetailComponent implements OnInit {
 
     relatedProducts: ProductCardViewModel[] = [];
 
-    constructor(private messageService: MessageService) {
+    id: number;
+
+    viewedProducts: ProductSildeViewModel[] = [];
+
+    constructor(
+        private messageService: MessageService,
+        private activatedRoute: ActivatedRoute,
+        private viewedProductService: ViewedProductService) {
         this.messageService.sendActivePage('product');
     }
 
     ngOnInit(): void {
+        this.activatedRoute.paramMap.subscribe(params => {
+            this.id = Number(params.get('id'));
+        });
         this.product = new ProductViewModel();
         this.product.name = 'name name an aemd á á';
         this.product.promotionPrice = 14356;
@@ -31,7 +45,10 @@ export class ProductDetailComponent implements OnInit {
         this.product.detail = '<p>details  ấ gs fa dhedf a</p>';
         this.product.brand = 'AOE';
 
+        let xa = new ProductSildeViewModel(this.product.id, this.product.image);
+        this.viewedProductService.addProduct(xa);
         // const x = new CommentViewModel();
+        this.viewedProducts = SessionHelper.getViewedProductFromStorage();
         // x.time = '12:12';
         // x.date = '21/2/2020';
         // x.content = 'this is a comment';

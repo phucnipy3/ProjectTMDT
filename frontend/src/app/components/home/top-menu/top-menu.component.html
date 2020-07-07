@@ -7,7 +7,7 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto topbar">
       <li class="nav-item" [class.active] = "activePage === 'home'" id="HomeBtn"><a class="nav-link" href="">Trang chủ</a></li>
-      <li class="nav-item" [class.active] = "activePage === 'product'" id="ProductBtn"><a class="nav-link" href="/Product">Sản phẩm</a></li>
+      <li class="nav-item" [class.active] = "activePage === 'product'" id="ProductBtn"><a class="nav-link" href="/san-pham">Sản phẩm</a></li>
     </ul>
     <ul class="navbar-nav ml-auto">
       <ng-container *ngIf="authen">   
@@ -23,10 +23,10 @@
 
             <div class="dropdown-menu dropdown-menu-right offset-2" aria-labelledby="dropdownMenuLink">
               <a class="dropdown-item" href="#modalSignIn" data-toggle="modal">Chuyển tài khoản</a>
-              <a class="dropdown-item" href="/Orders/Index">Đơn hàng</a>
-              <a class="dropdown-item" href="/Profile">Thông tin cá nhân<span class="float-right"><i
+              <a class="dropdown-item" href="/xem-don-hang">Đơn hàng</a>
+              <a class="dropdown-item" href="/thong-tin-ca-nhan">Thông tin cá nhân<span class="float-right"><i
                     class="far fa-user"></i></span></a>
-              <a class="dropdown-item" href="/Login/Logout">Đăng xuất<span class="float-right"><i
+              <a class="dropdown-item" (click)="logout()">Đăng xuất<span class="float-right"><i
                     class="fas fa-sign-out-alt"></i></span></a>
             </div>
           </div>
@@ -37,10 +37,10 @@
         <li class="nav-item "><a class="nav-link cursor-pointer" (click)="showSignUp()">Đăng ký</a></li>
       </ng-container>
       <li class="nav-item" id="CartBtn">
-        <a href="/Cart" class="nav-link">
+        <a href="/gio-hang" class="nav-link">
           <i class="icon icon-shopping-cart icon-20"></i>
           <span class="badge badge-light item-counter">
-            1
+            {{itemCount}}
           </span>
         </a>
       </li>

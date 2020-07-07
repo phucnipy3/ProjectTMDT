@@ -9,6 +9,7 @@ import { GetPasswordComponent } from './get-password/get-password.component';
 import { OrdersComponent } from './orders/orders.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { ShippingComponent } from './shipping/shipping.component';
+import { CheckoutComponent } from './checkout/checkout.component';
 
 const routes: Routes = [
     {
@@ -46,6 +47,10 @@ const routes: Routes = [
     {
         path: 'giao-hang',
         component: ShippingComponent
+    },
+    {
+        path: 'thanh-toan',
+        component: CheckoutComponent
     },
 ];
 

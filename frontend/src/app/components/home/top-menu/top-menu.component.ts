@@ -3,6 +3,7 @@ import { SimpleModalService } from 'ngx-simple-modal';
 import { LoginPopupComponent } from '../../shareds/login/login-popup-component';
 import { SignUpPopupComponent } from '../../shareds/sign-up/sign-up-popup.component';
 import { MessageService } from '../../../../services/message.service';
+import { CartService } from '../../../../services/cart.service';
 
 @Component({
     selector: 'top-menu',
@@ -12,9 +13,11 @@ export class TopMenuComponent implements OnInit {
 
     authen = false;
     activePage = '';
+    itemCount = 0;
     constructor(
         private simpleModalService: SimpleModalService,
-        private messageService: MessageService) {
+        private messageService: MessageService,
+        private cartService: CartService) {
         this.messageService.onActivePage().subscribe(activePage => {
             if (activePage) {
                 this.activePage = activePage;
@@ -24,9 +27,17 @@ export class TopMenuComponent implements OnInit {
             }
             console.log(this.activePage);
         });
+        this.itemCount = this.cartService.getItemCount();
+        this.messageService.onItemCount().subscribe(count => {
+            this.itemCount = count;
+        });
     }
 
     ngOnInit(): void {
+
+    }
+
+    logout(){
 
     }
 
