@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Service.Account.Login.Queries;
 using Nhom2.TMDT.Service.Account.Queries.GetProfile;
+using Nhom2.TMDT.Service.Account.Queries.GetRole;
+using Nhom2.TMDT.Service.Account.Queries.GetUser;
 using Nhom2.TMDT.Service.Account.ViewModels;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -17,11 +19,15 @@ namespace Nhom2.TMDT.WebApi.Controllers
     {
         private readonly ILoginQuery loginQuery;
         private readonly IGetProfileQuery getProfileQuery;
+        private readonly IGetUserQuery getUserQuery;
+        private readonly IGetRoleQuery getRoleQuery;
 
-        public AccountController(ILoginQuery loginQuery, IGetProfileQuery getProfileQuery)
+        public AccountController(ILoginQuery loginQuery, IGetProfileQuery getProfileQuery, IGetUserQuery getUserQuery, IGetRoleQuery getRoleQuery)
         {
             this.loginQuery = loginQuery;
             this.getProfileQuery = getProfileQuery;
+            this.getUserQuery = getUserQuery;
+            this.getRoleQuery = getRoleQuery;
         }
 
         [HttpPost("Login")]
@@ -40,9 +46,9 @@ namespace Nhom2.TMDT.WebApi.Controllers
 
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                return new ObjectResult(true);
+                return new ObjectResult(await getUserQuery.ExecutedAsync(User.Identity.Name));
             }
-            return new ObjectResult(false);
+            return new ObjectResult(null);
         }
 
         [HttpGet("Logout")]
@@ -60,12 +66,16 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(await getProfileQuery.ExecutedAsync(User.Identity.Name));
         }
 
-        [HttpGet("Athorize")]
+        [HttpGet("Authentication")]
         [AllowAnonymous]
-        public IActionResult Athorize(int role = 3)
+        public async Task<IActionResult> AuthenticationAsync(int role = 3)
         {
-
-            return Unauthorized();
+            int userRole = await getRoleQuery.ExecutedAsync(User.Identity.Name);
+            if (userRole > 0 && userRole <= role)
+            {
+                return new ObjectResult(await getUserQuery.ExecutedAsync(User.Identity.Name));
+            }
+            return new ObjectResult(null);
         }
     }
 }
