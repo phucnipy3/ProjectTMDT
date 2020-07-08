@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Nhom2.TMDT.Data.Entities
 {
@@ -8,8 +7,8 @@ namespace Nhom2.TMDT.Data.Entities
     {
         public int Id { get; set; }
         public string Content { get; set; }
-        public int? ProductID { get; set; }
-        public int? ParentID { get; set; }
+        public int? ProductId { get; set; }
+        public int? ParentId { get; set; }
         public int? CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }
         public bool? Status { get; set; }

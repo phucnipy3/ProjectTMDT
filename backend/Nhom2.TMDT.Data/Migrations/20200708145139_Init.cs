@@ -30,6 +30,21 @@ namespace Nhom2.TMDT.Data.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "ShipmentDetail",
+                columns: table => new
+                {
+                    Id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Address = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Email = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
+                    Phone = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ShipmentDetail", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Product",
                 columns: table => new
                 {
@@ -44,27 +59,18 @@ namespace Nhom2.TMDT.Data.Migrations
                     Quantity = table.Column<int>(nullable: true, defaultValue: 0),
                     Detail = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
                     Warranty = table.Column<int>(nullable: true, defaultValue: 0),
+                    CategoryId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
                     Status = table.Column<bool>(nullable: true, defaultValue: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Product", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "ShipmentDetail",
-                columns: table => new
-                {
-                    Id = table.Column<int>(nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Address = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    Email = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
-                    Phone = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ShipmentDetail", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Product_Category_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Category",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -102,8 +108,8 @@ namespace Nhom2.TMDT.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Content = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    ProductID = table.Column<int>(nullable: true),
-                    ParentID = table.Column<int>(nullable: true),
+                    ProductId = table.Column<int>(nullable: true),
+                    ParentId = table.Column<int>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
                     Status = table.Column<bool>(nullable: true, defaultValue: true)
@@ -117,13 +123,13 @@ namespace Nhom2.TMDT.Data.Migrations
                         principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Comment_Comment_ParentID",
-                        column: x => x.ParentID,
+                        name: "FK_Comment_Comment_ParentId",
+                        column: x => x.ParentId,
                         principalTable: "Comment",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Comment_Product_ProductID",
-                        column: x => x.ProductID,
+                        name: "FK_Comment_Product_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id");
                 });
@@ -135,8 +141,9 @@ namespace Nhom2.TMDT.Data.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Note = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    DeliveryMethod = table.Column<int>(nullable: true),
-                    PaymentMethod = table.Column<int>(nullable: true),
+                    DeliveryMethod = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    TotalShipping = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: true),
+                    PaymentMethod = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
                     ShipmentDetailId = table.Column<int>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
@@ -172,7 +179,7 @@ namespace Nhom2.TMDT.Data.Migrations
                     RatePoint = table.Column<int>(nullable: true, defaultValue: 0),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
                     CreatedBy = table.Column<int>(nullable: true),
-                    ProductID = table.Column<int>(nullable: true)
+                    ProductId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -183,8 +190,8 @@ namespace Nhom2.TMDT.Data.Migrations
                         principalTable: "User",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_Rate_Product_ProductID",
-                        column: x => x.ProductID,
+                        name: "FK_Rate_Product_ProductId",
+                        column: x => x.ProductId,
                         principalTable: "Product",
                         principalColumn: "Id");
                 });
@@ -227,14 +234,14 @@ namespace Nhom2.TMDT.Data.Migrations
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_ParentID",
+                name: "IX_Comment_ParentId",
                 table: "Comment",
-                column: "ParentID");
+                column: "ParentId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Comment_ProductID",
+                name: "IX_Comment_ProductId",
                 table: "Comment",
-                column: "ProductID");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Order_CreatedBy",
@@ -252,14 +259,19 @@ namespace Nhom2.TMDT.Data.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Product_CategoryId",
+                table: "Product",
+                column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Rate_CreatedBy",
                 table: "Rate",
                 column: "CreatedBy");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Rate_ProductID",
+                name: "IX_Rate_ProductId",
                 table: "Rate",
-                column: "ProductID");
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_User_ShipmentDetailId",
@@ -271,9 +283,6 @@ namespace Nhom2.TMDT.Data.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropTable(
-                name: "Category");
-
             migrationBuilder.DropTable(
                 name: "Comment");
 
@@ -291,6 +300,9 @@ namespace Nhom2.TMDT.Data.Migrations
 
             migrationBuilder.DropTable(
                 name: "User");
+
+            migrationBuilder.DropTable(
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "ShipmentDetail");

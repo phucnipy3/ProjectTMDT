@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nhom2.TMDT.Data", "Nhom2.TM
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Nhom2.TMDT.Common", "Nhom2.TMDT.Common\Nhom2.TMDT.Common.csproj", "{2CC892FA-D12D-4A7B-8248-6F3FCCC8A693}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nhom2.TMDT.Service", "Nhom2.TMDT.Service\Nhom2.TMDT.Service.csproj", "{B1B7B5CF-8644-4AA8-B7E8-0F1332979438}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2CC892FA-D12D-4A7B-8248-6F3FCCC8A693}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2CC892FA-D12D-4A7B-8248-6F3FCCC8A693}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2CC892FA-D12D-4A7B-8248-6F3FCCC8A693}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B1B7B5CF-8644-4AA8-B7E8-0F1332979438}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B1B7B5CF-8644-4AA8-B7E8-0F1332979438}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B1B7B5CF-8644-4AA8-B7E8-0F1332979438}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B1B7B5CF-8644-4AA8-B7E8-0F1332979438}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

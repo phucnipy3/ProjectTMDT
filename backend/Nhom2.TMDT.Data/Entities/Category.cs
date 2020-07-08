@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Nhom2.TMDT.Data.Entities
 {
@@ -15,5 +14,6 @@ namespace Nhom2.TMDT.Data.Entities
 
         public virtual Category Parent { get; set; }
         public virtual ICollection<Category> Children { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 }

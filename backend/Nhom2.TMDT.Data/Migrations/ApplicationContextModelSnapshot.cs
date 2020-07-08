@@ -73,10 +73,10 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int?>("ParentID")
+                    b.Property<int?>("ParentId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ProductID")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<bool?>("Status")
@@ -88,9 +88,9 @@ namespace Nhom2.TMDT.Data.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("ParentID");
+                    b.HasIndex("ParentId");
 
-                    b.HasIndex("ProductID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Comment");
                 });
@@ -122,8 +122,9 @@ namespace Nhom2.TMDT.Data.Migrations
                     b.Property<DateTime?>("Deleted")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("DeliveryMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("DeliveryMethod")
+                        .HasColumnType("NVARCHAR(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Note")
                         .HasColumnType("NVARCHAR(500)")
@@ -132,8 +133,9 @@ namespace Nhom2.TMDT.Data.Migrations
                     b.Property<DateTime?>("Ordered")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("PaymentMethod")
-                        .HasColumnType("int");
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("NVARCHAR(500)")
+                        .HasMaxLength(500);
 
                     b.Property<int?>("ShipmentDetailId")
                         .HasColumnType("int");
@@ -142,6 +144,9 @@ namespace Nhom2.TMDT.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasDefaultValue(0);
+
+                    b.Property<decimal?>("TotalShipping")
+                        .HasColumnType("DECIMAL(18,0)");
 
                     b.Property<DateTime?>("Transporting")
                         .HasColumnType("datetime2");
@@ -197,6 +202,9 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("NVARCHAR(500)")
                         .HasMaxLength(500);
 
+                    b.Property<int?>("CategoryId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime?>("CreatedDate")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -241,6 +249,8 @@ namespace Nhom2.TMDT.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CategoryId");
+
                     b.ToTable("Product");
                 });
 
@@ -259,7 +269,7 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
-                    b.Property<int?>("ProductID")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int?>("RatePoint")
@@ -271,7 +281,7 @@ namespace Nhom2.TMDT.Data.Migrations
 
                     b.HasIndex("CreatedBy");
 
-                    b.HasIndex("ProductID");
+                    b.HasIndex("ProductId");
 
                     b.ToTable("Rate");
                 });
@@ -379,12 +389,12 @@ namespace Nhom2.TMDT.Data.Migrations
 
                     b.HasOne("Nhom2.TMDT.Data.Entities.Comment", "Parent")
                         .WithMany("Children")
-                        .HasForeignKey("ParentID")
+                        .HasForeignKey("ParentId")
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Nhom2.TMDT.Data.Entities.Product", "Product")
                         .WithMany("Comments")
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 
@@ -416,6 +426,14 @@ namespace Nhom2.TMDT.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Nhom2.TMDT.Data.Entities.Product", b =>
+                {
+                    b.HasOne("Nhom2.TMDT.Data.Entities.Category", "Category")
+                        .WithMany("Products")
+                        .HasForeignKey("CategoryId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
             modelBuilder.Entity("Nhom2.TMDT.Data.Entities.Rate", b =>
                 {
                     b.HasOne("Nhom2.TMDT.Data.Entities.User", "User")
@@ -425,7 +443,7 @@ namespace Nhom2.TMDT.Data.Migrations
 
                     b.HasOne("Nhom2.TMDT.Data.Entities.Product", "Product")
                         .WithMany("Rates")
-                        .HasForeignKey("ProductID")
+                        .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.NoAction);
                 });
 

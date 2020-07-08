@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Entities;
-using System.Runtime.InteropServices;
 
 namespace Nhom2.TMDT.Data.Services
 {
@@ -79,13 +78,13 @@ namespace Nhom2.TMDT.Data.Services
             modelBuilder.Entity<Comment>()
                 .HasOne(e => e.Parent)
                 .WithMany(e => e.Children)
-                .HasForeignKey(e => e.ParentID)
+                .HasForeignKey(e => e.ParentId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Comment>()
                 .HasOne(e => e.Product)
                 .WithMany(e => e.Comments)
-                .HasForeignKey(e => e.ProductID)
+                .HasForeignKey(e => e.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<Comment>()
@@ -108,10 +107,18 @@ namespace Nhom2.TMDT.Data.Services
                 .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<Order>()
-                .Property(e => e.DeliveryMethod);
+                .Property(e => e.DeliveryMethod)
+                .HasMaxLength(500)
+                .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<Order>()
-                .Property(e => e.PaymentMethod);
+                .Property(e => e.TotalShipping)
+                .HasColumnType("DECIMAL(18,0)");
+
+            modelBuilder.Entity<Order>()
+                .Property(e => e.PaymentMethod)
+                .HasMaxLength(500)
+                .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.CreatedDate)
@@ -239,6 +246,12 @@ namespace Nhom2.TMDT.Data.Services
             modelBuilder.Entity<Product>()
                 .Property(e => e.Status)
                 .HasDefaultValue(true);
+
+            modelBuilder.Entity<Product>()
+                .HasOne(e => e.Category)
+                .WithMany(e => e.Products)
+                .HasForeignKey(e => e.CategoryId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
             #region Rate
@@ -265,7 +278,7 @@ namespace Nhom2.TMDT.Data.Services
             modelBuilder.Entity<Rate>()
                 .HasOne(e => e.Product)
                 .WithMany(e => e.Rates)
-                .HasForeignKey(e => e.ProductID)
+                .HasForeignKey(e => e.ProductId)
                 .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
