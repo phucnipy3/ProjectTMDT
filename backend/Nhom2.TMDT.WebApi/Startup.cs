@@ -1,15 +1,24 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Nhom2.TMDT.Data.Services;
+using Nhom2.TMDT.Service.Account.Login.Queries;
+using Nhom2.TMDT.Service.Account.Queries.GetProfile;
+using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
+using Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew;
+using Nhom2.TMDT.Service.Order.Queries.GetOrder;
+using Nhom2.TMDT.Service.Product.Queries.GetComment;
+using Nhom2.TMDT.Service.Product.Queries.GetProduct;
+using Nhom2.TMDT.Service.Product.Queries.GetProductDetail;
+using Nhom2.TMDT.Service.Product.Queries.GetRate;
+using Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct;
+using System;
 
 namespace Nhom2.TMDT.WebApi
 {
@@ -31,6 +40,14 @@ namespace Nhom2.TMDT.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<ApplicationContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), builder =>
+                {
+                    builder.EnableRetryOnFailure(5, TimeSpan.FromSeconds(10), null);
+                });
+            });
+
             services.AddOptions();
             services.AddCors(options =>
             {
@@ -40,6 +57,26 @@ namespace Nhom2.TMDT.WebApi
                     .AllowAnyHeader());
             });
             services.AddControllers();
+
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie();
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Latest);
+
+            //api
+            services.AddScoped<ILoginQuery, LoginQuery>();
+            services.AddScoped<IGetSlideProductHotQuery, GetSlideProductHotQuery>();
+            services.AddScoped<IGetSlideProductNewQuery, GetSlideProductNewQuery>();
+            services.AddScoped<IGetProductQuery, GetProductQuery>();
+            services.AddScoped<IGetRelatedProductQuery, GetRelatedProductQuery>();
+            services.AddScoped<IGetProductDetailQuery, GetProductDetailQuery>();
+            services.AddScoped<IGetCommentQuery, GetCommentQuery>();
+            services.AddScoped<IGetRateQuery, GetRateQuery>();
+            services.AddScoped<IGetProfileQuery, GetProfileQuery>();
+            services.AddScoped<IGetOrderQuery, GetOrderQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -55,6 +92,10 @@ namespace Nhom2.TMDT.WebApi
             app.UseRouting();
 
             app.UseCors("CorsPolicy");
+
+            app.UseStaticFiles();
+            app.UseCookiePolicy();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

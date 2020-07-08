@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Home\Commands\" />
+    <Folder Include="Account\Commands\" />
+    <Folder Include="Order\Command\" />
+    <Folder Include="Product\Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Nhom2.TMDT.Common\Nhom2.TMDT.Common.csproj" />
+    <ProjectReference Include="..\Nhom2.TMDT.Data\Nhom2.TMDT.Data.csproj" />
+  </ItemGroup>
+
+</Project>
