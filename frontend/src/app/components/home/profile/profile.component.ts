@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProfileViewModel } from '../../../../models/account/profile';
 import { SimpleModalService } from 'ngx-simple-modal';
-import { ChangePasswordPopupComponent } from '../../shareds/change-password/change-password-popup.component';
 import { MessageService } from '../../../../services/message.service';
+import { ChangePasswordPopupComponent } from '../change-password/change-password-popup.component';
 
 @Component({
     selector: 'profile',

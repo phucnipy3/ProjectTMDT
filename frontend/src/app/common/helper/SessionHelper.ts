@@ -1,10 +1,12 @@
 import { CartItemViewModel } from '../../../models/cart/cart-item';
 import { ShipmentDetailViewModel } from '../../../models/order/shipment-detail';
 import { ProductSildeViewModel } from '../../../models/product/product-slide';
+import { User } from '../../../models/account/user';
 export class SessionHelper {
     private static readonly CART_LOCAL: string = 'cart';
     private static readonly SHIPPING_LOCAL: string = 'shipping';
     private static readonly VIEWED_LOCAL: string = 'viewed';
+    private static readonly USER_LOCAL: string = 'user';
 
     public static saveCartToStorage(cartItems: CartItemViewModel[]) {
         sessionStorage.setItem(this.CART_LOCAL, JSON.stringify(cartItems));
@@ -55,5 +57,22 @@ export class SessionHelper {
 
     public static removeViewedProductStorage() {
         sessionStorage.removeItem(this.VIEWED_LOCAL);
+    }
+
+    public static saveUserToStorage(user: User) {
+        sessionStorage.setItem(this.USER_LOCAL, JSON.stringify(user));
+    }
+
+    public static getUserFromStorage(): User {
+        const currentUser = sessionStorage.getItem(this.USER_LOCAL);
+        if (!currentUser || currentUser === '') {
+            return undefined;
+        }
+        const user: User = JSON.parse(currentUser);
+        return user;
+    }
+
+    public static removeUserStorage() {
+        sessionStorage.removeItem(this.USER_LOCAL);
     }
 }

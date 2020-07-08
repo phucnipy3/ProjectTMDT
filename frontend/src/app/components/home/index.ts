@@ -21,3 +21,7 @@ export * from './orders/order-detail/order-detail.component';
 export * from './shipping/shipping.component';
 export * from './shipping/shipping-input/shipping-input.component';
 export * from './checkout/checkout.component';
+export * from './login/login-popup-component';
+export * from './sign-up/sign-up-popup.component';
+export * from './change-password/change-password-popup.component';
+export * from './forget-password/forget-password-popup.component';

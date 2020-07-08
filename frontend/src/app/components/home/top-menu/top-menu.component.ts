@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { SimpleModalService } from 'ngx-simple-modal';
-import { LoginPopupComponent } from '../../shareds/login/login-popup-component';
-import { SignUpPopupComponent } from '../../shareds/sign-up/sign-up-popup.component';
 import { MessageService } from '../../../../services/message.service';
 import { CartService } from '../../../../services/cart.service';
+import { LoginPopupComponent } from '../login/login-popup-component';
+import { SignUpPopupComponent } from '../sign-up/sign-up-popup.component';
 
 @Component({
     selector: 'top-menu',

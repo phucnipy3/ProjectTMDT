@@ -2,13 +2,14 @@ import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { Services } from '../../services/services.declaration';
 import { SimpleModalModule, defaultSimpleModalOptions } from 'ngx-simple-modal';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
+import { JwtInterceptor } from '../../interceptors/jwt.interceptor';
 
 const APP_PROVIDERS: any[] = [
   Services,
@@ -39,6 +40,7 @@ const APP_PROVIDERS: any[] = [
   ],
   providers: [
     APP_PROVIDERS,
+    {provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true},
   ],
   bootstrap: [AppComponent]
 })

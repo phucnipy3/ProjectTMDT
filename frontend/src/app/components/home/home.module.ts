@@ -33,7 +33,12 @@ const APP_COMPONENTS: any[] = [
     fromHome.CheckoutComponent,
 ];
 
-const APP_POPUP_COMPONENTS: any[] = [];
+const APP_POPUP_COMPONENTS: any[] = [
+    fromHome.LoginPopupComponent,
+    fromHome.SignUpPopupComponent,
+    fromHome.ForgetPasswordPopupComponent,
+    fromHome.ChangePasswordPopupComponent,
+];
 
 @NgModule({
     declarations: [APP_COMPONENTS, APP_POPUP_COMPONENTS],
