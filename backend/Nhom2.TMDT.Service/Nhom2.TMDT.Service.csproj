@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <Folder Include="Admin\Command\" />
-    <Folder Include="Admin\ViewModels\" />
     <Folder Include="Home\Commands\" />
     <Folder Include="Account\Commands\" />
     <Folder Include="Order\Command\" />
