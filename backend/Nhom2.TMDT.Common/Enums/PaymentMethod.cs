@@ -4,7 +4,7 @@ namespace Nhom2.TMDT.Common.Enums
 {
     public enum PaymentMethod
     {
-        [Description("Thanh toán khi nhân hàng")]
+        [Description("Thanh toán khi nhận hàng")]
         Cash = 1,
         [Description("Thanh toán bẳng thẻ tín dụng/ ghi nợ")]
         Credit = 2,

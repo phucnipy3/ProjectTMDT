@@ -17,7 +17,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.GetProfile
 
         public async Task<ProfileViewModel> ExecutedAsync(string userName)
         {
-            var data = await db.Users.Where(x => x.UserName.Trim() == userName.Trim()).Select(x => new ProfileViewModel()
+            var data = await db.Users.Where(x => x.UserName == userName.Trim()).Select(x => new ProfileViewModel()
             {
                 UserName = x.UserName,
                 FullName = x.Name,

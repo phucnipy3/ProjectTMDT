@@ -1,43 +1,37 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Common.PagedList;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Admin.ViewModels;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
+namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderManager
 {
-    public class GetOrderQuery : IGetOrderQuery
+    public class GetOrderManagerQuery : IGetOrderManagerQuery
     {
         private readonly ApplicationContext db;
 
-        public GetOrderQuery(ApplicationContext db)
+        public GetOrderManagerQuery(ApplicationContext db)
         {
             this.db = db;
         }
 
-        public async Task<PagedList<OrderViewModel>> ExecutedAsync(string userName, string searchString, int pageNumber, int pageSize)
+        public async Task<PagedList<OrderManagerViewModel>> ExecutedAsync(string searchString, int pageNumber, int pageSize)
         {
             var table = db.Orders.AsQueryable();
-            var user = await db.Users.SingleOrDefaultAsync(x => x.UserName.Equals(userName));
-
-            if (user != null && user.Role.GetValueOrDefault() == (int)Role.Customer)
-            {
-                table = table.Where(x => x.CreatedBy == user.Id);
-            }
 
             if (!string.IsNullOrEmpty(searchString))
             {
                 table = table.Where(x => x.User.Name.Contains(searchString) || x.OrderDetails.Any(x => x.Product.Name.Contains(searchString)));
             }
 
-            PagedList<OrderViewModel> data = new PagedList<OrderViewModel>();
+            PagedList<OrderManagerViewModel> data = new PagedList<OrderManagerViewModel>();
 
-            data.Items = await table.OrderByDescending(x => x.CreatedDate).Select(x => new OrderViewModel()
+            data.Items = await table.OrderByDescending(x => x.CreatedDate).Select(x => new OrderManagerViewModel()
             {
                 Id = x.Id,
+                UserName = x.User.Name,
+                UserImage = x.User.Image,
                 Products = x.OrderDetails.Select(y => new CartItemViewModel()
                 {
                     Id = y.Id,

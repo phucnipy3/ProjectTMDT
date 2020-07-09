@@ -16,7 +16,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.GetRole
 
         public async Task<int> ExecutedAsync(string userName)
         {
-            var data = await db.Users.Where(x => x.UserName.Trim().Equals(userName.Trim())).SingleOrDefaultAsync();
+            var data = await db.Users.Where(x => x.UserName == userName.Trim()).SingleOrDefaultAsync();
 
             if (data == null)
             {

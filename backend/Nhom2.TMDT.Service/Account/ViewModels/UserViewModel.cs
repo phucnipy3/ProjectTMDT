@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Nhom2.TMDT.Service.Account.ViewModels
+﻿namespace Nhom2.TMDT.Service.Account.ViewModels
 {
     public class UserViewModel
     {

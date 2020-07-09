@@ -10,9 +10,17 @@ using Microsoft.Extensions.Hosting;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
 using Nhom2.TMDT.Service.Account.Queries.GetProfile;
+using Nhom2.TMDT.Service.Account.Queries.GetRole;
+using Nhom2.TMDT.Service.Account.Queries.GetUser;
+using Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder;
+using Nhom2.TMDT.Service.Admin.Queries.GetDeliveryMethod;
+using Nhom2.TMDT.Service.Admin.Queries.GetOrder;
+using Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail;
+using Nhom2.TMDT.Service.Admin.Queries.GetOrderManager;
+using Nhom2.TMDT.Service.Admin.Queries.GetPaymentMethod;
+using Nhom2.TMDT.Service.Admin.Queries.OrderCart;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew;
-using Nhom2.TMDT.Service.Order.Queries.GetOrder;
 using Nhom2.TMDT.Service.Product.Queries.GetComment;
 using Nhom2.TMDT.Service.Product.Queries.GetProduct;
 using Nhom2.TMDT.Service.Product.Queries.GetProductDetail;
@@ -76,7 +84,15 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IGetCommentQuery, GetCommentQuery>();
             services.AddScoped<IGetRateQuery, GetRateQuery>();
             services.AddScoped<IGetProfileQuery, GetProfileQuery>();
+            services.AddScoped<IGetUserQuery, GetUserQuery>();
+            services.AddScoped<IGetRoleQuery, GetRoleQuery>();
             services.AddScoped<IGetOrderQuery, GetOrderQuery>();
+            services.AddScoped<IGetOrderManagerQuery, GetOrderManagerQuery>();
+            services.AddScoped<IGetOrderDetailQuery, GetOrderDetailQuery>();
+            services.AddScoped<IConfirmOrderQuery, ConfirmOrderQuery>();
+            services.AddScoped<IGetDeliveryMethodQuery, GetDeliveryMethodQuery>();
+            services.AddScoped<IOrderCartQuery, OrderCartQuery>();
+            services.AddScoped<IGetPaymentMethodQuery, GetPaymentMethodQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

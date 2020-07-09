@@ -30,7 +30,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.getRoleQuery = getRoleQuery;
         }
 
-        [HttpPost("Login")]
+        [HttpGet("Login")]
         [AllowAnonymous]
         public async Task<IActionResult> LoginAsync(string userName, string password)
         {

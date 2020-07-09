@@ -24,11 +24,11 @@ namespace Nhom2.TMDT.Service.Account.Login.Queries
             if (!string.IsNullOrEmpty(userName) && !string.IsNullOrEmpty(password))
             {
                 string passwordEncrypt = await Task.Run(() => new Encryption().EncryptionMD5(password.Trim()));
-                bool exists = await db.Users.AnyAsync(x => x.UserName.Trim() == userName.Trim() && x.Password == passwordEncrypt);
+                bool exists = await db.Users.AnyAsync(x => x.UserName == userName.Trim() && x.Password == passwordEncrypt);
 
                 if (exists)
                 {
-                    data = await db.Users.Where(x => x.UserName.Trim() == userName.Trim() && x.Password == passwordEncrypt).Select(x => new LoginViewModel()
+                    data = await db.Users.Where(x => x.UserName == userName.Trim() && x.Password == passwordEncrypt).Select(x => new LoginViewModel()
                     {
                         Authenticated = true,
                         Role = x.Role.GetValueOrDefault()

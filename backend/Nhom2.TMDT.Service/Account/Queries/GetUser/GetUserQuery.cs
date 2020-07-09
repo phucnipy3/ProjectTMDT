@@ -19,7 +19,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.GetUser
 
         public async Task<UserViewModel> ExecutedAsync(string userName)
         {
-            var data = await db.Users.Where(x => x.UserName.Trim().Equals(userName.Trim())).Select(x => new UserViewModel()
+            var data = await db.Users.Where(x => x.UserName == userName.Trim()).Select(x => new UserViewModel()
             {
                 FullName = x.Name,
                 Image = x.Image

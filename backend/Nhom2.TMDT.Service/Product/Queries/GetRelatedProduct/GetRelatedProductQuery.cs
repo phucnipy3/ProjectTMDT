@@ -3,7 +3,6 @@ using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Product.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct

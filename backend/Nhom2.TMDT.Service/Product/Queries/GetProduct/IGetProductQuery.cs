@@ -6,6 +6,6 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetProduct
 {
     public interface IGetProductQuery
     {
-        Task<PagedList<ProductCardViewModel>> ExecutedAsync(int category, string searchString, int pageNumber = 1, int pageSize = 10);
+        Task<PagedList<ProductCardViewModel>> ExecutedAsync(int category, string searchString, int pageNumber, int pageSize);
     }
 }

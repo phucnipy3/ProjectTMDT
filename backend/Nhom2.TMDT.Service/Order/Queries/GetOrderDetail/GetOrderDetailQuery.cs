@@ -1,0 +1,63 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Nhom2.TMDT.Common.Enums;
+using Nhom2.TMDT.Common.Extensions;
+using Nhom2.TMDT.Data.Services;
+using Nhom2.TMDT.Service.Admin.ViewModels;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail
+{
+    public class GetOrderDetailQuery : IGetOrderDetailQuery
+    {
+        private readonly ApplicationContext db;
+
+        public GetOrderDetailQuery(ApplicationContext db)
+        {
+            this.db = db;
+        }
+
+        public async Task<OrderDetailViewModel> ExecutedAsync(int orderId)
+        {
+            var data = await db.Orders.Where(x => x.Id == orderId).Select(x => new OrderDetailViewModel()
+            {
+                Id = x.Id,
+                ShipmentDetail = x.ShipmentDetail,
+                Products = x.OrderDetails.Select(y => new CartItemViewModel()
+                {
+                    Id = y.Id,
+                    Image = y.Product.Image,
+                    Name = y.Product.Name,
+                    Count = y.Count.GetValueOrDefault(),
+                    Price = y.Price.GetValueOrDefault(),
+                    PromotionPrice = y.PromotionPrice
+                }).ToList(),
+                DeliveryMothod = x.DeliveryMethod,
+                TotalShipping = x.TotalShipping.GetValueOrDefault(),
+                PaymentMethod = x.PaymentMethod,
+                CreatedDate = x.CreatedDate.GetValueOrDefault()
+            }).SingleOrDefaultAsync();
+
+            var order = await db.Orders.Where(x => x.Id == orderId).SingleOrDefaultAsync();
+
+            data.Status = ((OrderStatus)order.Status).GetDescription();
+
+            var timeLogs = new List<TimeLog>();
+            if (order.Ordered.HasValue)
+                timeLogs.Add(new TimeLog() { TimeLine = order.Ordered.GetValueOrDefault(), Event = OrderStatus.Ordered.GetDescription() });
+            if (order.Confirmed.HasValue)
+                timeLogs.Add(new TimeLog() { TimeLine = order.Confirmed.GetValueOrDefault(), Event = OrderStatus.Confirmed.GetDescription() });
+            if (order.Transporting.HasValue)
+                timeLogs.Add(new TimeLog() { TimeLine = order.Transporting.GetValueOrDefault(), Event = OrderStatus.Transporting.GetDescription() });
+            if (order.Completed.HasValue)
+                timeLogs.Add(new TimeLog() { TimeLine = order.Completed.GetValueOrDefault(), Event = OrderStatus.Completed.GetDescription() });
+            if (order.Canceled.HasValue)
+                timeLogs.Add(new TimeLog() { TimeLine = order.Canceled.GetValueOrDefault(), Event = OrderStatus.Canceled.GetDescription() });
+
+            data.TimeLogs = timeLogs.OrderByDescending(x => x.TimeLine).ToList();
+
+            return data;
+        }
+    }
+}

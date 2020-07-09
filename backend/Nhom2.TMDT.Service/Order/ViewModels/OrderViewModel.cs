@@ -1,9 +1,7 @@
-﻿using Nhom2.TMDT.Data.Entities;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace Nhom2.TMDT.Service.Order.ViewModels
+namespace Nhom2.TMDT.Service.Admin.ViewModels
 {
     public class OrderViewModel
     {

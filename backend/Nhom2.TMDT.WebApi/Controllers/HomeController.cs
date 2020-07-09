@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew;
 using System.Threading.Tasks;
