@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Nhom2.TMDT.Service.Admin.ViewModels
+namespace Nhom2.TMDT.Service.Order.ViewModels
 {
     public class OrderDetailViewModel
     {

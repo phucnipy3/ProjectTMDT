@@ -1,8 +1,8 @@
 ﻿using Nhom2.TMDT.Common.PagedList;
-using Nhom2.TMDT.Service.Admin.ViewModels;
+using Nhom2.TMDT.Service.Order.ViewModels;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
+namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
 {
     public interface IGetOrderQuery
     {

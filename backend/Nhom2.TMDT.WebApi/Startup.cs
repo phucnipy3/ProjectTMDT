@@ -10,14 +10,15 @@ using Microsoft.Extensions.Hosting;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
 using Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder;
-using Nhom2.TMDT.Service.Admin.Queries.GetDeliveryMethod;
-using Nhom2.TMDT.Service.Admin.Queries.GetOrder;
-using Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail;
 using Nhom2.TMDT.Service.Admin.Queries.GetOrderManager;
-using Nhom2.TMDT.Service.Admin.Queries.GetPaymentMethod;
-using Nhom2.TMDT.Service.Admin.Queries.OrderCart;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew;
+using Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail;
+using Nhom2.TMDT.Service.Order.Queries.CreateOrderCart;
+using Nhom2.TMDT.Service.Order.Queries.GetDeliveryMethod;
+using Nhom2.TMDT.Service.Order.Queries.GetOrder;
+using Nhom2.TMDT.Service.Order.Queries.GetOrderDetail;
+using Nhom2.TMDT.Service.Order.Queries.GetPaymentMethod;
 using Nhom2.TMDT.Service.Product.Commands.CreateComment;
 using Nhom2.TMDT.Service.Product.Commands.CreateRate;
 using Nhom2.TMDT.Service.Product.Queries.GetCategory;
@@ -88,11 +89,12 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IGetOrderDetailQuery, GetOrderDetailQuery>();
             services.AddScoped<IConfirmOrderQuery, ConfirmOrderQuery>();
             services.AddScoped<IGetDeliveryMethodQuery, GetDeliveryMethodQuery>();
-            services.AddScoped<IOrderCartQuery, OrderCartQuery>();
+            services.AddScoped<ICreateOrderCartQuery, CreateOrderCartQuery>();
             services.AddScoped<IGetPaymentMethodQuery, GetPaymentMethodQuery>();
             services.AddScoped<IGetCategoryQuery, GetCategoryQuery>();
             services.AddScoped<ICreateCommentCommand, CreateCommentCommand>();
             services.AddScoped<ICreateRateCommand, CreateRateCommand>();
+            services.AddScoped<IUpdateShipmentDetailCommand, UpdateShipmentDetailCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -2,12 +2,12 @@
 using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Common.Extensions;
 using Nhom2.TMDT.Data.Services;
-using Nhom2.TMDT.Service.Admin.ViewModels;
+using Nhom2.TMDT.Service.Order.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail
+namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
 {
     public class GetOrderDetailQuery : IGetOrderDetailQuery
     {

@@ -1,18 +1,18 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
-using Nhom2.TMDT.Service.Admin.ViewModels;
+using Nhom2.TMDT.Service.Order.ViewModels;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.OrderCart
+namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
 {
-    public class OrderCartQuery : IOrderCartQuery
+    public class CreateOrderCartQuery : ICreateOrderCartQuery
     {
         private readonly ApplicationContext db;
 
-        public OrderCartQuery(ApplicationContext db)
+        public CreateOrderCartQuery(ApplicationContext db)
         {
             this.db = db;
         }

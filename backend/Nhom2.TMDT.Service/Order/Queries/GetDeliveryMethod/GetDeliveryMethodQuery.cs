@@ -1,11 +1,11 @@
 ﻿using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Common.Extensions;
 using Nhom2.TMDT.Data.Services;
-using Nhom2.TMDT.Service.Admin.ViewModels;
+using Nhom2.TMDT.Service.Order.ViewModels;
 using System;
 using System.Collections.Generic;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetDeliveryMethod
+namespace Nhom2.TMDT.Service.Order.Queries.GetDeliveryMethod
 {
     public class GetDeliveryMethodQuery : IGetDeliveryMethodQuery
     {
