@@ -19,11 +19,11 @@ namespace Nhom2.TMDT.Service.Account.Commands.GetNewPassword
             encryption = new Encryption();
         }
 
-        public async Task<bool> ExecutedAsync(int userId, NewPasswordViewModel newPasswordViewModel)
+        public async Task<bool> ExecutedAsync(NewPasswordViewModel newPasswordViewModel)
         {
             try
             {
-                var user = await db.Users.Where(x => x.Id == userId && x.Verification == newPasswordViewModel.Code && x.ExprireTime <= DateTime.Now).FirstOrDefaultAsync();
+                var user = await db.Users.Where(x => x.Username == newPasswordViewModel.Email && x.Verification == newPasswordViewModel.Code && x.ExprireTime <= DateTime.Now).FirstOrDefaultAsync();
 
                 if (user == null)
                     return false;

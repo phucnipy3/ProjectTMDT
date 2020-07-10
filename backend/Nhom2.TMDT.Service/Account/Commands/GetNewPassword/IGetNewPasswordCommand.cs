@@ -5,6 +5,6 @@ namespace Nhom2.TMDT.Service.Account.Commands.GetNewPassword
 {
     public interface IGetNewPasswordCommand
     {
-        Task<bool> ExecutedAsync(int userId, NewPasswordViewModel newPasswordViewModel);
+        Task<bool> ExecutedAsync(NewPasswordViewModel newPasswordViewModel);
     }
 }
