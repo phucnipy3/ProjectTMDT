@@ -40,7 +40,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.getOrderStatusQuery = getOrderStatusQuery;
         }
 
-        [HttpGet("GetOrder")]
+        [HttpGet("GetOrders")]
         [Authorize]
         public async Task<IActionResult> GetOrderAsync(string searchString, int status = 0, int pageNumber = 1, int pageSize = 10)
         {
