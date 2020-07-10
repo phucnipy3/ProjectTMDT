@@ -64,7 +64,7 @@ export class ProductService {
 
     public rate(id: number, point: number): Observable<boolean> {
         return this.http
-            .get(this.apiUrl + '/Rate?productId=' + id + '&rate=' + point)
+            .get(this.apiUrl + '/CreateRate?productId=' + id + '&point=' + point)
             .pipe(
                 map((res: boolean) => {
                     return res;
@@ -74,7 +74,7 @@ export class ProductService {
 
     public comment(productId: number, content: string): Observable<boolean> {
         return this.http
-            .get(this.apiUrl + '/Comment?productId=' + productId + '&content=' + content)
+            .get(this.apiUrl + '/CreateComment?productId=' + productId + '&content=' + content)
             .pipe(
                 map((res: boolean) => {
                     return res;
