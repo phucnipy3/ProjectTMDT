@@ -52,7 +52,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
                 }).ToList(),
                 DeliveryMothod = x.DeliveryMethod,
                 TotalShipping = x.TotalShipping.GetValueOrDefault()
-            }).Skip((pageSize - 1) * pageNumber).Take(pageNumber).ToListAsync();
+            }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             data.PageNumber = pageNumber;
             data.PageSize = pageSize;

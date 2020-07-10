@@ -44,7 +44,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderManager
                 }).ToList(),
                 DeliveryMothod = x.DeliveryMethod,
                 TotalShipping = x.TotalShipping.GetValueOrDefault()
-            }).Skip((pageSize - 1) * pageNumber).Take(pageNumber).ToListAsync();
+            }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             data.PageNumber = pageNumber;
             data.PageSize = pageSize;
