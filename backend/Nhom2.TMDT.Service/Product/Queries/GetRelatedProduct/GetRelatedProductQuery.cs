@@ -18,7 +18,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct
 
         public async Task<List<ProductCardViewModel>> ExecutedAsync(int productId)
         {
-            var temp = db.Products.Single(x => x.Id == productId);
+            var temp = await db.Products.Where(x => x.Id == productId).FirstOrDefaultAsync();
 
             var data = await db.Products.Where(x => x.Status == true)
                 .OrderByDescending(x => x.CategoryId == temp.CategoryId).ThenByDescending(x => x.CreatedDate)
