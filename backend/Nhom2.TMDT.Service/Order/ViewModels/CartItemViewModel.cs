@@ -1,4 +1,4 @@
-﻿namespace Nhom2.TMDT.Service.Admin.ViewModels
+﻿namespace Nhom2.TMDT.Service.Order.ViewModels
 {
     public class CartItemViewModel
     {

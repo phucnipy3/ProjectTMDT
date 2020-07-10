@@ -2,11 +2,11 @@
 using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Common.PagedList;
 using Nhom2.TMDT.Data.Services;
-using Nhom2.TMDT.Service.Admin.ViewModels;
+using Nhom2.TMDT.Service.Order.ViewModels;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
+namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
 {
     public class GetOrderQuery : IGetOrderQuery
     {
@@ -17,14 +17,13 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
             this.db = db;
         }
 
-        public async Task<PagedList<OrderViewModel>> ExecutedAsync(string userName, string searchString, int pageNumber, int pageSize)
+        public async Task<PagedList<OrderViewModel>> ExecutedAsync(int userId, string searchString, int pageNumber, int pageSize)
         {
             var table = db.Orders.Where(x => x.Status != -1).AsQueryable();
-            var user = await db.Users.SingleOrDefaultAsync(x => x.Username.Equals(userName));
 
-            if (user != null && user.Role.GetValueOrDefault() == (int)Role.Customer)
+            if (await db.Users.AnyAsync(x => x.Id == userId && x.Role == (int)Role.Customer))
             {
-                table = table.Where(x => x.CreatedBy == user.Id);
+                table = table.Where(x => x.CreatedBy == userId);
             }
 
             if (!string.IsNullOrEmpty(searchString))

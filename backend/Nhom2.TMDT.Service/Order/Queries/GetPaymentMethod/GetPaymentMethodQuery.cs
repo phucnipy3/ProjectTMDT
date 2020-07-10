@@ -1,11 +1,9 @@
 ﻿using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Common.Extensions;
-using Nhom2.TMDT.Data.Services;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetPaymentMethod
+namespace Nhom2.TMDT.Service.Order.Queries.GetPaymentMethod
 {
     public class GetPaymentMethodQuery : IGetPaymentMethodQuery
     {

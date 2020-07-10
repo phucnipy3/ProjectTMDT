@@ -26,7 +26,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetProductDetail
                 Name = x.Name,
                 Image = x.Image,
                 Brand = x.Brand
-            }).SingleOrDefaultAsync();
+            }).FirstOrDefaultAsync();
 
             return data;
         }

@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nhom2.TMDT.Service.Product.Queries.Comment;
+using Nhom2.TMDT.Service.Product.Commands.CreateComment;
+using Nhom2.TMDT.Service.Product.Commands.CreateRate;
 using Nhom2.TMDT.Service.Product.Queries.GetCategory;
 using Nhom2.TMDT.Service.Product.Queries.GetComment;
 using Nhom2.TMDT.Service.Product.Queries.GetProduct;
 using Nhom2.TMDT.Service.Product.Queries.GetProductDetail;
 using Nhom2.TMDT.Service.Product.Queries.GetRate;
 using Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct;
-using Nhom2.TMDT.Service.Product.Queries.Rate;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.WebApi.Controllers
@@ -22,10 +23,10 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public readonly IGetRateQuery getRateQuery;
         public readonly IGetCommentQuery getCommentQuery;
         public readonly IGetCategoryQuery getCategoryQuery;
-        public readonly ICommentQuery commentQuery;
-        public readonly IRateQuery rateQuery;
+        public readonly ICreateCommentCommand createCommentCommand;
+        public readonly ICreateRateCommand createRateCommand;
 
-        public ProductController(IGetProductQuery getProductQuery, IGetRelatedProductQuery getRelatedProductQuery, IGetProductDetailQuery getProductDetailQuery, IGetRateQuery getRateQuery, IGetCommentQuery getCommentQuery, IGetCategoryQuery getCategoryQuery, ICommentQuery commentQuery, IRateQuery rateQuery)
+        public ProductController(IGetProductQuery getProductQuery, IGetRelatedProductQuery getRelatedProductQuery, IGetProductDetailQuery getProductDetailQuery, IGetRateQuery getRateQuery, IGetCommentQuery getCommentQuery, IGetCategoryQuery getCategoryQuery, ICreateCommentCommand createCommentCommand, ICreateRateCommand createRateCommand)
         {
             this.getProductQuery = getProductQuery;
             this.getRelatedProductQuery = getRelatedProductQuery;
@@ -33,8 +34,8 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.getRateQuery = getRateQuery;
             this.getCommentQuery = getCommentQuery;
             this.getCategoryQuery = getCategoryQuery;
-            this.commentQuery = commentQuery;
-            this.rateQuery = rateQuery;
+            this.createCommentCommand = createCommentCommand;
+            this.createRateCommand = createRateCommand;
         }
 
         [HttpGet("GetProduct")]
@@ -58,18 +59,18 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(await getProductDetailQuery.ExecutedAsync(productId));
         }
 
-        [HttpGet("GetRate")]
+        [HttpGet("GetRates")]
         [AllowAnonymous]
         public async Task<IActionResult> GetRateAsync(int productId)
         {
-            return new ObjectResult(await getRateQuery.ExecutedAsync(User.Identity.Name, productId));
+            return new ObjectResult(await getRateQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId));
         }
 
-        [HttpGet("GetComment")]
+        [HttpGet("GetComments")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCommentAsync(int productId, int pagaNumber = 1, int pageSize = 10)
         {
-            return new ObjectResult(await getCommentQuery.ExecutedAsync(User.Identity.Name, productId, pagaNumber, pageSize));
+            return new ObjectResult(await getCommentQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, pagaNumber, pageSize));
         }
 
         [HttpGet("GetCategory")]
@@ -79,18 +80,18 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(await getCategoryQuery.ExecutedAsync());
         }
 
-        [HttpGet("Comment")]
+        [HttpGet("CreateComment")]
         [Authorize]
-        public async Task<IActionResult> CommentAsync(int productId, string content, int? parrentId = null)
+        public async Task<IActionResult> CreateCommentAsync(int productId, string content, int? parrentId = null)
         {
-            return new ObjectResult(await commentQuery.ExecutedAsync(User.Identity.Name, productId, content, parrentId));
+            return new ObjectResult(await createCommentCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, content, parrentId));
         }
 
-        [HttpGet("Rate")]
+        [HttpGet("CreateRate")]
         [Authorize]
-        public async Task<IActionResult> RateAsync(int productId, int rate)
+        public async Task<IActionResult> CreateRateAsync(int productId, int point)
         {
-            return new ObjectResult(await rateQuery.ExecutedAsync(User.Identity.Name, productId, rate));
+            return new ObjectResult(await createRateCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, point));
         }
     }
 }

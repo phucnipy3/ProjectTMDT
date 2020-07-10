@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetPaymentMethod
+namespace Nhom2.TMDT.Service.Order.Queries.GetPaymentMethod
 {
     public interface IGetPaymentMethodQuery
     {

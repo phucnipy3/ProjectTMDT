@@ -19,7 +19,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder
         {
             try
             {
-                var order = await db.Orders.Where(x => x.Id == orderId).SingleOrDefaultAsync();
+                var order = await db.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
                 if (order != null)
                 {
                     if (isCancel)

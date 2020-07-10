@@ -2,12 +2,12 @@
 using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Common.Extensions;
 using Nhom2.TMDT.Data.Services;
-using Nhom2.TMDT.Service.Admin.ViewModels;
+using Nhom2.TMDT.Service.Order.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail
+namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
 {
     public class GetOrderDetailQuery : IGetOrderDetailQuery
     {
@@ -37,9 +37,9 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail
                 TotalShipping = x.TotalShipping.GetValueOrDefault(),
                 PaymentMethod = x.PaymentMethod,
                 CreatedDate = x.CreatedDate.GetValueOrDefault()
-            }).SingleOrDefaultAsync();
+            }).FirstOrDefaultAsync();
 
-            var order = await db.Orders.Where(x => x.Id == orderId).SingleOrDefaultAsync();
+            var order = await db.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
 
             data.Status = ((OrderStatus)order.Status).GetDescription();
 
