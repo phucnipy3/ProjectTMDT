@@ -9,6 +9,7 @@ using Nhom2.TMDT.Service.Admin.Queries.GetPaymentMethod;
 using Nhom2.TMDT.Service.Admin.Queries.OrderCart;
 using Nhom2.TMDT.Service.Admin.ViewModels;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.WebApi.Controllers
@@ -36,7 +37,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [HttpGet("GetOrder")]
         public async Task<IActionResult> GetOrderAsync(string searchString, int pageNumber = 1, int pageSize = 10)
         {
-            return new ObjectResult(await getOrderQuery.ExecutedAsync(User.Identity.Name, searchString, pageNumber, pageSize));
+            return new ObjectResult(await getOrderQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), searchString, pageNumber, pageSize));
         }
 
         [HttpGet("GetOrderDetail")]
@@ -60,7 +61,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [HttpPost("OrderCart")]
         public async Task<IActionResult> OrderCartAsync(OrderCartViewModel orderCartViewModel)
         {
-            return new ObjectResult(await orderCartQuery.ExecutedAsync(User.Identity.Name, orderCartViewModel));
+            return new ObjectResult(await orderCartQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), orderCartViewModel));
         }
     }
 }

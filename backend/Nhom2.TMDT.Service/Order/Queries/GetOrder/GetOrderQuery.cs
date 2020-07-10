@@ -17,14 +17,13 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
             this.db = db;
         }
 
-        public async Task<PagedList<OrderViewModel>> ExecutedAsync(string userName, string searchString, int pageNumber, int pageSize)
+        public async Task<PagedList<OrderViewModel>> ExecutedAsync(int userId, string searchString, int pageNumber, int pageSize)
         {
             var table = db.Orders.Where(x => x.Status != -1).AsQueryable();
-            var user = await db.Users.SingleOrDefaultAsync(x => x.Username.Equals(userName));
 
-            if (user != null && user.Role.GetValueOrDefault() == (int)Role.Customer)
+            if (await db.Users.AnyAsync(x => x.Id == userId && x.Role == (int)Role.Customer))
             {
-                table = table.Where(x => x.CreatedBy == user.Id);
+                table = table.Where(x => x.CreatedBy == userId);
             }
 
             if (!string.IsNullOrEmpty(searchString))

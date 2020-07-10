@@ -17,7 +17,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.OrderCart
             this.db = db;
         }
 
-        public async Task<bool> ExecutedAsync(string userName, OrderCartViewModel orderCartViewModel)
+        public async Task<bool> ExecutedAsync(int userId, OrderCartViewModel orderCartViewModel)
         {
             Data.Entities.Order order = new Data.Entities.Order();
 
@@ -44,11 +44,9 @@ namespace Nhom2.TMDT.Service.Admin.Queries.OrderCart
             order.TotalShipping = orderCartViewModel.DeliveryMethod.Cost;
             order.PaymentMethod = orderCartViewModel.PaymentMethod;
             order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
+            order.CreatedBy = userId;
             order.Ordered = DateTime.Now;
             order.Status = 1;
-
-            var user = await db.Users.Where(x => x.Username == userName).SingleOrDefaultAsync();
-            order.CreatedBy = user.Id;
 
             await db.Orders.AddAsync(order);
 

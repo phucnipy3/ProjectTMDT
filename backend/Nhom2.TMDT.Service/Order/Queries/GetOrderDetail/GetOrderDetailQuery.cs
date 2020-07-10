@@ -37,9 +37,9 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderDetail
                 TotalShipping = x.TotalShipping.GetValueOrDefault(),
                 PaymentMethod = x.PaymentMethod,
                 CreatedDate = x.CreatedDate.GetValueOrDefault()
-            }).SingleOrDefaultAsync();
+            }).FirstOrDefaultAsync();
 
-            var order = await db.Orders.Where(x => x.Id == orderId).SingleOrDefaultAsync();
+            var order = await db.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
 
             data.Status = ((OrderStatus)order.Status).GetDescription();
 

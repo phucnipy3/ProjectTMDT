@@ -70,7 +70,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetProfileAsync()
         {
-            return new ObjectResult(await db.Users.Where(x => x.Id == int.Parse(User.FindFirstValue(ClaimTypes.Sid))).SingleOrDefaultAsync());
+            return new ObjectResult(await db.Users.Where(x => x.Id == int.Parse(User.FindFirstValue(ClaimTypes.Sid))).FirstOrDefaultAsync());
         }
 
         [HttpGet("Authentication")]

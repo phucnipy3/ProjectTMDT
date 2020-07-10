@@ -5,6 +5,6 @@ namespace Nhom2.TMDT.Service.Admin.Queries.OrderCart
 {
     public interface IOrderCartQuery
     {
-        Task<bool> ExecutedAsync(string userName, OrderCartViewModel orderCartViewModel);
+        Task<bool> ExecutedAsync(int userId, OrderCartViewModel orderCartViewModel);
     }
 }

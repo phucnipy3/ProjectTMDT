@@ -6,6 +6,6 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
 {
     public interface IGetOrderQuery
     {
-        Task<PagedList<OrderViewModel>> ExecutedAsync(string userName, string searchString, int pageNumber, int pageSize);
+        Task<PagedList<OrderViewModel>> ExecutedAsync(int userId, string searchString, int pageNumber, int pageSize);
     }
 }

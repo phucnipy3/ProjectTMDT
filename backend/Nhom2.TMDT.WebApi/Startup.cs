@@ -18,14 +18,14 @@ using Nhom2.TMDT.Service.Admin.Queries.GetPaymentMethod;
 using Nhom2.TMDT.Service.Admin.Queries.OrderCart;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew;
-using Nhom2.TMDT.Service.Product.Queries.Comment;
+using Nhom2.TMDT.Service.Product.Commands.CreateComment;
+using Nhom2.TMDT.Service.Product.Commands.CreateRate;
 using Nhom2.TMDT.Service.Product.Queries.GetCategory;
 using Nhom2.TMDT.Service.Product.Queries.GetComment;
 using Nhom2.TMDT.Service.Product.Queries.GetProduct;
 using Nhom2.TMDT.Service.Product.Queries.GetProductDetail;
 using Nhom2.TMDT.Service.Product.Queries.GetRate;
 using Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct;
-using Nhom2.TMDT.Service.Product.Queries.Rate;
 using System;
 
 namespace Nhom2.TMDT.WebApi
@@ -91,8 +91,8 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IOrderCartQuery, OrderCartQuery>();
             services.AddScoped<IGetPaymentMethodQuery, GetPaymentMethodQuery>();
             services.AddScoped<IGetCategoryQuery, GetCategoryQuery>();
-            services.AddScoped<ICommentQuery, CommentQuery>();
-            services.AddScoped<IRateQuery, RateQuery>();
+            services.AddScoped<ICreateCommentCommand, CreateCommentCommand>();
+            services.AddScoped<ICreateRateCommand, CreateRateCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

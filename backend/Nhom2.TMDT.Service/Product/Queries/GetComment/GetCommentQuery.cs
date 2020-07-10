@@ -16,7 +16,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetComment
             this.db = db;
         }
 
-        public async Task<PagedList<CommentViewModel>> ExecutedAsync(string userName, int productId, int pageNumber, int pageSize)
+        public async Task<PagedList<CommentViewModel>> ExecutedAsync(int userId, int productId, int pageNumber, int pageSize)
         {
             var table = db.Comments.Where(x => x.ProductId == productId && !x.ParentId.HasValue).OrderByDescending(x => x.CreatedDate).Select(x => new CommentViewModel()
             {
@@ -34,10 +34,10 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetComment
                     Content = y.Content,
                     Time = y.CreatedDate.GetValueOrDefault().ToString("HH:mm"),
                     Date = y.CreatedDate.GetValueOrDefault().ToString("dd/MM/yyyy"),
-                    CanDelete = y.User.Username.Equals(userName),
+                    CanDelete = y.CreatedBy == userId,
                     Manager = y.User.Role == 1 || y.User.Role == 2
                 }).ToList(),
-                CanDelete = x.User.Username.Equals(userName),
+                CanDelete = x.CreatedBy == userId,
                 Manager = x.User.Role == 1 || x.User.Role == 2
             });
 

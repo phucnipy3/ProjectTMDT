@@ -17,7 +17,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRate
             this.db = db;
         }
 
-        public async Task<RateViewModel> ExecutedAsync(string userName, int productId)
+        public async Task<RateViewModel> ExecutedAsync(int userId, int productId)
         {
             var table = db.Rates.Where(x => x.ProductId == productId);
 
@@ -33,7 +33,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRate
             int[] temp = { 1, 2, 3, 4, 5 };
             await Task.Run(() => data.PersentPoints = temp.GroupJoin(table, x => x, y => y.RatePoint, (x, y) => new { x, y }).Select(x => x.y.Count() * 100 / table.Count()).ToList());
 
-            data.UserRate = await db.Rates.Where(x => x.ProductId == productId && x.User.Username.Equals(userName)).Select(x => x.RatePoint.GetValueOrDefault()).SingleOrDefaultAsync();
+            data.UserRate = await db.Rates.Where(x => x.ProductId == productId && x.CreatedBy == userId).Select(x => x.RatePoint.GetValueOrDefault()).FirstOrDefaultAsync();
 
             return data;
         }
