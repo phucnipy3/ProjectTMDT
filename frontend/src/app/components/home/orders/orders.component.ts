@@ -5,6 +5,7 @@ import { TimeLog } from '../../../../models/order/time-log';
 import { MessageService } from '../../../../services/message.service';
 import { OrderStatusViewModel } from '../../../../models/order/order-status';
 import { OrderService } from '../../../../services/order.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'orders',
@@ -23,7 +24,8 @@ export class OrdersComponent implements OnInit {
 
     constructor(
         private messageService: MessageService,
-        private orderService: OrderService) {
+        private orderService: OrderService,
+        private router: Router) {
         this.messageService.clearActivePage();
     }
 
@@ -62,5 +64,9 @@ export class OrdersComponent implements OnInit {
 
     changePage(page){
         this.getOrders(this.searchString, page);
+    }
+
+    moveToDetail(id: number){
+        this.router.navigate(['/chi-tiet-don-hang/' + id]);
     }
 }

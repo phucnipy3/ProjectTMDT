@@ -4,6 +4,8 @@ import { ProductOnOrderViewModel } from '../../../../../models/order/product-on-
 import { TimeLog } from '../../../../../models/order/time-log';
 import { ShipmentDetailViewModel } from '../../../../../models/order/shipment-detail';
 import { MessageService } from '../../../../../services/message.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { OrderService } from '../../../../../services/order.service';
 
 @Component({
     selector: 'order-detail',
@@ -12,31 +14,25 @@ import { MessageService } from '../../../../../services/message.service';
 export class OrderDetailComponent implements OnInit {
 
     order: OrderViewModel;
-
-    constructor(private messageService: MessageService) {
+    id: number;
+    constructor(
+        private messageService: MessageService,
+        private activatedRoute: ActivatedRoute,
+        private orderService: OrderService) {
         this.messageService.clearActivePage();
     }
 
     ngOnInit(): void {
-        let order = new OrderViewModel();
-        order.status = 'Đã giao';
-        order.totalMoney = 1234546;
-        let product = new ProductOnOrderViewModel();
-        product.image = '../../../assets/image/banner1.jpg';
-        product.name = 'agds sdf dsgdfd há á';
-        product.price = 12354;
-        product.promotionPrice = 136658;
-        product.count = 2;
-        order.products.push(product);
-        let timelog = new TimeLog();
-        timelog.timeLine = '12-12-2020';
-        timelog.event = 'event sa grrga a';
-        order.timeLogs.push(timelog);
-        let info = new ShipmentDetailViewModel();
-        info.name = 'phúc nguyễn';
-        info.phoneNumber = '05241351';
-        info.address = 'Quận 9, tp.HCM';
-        order.shipmentDetail = info;
-        this.order = order;
+        this.activatedRoute.paramMap.subscribe((res: ParamMap) => {
+            if (res) {
+                this.id = Number(res.get('id'));
+                this.orderService.getOrderDetail(this.id).subscribe((res: OrderViewModel) => {
+                    if (res) {
+                        this.order = res;
+                    }
+                });
+            }
+        });
+
     }
 }

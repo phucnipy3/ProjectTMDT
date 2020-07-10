@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Config } from '../app/config';
 import { PathController } from '../app/common/consts/path-controllers.const';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, pipe } from 'rxjs';
 import { ShippingMethod } from '../models/order/shipping-method';
 import { map } from 'rxjs/operators';
 import { CartItemViewModel } from '../models/cart/cart-item';
@@ -80,6 +80,16 @@ export class OrderService {
             .get(this.apiUrl + '/GetOrderStatus')
             .pipe(
                 map((res: OrderStatusViewModel[]) => {
+                    return res;
+                })
+            );
+    }
+
+    getOrderDetail(id: number): Observable<OrderViewModel> {
+        return this.http
+            .get(this.apiUrl + '/GetOrderDetail?orderId=' + id)
+            .pipe(
+                map((res: OrderViewModel) => {
                     return res;
                 })
             );
