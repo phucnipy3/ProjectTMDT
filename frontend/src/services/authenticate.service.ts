@@ -8,6 +8,7 @@ import { SessionHelper } from '../app/common/helper/SessionHelper';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { SignUpViewModel } from '../models/account/sign-up';
+import { ProfileViewModel } from '../models/account/profile';
 
 @Injectable()
 export class AuthenticateService {
@@ -69,4 +70,55 @@ export class AuthenticateService {
                 })
             );
     }
+
+    public getProfile(): Observable<ProfileViewModel> {
+        return this.http
+            .get(this.apiUrl + '/GetProfile')
+            .pipe(
+                map((res: ProfileViewModel) => {
+                    return res;
+                })
+            );
+    }
+
+    public updateProfile(profile: ProfileViewModel): Observable<boolean> {
+        return this.http
+            .post(this.apiUrl + '/UpdateProfile', profile)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    public changePassword(oldPassword: string, newPassword: string): Observable<boolean> {
+        return this.http
+            .post(this.apiUrl + '/ChangePassword', { oldPassword, newPassword })
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    public forgetPassword(email: string): Observable<boolean> {
+        return this.http
+            .post(this.apiUrl + '/ForgetPassword', email)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    public getNewPassword(newPassword: string, code: string): Observable<boolean> {
+        return this.http
+            .post(this.apiUrl + '/GetNewPassword', { newPassword, code })
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
 }

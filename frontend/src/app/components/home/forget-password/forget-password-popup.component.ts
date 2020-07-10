@@ -8,12 +8,14 @@ declare var $: any;
 
 export class ForgetPasswordPopupComponent extends SimpleModalComponent<null, string> {
 
+    email: string;
+
     constructor() {
         super();
     }
 
     confirm() {
-        this.result = $('#email').val();
+        this.result = this.email;
         this.close();
     }
 }

@@ -1,5 +1,7 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { ShipmentDetailViewModel } from 'src/models/order/shipment-detail';
+import { OrderService } from '../../../../../services/order.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'shipping-input',
@@ -10,9 +12,13 @@ export class ShippingInputComponent implements OnInit, OnChanges {
     @Input() shippingInput: ShipmentDetailViewModel;
     @Output() cancel: EventEmitter<null> = new EventEmitter();
     @Output() callback: EventEmitter<ShipmentDetailViewModel> = new EventEmitter();
+    @Output() updated: EventEmitter<null> = new EventEmitter();
     updating = false;
     shipping: ShipmentDetailViewModel;
-    constructor() {
+    constructor(
+        private orderService: OrderService,
+        private toastr: ToastrService
+    ) {
     }
     ngOnChanges(changes: SimpleChanges): void {
         if (this.shippingInput) {
@@ -41,8 +47,18 @@ export class ShippingInputComponent implements OnInit, OnChanges {
     }
 
     onUpdate() {
-        // call api update shipping, toast,  call cancel() to close;
-        this.shippingInput = this.shipping;
+        this.orderService.updateShipping(this.shipping).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Cập nhật thành công');
+                this.updated.emit();
+                this.cancel.emit();
+            }
+            else {
+                this.toastr.warning('Cập nhật thất bại');
+            }
+        }, () => {
+            this.toastr.warning('Có lỗi xảy ra');
+        });
     }
 
     onMoveToCheckout() {

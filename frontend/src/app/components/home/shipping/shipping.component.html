@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="collapse" id="shippingCollapse">
-    <shipping-input [shippingInput] = "selectedShipping" (cancel) = "closeCollapse()" (callback) = "moveToCheckout($event)">
+    <shipping-input [shippingInput] = "selectedShipping" (cancel) = "closeCollapse()" (callback) = "moveToCheckout($event)" (updated) = "getShipmentDetails()">
 
     </shipping-input>
   </div>

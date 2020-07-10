@@ -4,6 +4,7 @@ import { SessionHelper } from '../../../common/helper/SessionHelper';
 import { Router } from '@angular/router';
 import { User } from '../../../../models/account/user';
 import { OrderService } from '../../../../services/order.service';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
     selector: 'shipping',
@@ -17,20 +18,25 @@ export class ShippingComponent implements OnInit {
     selectedShipping: ShipmentDetailViewModel;
     constructor(
         private router: Router,
-        private orderService: OrderService
+        private orderService: OrderService,
+        private toastr: ToastrService
     ) { }
 
     ngOnInit(): void {
         this.user = SessionHelper.getUserFromStorage();
 
+        this.getShipmentDetails();
+
+        $('.collapse').collapse({
+            toggle: false
+        });
+    }
+
+    getShipmentDetails() {
         this.orderService.getShipmentDetails().subscribe((res: ShipmentDetailViewModel[]) => {
             if (res) {
                 this.shippings = res;
             }
-        });
-
-        $('.collapse').collapse({
-            toggle: false
         });
     }
 
@@ -48,6 +54,16 @@ export class ShippingComponent implements OnInit {
     }
 
     onDelete(id: number) {
-        // call api delete shipping, toast
+        this.orderService.deleteShipping(id).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Xóa thành công');
+                this.getShipmentDetails();
+            }
+            else {
+                this.toastr.warning('Thất bại');
+            }
+        }, () => {
+            this.toastr.warning('Đã có lỗi xảy ra');
+        });
     }
 }

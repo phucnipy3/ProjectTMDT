@@ -94,4 +94,24 @@ export class OrderService {
                 })
             );
     }
+
+    updateShipping(shipmentDetail: ShipmentDetailViewModel): Observable<boolean> {
+        return this.http
+            .post(this.apiUrl + '/UpdateShipmentDetail', shipmentDetail)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    deleteShipping(shipmentDetailId: number): Observable<boolean> {
+        return this.http
+            .get(this.apiUrl + '/DeleteShipmentDetail?s;hipmentDetailId=' + shipmentDetailId)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
 }
