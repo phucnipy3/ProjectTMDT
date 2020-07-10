@@ -49,7 +49,7 @@ namespace Nhom2.TMDT.Service.Order.ViewModels
 
     public class TimeLog
     {
-        public DateTime TimeLine { get; set; }
+        public string TimeLine { get; set; }
         public string Event { get; set; }
     }
 }
