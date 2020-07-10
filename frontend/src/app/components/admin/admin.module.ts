@@ -12,6 +12,7 @@ import { AdminRoutingModule } from './admin-routing.module';
 const APP_COMPONENTS: any[] = [
     fromAdmin.LoginComponent,
     fromAdmin.OrderComponent,
+    fromAdmin.AdminComponent,
 ];
 
 const APP_POPUP_COMPONENTS: any[] = [

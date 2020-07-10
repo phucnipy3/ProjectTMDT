@@ -1,23 +1,23 @@
-import { RouterModule, Routes, CanActivate } from '@angular/router';
-import { NgModule } from '@angular/core';
-import { LoginComponent } from './login/login.component';
-import { OrderComponent } from './order/order.component';
 import { AdminGuard } from '../../../guards/admin.guard';
+import { LoginComponent } from './login/login.component';
+import { NgModule } from '@angular/core';
+import { OrderComponent } from './order/order.component';
+import { RouterModule, Routes } from '@angular/router';
 
 
 const routes: Routes = [
     {
-        path: 'dang-nhap',
-        component: LoginComponent,
+        path: '',
+        component: OrderComponent,
+        canActivate: [AdminGuard]
     },
     {
         path: 'quan-ly-don-hang',
         redirectTo: ''
     },
     {
-        path: '',
-        component: OrderComponent,
-        canActivate: [AdminGuard]
+        path: 'dang-nhap',
+        component: LoginComponent,
     },
 
 ];
