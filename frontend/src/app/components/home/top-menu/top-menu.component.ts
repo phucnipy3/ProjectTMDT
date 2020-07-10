@@ -8,6 +8,7 @@ import { User } from '../../../../models/account/user';
 import { SessionHelper } from '../../../common/helper/SessionHelper';
 import { AuthenticateService } from '../../../../services/authenticate.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'top-menu',
@@ -23,7 +24,8 @@ export class TopMenuComponent implements OnInit {
         private messageService: MessageService,
         private cartService: CartService,
         private authenticateService: AuthenticateService,
-        private toastr: ToastrService) {
+        private toastr: ToastrService,
+        private router: Router) {
         this.messageService.onActivePage().subscribe(activePage => {
             if (activePage) {
                 this.activePage = activePage;
@@ -50,6 +52,7 @@ export class TopMenuComponent implements OnInit {
         this.authenticateService.logout().subscribe((res) => {
             if (res) {
                 this.user = undefined;
+                this.router.navigate(['/']);
             }
         });
     }

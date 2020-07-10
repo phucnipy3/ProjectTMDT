@@ -6,13 +6,15 @@ import { Observable } from 'rxjs';
 import { User } from '../models/account/user';
 import { SessionHelper } from '../app/common/helper/SessionHelper';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class AuthenticateService {
 
     private apiUrl = Config.getPath(PathController.Account);
 
-    constructor(private http: HttpClient) { }
+    constructor(
+        private http: HttpClient,) { }
 
     public login(username: string, password: string): Observable<User> {
         return this.http

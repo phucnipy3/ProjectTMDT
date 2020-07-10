@@ -3,4 +3,5 @@ export const PathController = {
     Admin: 'admin',
     Product: 'product',
     Account: 'account',
+    Order: 'order',
 };

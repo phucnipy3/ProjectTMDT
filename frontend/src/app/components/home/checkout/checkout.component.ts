@@ -4,6 +4,10 @@ import { ShipmentDetailViewModel } from '../../../../models/order/shipment-detai
 import { SessionHelper } from '../../../common/helper/SessionHelper';
 import { CartItemViewModel } from '../../../../models/cart/cart-item';
 import { CartService } from '../../../../services/cart.service';
+import { ShippingMethod } from '../../../../models/order/shipping-method';
+import { OrderService } from '../../../../services/order.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'checkout',
@@ -11,14 +15,20 @@ import { CartService } from '../../../../services/cart.service';
 })
 export class CheckoutComponent implements OnInit {
 
-    transports: TransportViewModel[] = [];
+    shippingMethods: ShippingMethod[] = [];
+    selectedShippingMethod: ShippingMethod;
+    paymentMethods: string[] = [];
+    selectedPaymentMethod: string;
     shipping: ShipmentDetailViewModel;
     cartItems: CartItemViewModel[] = [];
     total: number;
     totalCount: number;
     shipfee: number;
     constructor(
-        private cartService: CartService
+        private cartService: CartService,
+        private orderService: OrderService,
+        private toastr: ToastrService,
+        private router: Router,
     ) { }
 
     ngOnInit(): void {
@@ -26,19 +36,41 @@ export class CheckoutComponent implements OnInit {
         this.cartItems = SessionHelper.getCartFromStorage();
         this.total = this.cartService.getTotal();
         this.totalCount = this.cartService.getItemCount();
-        let x = new TransportViewModel();
-        x.name = 'Giao hàng tiêu chuẩn';
-        x.fee = 12346;
-        let y = new TransportViewModel();
-        y.name = 'Giao hàng nhanh';
-        y.fee = 21533;
-        this.transports.push(x);
-        this.transports.push(y);
-
-        this.shipfee = this.transports[0].fee;
+        this.getShippingMethods();
+        this.getPaymentMethods();
     }
 
-    shipChange(fee){
-        this.shipfee = fee;
+    shipChange(shippingMethod: ShippingMethod) {
+        this.selectedShippingMethod = shippingMethod;
+    }
+
+    getShippingMethods() {
+        this.orderService.getShippingMethods().subscribe((res: ShippingMethod[]) => {
+            this.shippingMethods = res;
+        });
+    }
+
+    getPaymentMethods() {
+        this.orderService.getPaymentMethods().subscribe((res: string[]) => {
+            this.paymentMethods = res;
+            this.selectedPaymentMethod = res[0];
+        });
+    }
+
+    createOrder() {
+        this.orderService.createOrder(
+            SessionHelper.getCartFromStorage(),
+            SessionHelper.getShippingFromStorage(),
+            this.selectedShippingMethod,
+            this.selectedPaymentMethod)
+            .subscribe((res) => {
+                if (res) {
+                    this.toastr.success('Đặt hàng thành công');
+                } else {
+                    this.toastr.warning('Đặt hàng thất bại');
+                }
+                SessionHelper.removeCartStorage();
+                this.router.navigate(['/']);
+            });
     }
 }
