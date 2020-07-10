@@ -11,13 +11,14 @@
             {
                 if (Price != 0)
                 {
-                    return ((1 - PromotionPrice.GetValueOrDefault() / Price) * 100).ToString("##,##");
+                    return ((1 - PromotionPrice.GetValueOrDefault() / Price) * 100).ToString("##,##\\%");
                 }
                 return "0";
             }
         }
         public string Detail { get; set; }
         public string Name { get; set; }
+        public string Image { get; set; }
         public string Brand { get; set; }
     }
 }
