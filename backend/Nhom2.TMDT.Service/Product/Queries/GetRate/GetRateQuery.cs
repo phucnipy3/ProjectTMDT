@@ -17,7 +17,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRate
             this.db = db;
         }
 
-        public async Task<RateViewModel> ExecutedAsync(int userId, int productId)
+        public async Task<RateViewModel> ExecutedAsync(int productId, int userId)
         {
             var table = db.Rates.Where(x => x.ProductId == productId);
 

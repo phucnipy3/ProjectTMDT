@@ -63,14 +63,18 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetRateAsync(int productId)
         {
-            return new ObjectResult(await getRateQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId));
+            int userId;
+            int.TryParse(User.FindFirstValue(ClaimTypes.Sid), out userId);
+            return new ObjectResult(await getRateQuery.ExecutedAsync(productId, userId));
         }
 
         [HttpGet("GetComments")]
         [AllowAnonymous]
         public async Task<IActionResult> GetCommentAsync(int productId, int pagaNumber = 1, int pageSize = 10)
         {
-            return new ObjectResult(await getCommentQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, pagaNumber, pageSize));
+            int userId;
+            int.TryParse(User.FindFirstValue(ClaimTypes.Sid), out userId);
+            return new ObjectResult(await getCommentQuery.ExecutedAsync(userId, productId, pagaNumber, pageSize));
         }
 
         [HttpGet("GetCategory")]
