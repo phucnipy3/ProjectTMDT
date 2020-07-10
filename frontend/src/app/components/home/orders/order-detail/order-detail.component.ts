@@ -36,7 +36,7 @@ export class OrderDetailComponent implements OnInit {
         info.name = 'phúc nguyễn';
         info.phoneNumber = '05241351';
         info.address = 'Quận 9, tp.HCM';
-        order.information = info;
+        order.shipmentDetail = info;
         this.order = order;
     }
 }
