@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ShipmentDetailViewModel } from '../../../../models/order/shipment-detail';
+import { SessionHelper } from '../../../common/helper/SessionHelper';
+import { Router } from '@angular/router';
+import { User } from '../../../../models/account/user';
 declare var $: any;
 @Component({
     selector: 'shipping',
@@ -7,14 +10,17 @@ declare var $: any;
 })
 export class ShippingComponent implements OnInit {
 
-    authen = true;
+    user: User;
 
     shippings: ShipmentDetailViewModel[] = [];
-    shippingId: number;
-    constructor() { }
+    selectedShipping: ShipmentDetailViewModel;
+    constructor(
+        private router: Router
+    ) { }
 
     ngOnInit(): void {
 
+        this.user = SessionHelper.getUserFromStorage();
         let shipping = new ShipmentDetailViewModel();
         shipping.phoneNumber = '3544572334';
         shipping.id = 1;
@@ -31,11 +37,20 @@ export class ShippingComponent implements OnInit {
         });
     }
 
-    updateShipping(id) {
-        this.shippingId = id;
+    updateShipping(shipping: ShipmentDetailViewModel) {
+        this.selectedShipping = shipping;
         $('#shippingCollapse').collapse('show');
     }
-    closeCollapse(){
+    closeCollapse() {
         $('#shippingCollapse').collapse('hide');
+    }
+
+    moveToCheckout(shipping: ShipmentDetailViewModel) {
+        SessionHelper.saveShippingToStorage(shipping);
+        this.router.navigate(['/thanh-toan']);
+    }
+
+    onDelete(id: number){
+        // call api delete shipping, toast
     }
 }

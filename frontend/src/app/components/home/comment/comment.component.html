@@ -26,18 +26,18 @@
             &emsp;</li>
           <li class="d-inline-block mx-1"><i class="icon icon-calendar"></i>
             {{comment.date}} &emsp;</li>
-          <li class="d-inline-block mx-1"><span class="text-info" (click) = "reply()">reply</span> &emsp;</li>
+          <li class="d-inline-block mx-1"><span class="text-info" (click) = "showReplyInput()">reply</span> &emsp;</li>
         </ul>
       </div>
       <ng-container *ngIf="!isChild">
         <div class="col-12 comment-replies">
           <ng-container *ngFor="let child of comment.children">
-            <comment [isChild]=true (callback) = "showReply = !showReply" [comment] ="child">
+            <comment [isChild]=true (callbackToParent) = "showReply = !showReply" [comment] ="child">
             </comment>
           </ng-container>
         </div>
         <div class="col-12">
-          <comment-input [show] = "showReply">
+          <comment-input [show] = "showReply" (callback) = "reply($event)">
           </comment-input>
         </div>
       </ng-container>

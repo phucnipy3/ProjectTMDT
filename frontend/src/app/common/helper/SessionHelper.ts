@@ -30,7 +30,7 @@ export class SessionHelper {
     }
 
     public static getShippingFromStorage(): ShipmentDetailViewModel {
-        const currentShipping = sessionStorage.getItem(this.CART_LOCAL);
+        const currentShipping = sessionStorage.getItem(this.SHIPPING_LOCAL);
         if (!currentShipping || currentShipping === '') {
             return undefined;
         }

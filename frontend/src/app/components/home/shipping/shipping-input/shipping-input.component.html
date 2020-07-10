@@ -40,7 +40,7 @@
                     <button class="btn btn-secondary w-100 " (click)="onCancel()" >Hủy</button>
                 </div>
                 <div class="col pl-1">
-                    <button class="btn btn-primary w-100">Giao đến địa chỉ này</button>
+                    <button class="btn btn-primary w-100" (click)="onMoveToCheckout()">Giao đến địa chỉ này</button>
                 </div>
             </div>
             <div class="row" *ngIf="updating">
@@ -49,7 +49,7 @@
                     <button class="btn btn-secondary w-100" (click)="onCancel()">Hủy</button>
                 </div>
                 <div class="col pl-1">
-                    <button class="btn btn-primary w-100">Cập nhật</button>
+                    <button class="btn btn-primary w-100" (click) = "onUpdate()">Cập nhật</button>
                 </div>
             </div>
         </div>

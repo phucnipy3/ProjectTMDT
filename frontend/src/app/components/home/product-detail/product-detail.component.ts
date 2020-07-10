@@ -13,6 +13,8 @@ import { User } from '../../../../models/account/user';
 import { SimpleModalService } from 'ngx-simple-modal';
 import { LoginPopupComponent } from '../login/login-popup-component';
 import { ToastrService } from 'ngx-toastr';
+import { PagedList } from '../../../../models/paged-list/paged-list';
+import { CartService } from '../../../../services/cart.service';
 
 @Component({
     selector: 'product-detail',
@@ -31,13 +33,18 @@ export class ProductDetailComponent implements OnInit {
 
     viewedProducts: ProductSildeViewModel[] = [];
 
+    pageNumber = 1;
+    pageSize = 10;
+    totalCount = 0;
+
     constructor(
         private messageService: MessageService,
         private activatedRoute: ActivatedRoute,
         private viewedProductService: ViewedProductService,
         private productService: ProductService,
         private simpleModalService: SimpleModalService,
-        private toastr: ToastrService) {
+        private toastr: ToastrService,
+        private cartService: CartService) {
         this.messageService.sendActivePage('product');
     }
 
@@ -82,23 +89,65 @@ export class ProductDetailComponent implements OnInit {
                             this.toastr.success('Đánh giá thành công');
                             this.getRate();
                         }
-                        else{
+                        else {
                             this.toastr.warning('Đánh giá thất bại');
                         }
                     });
                 }
             });
         }
-        else{
+        else {
             this.productService.rate(this.id, point).subscribe((success) => {
                 if (success) {
                     this.toastr.success('Đánh giá thành công');
                     this.getRate();
                 }
-                else{
+                else {
                     this.toastr.warning('Đánh giá thất bại');
                 }
             });
         }
+    }
+
+    onComment(content: string) {
+        this.productService.comment(this.product.id, content).subscribe((res) => {
+            if (res) {
+                this.getComments();
+                this.toastr.success('Bình luận thành công');
+            }
+            else {
+                this.toastr.warning('Bình luận thất bại');
+            }
+        });
+    }
+
+    onReply(content: string, parentId: number) {
+        this.productService.reply(this.product.id, parentId, content).subscribe((res) => {
+            if (res) {
+                this.getComments();
+                this.toastr.success('Trả lời bình luận thành công');
+            }
+            else {
+                this.toastr.warning('Trả lời bình luận thất bại');
+            }
+        });
+    }
+
+    getComments(pageNumber = 1, pageSize = 10) {
+        this.productService.getComments(this.id, pageNumber, pageSize).subscribe((res: PagedList<CommentViewModel>) => {
+            if (res) {
+                this.comments = res.items;
+                this.totalCount = res.totalCount;
+                this.pageNumber = res.pageNumber;
+            }
+        });
+    }
+
+    changePage(page: number){
+        this.getComments(page);
+    }
+
+    addToCart(){
+        this.cartService.addProductToCart(this.product);
     }
 }

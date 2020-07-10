@@ -8,6 +8,7 @@ import { map } from 'rxjs/operators';
 import { PagedList } from '../models/paged-list/paged-list';
 import { ProductViewModel } from '../models/product/product';
 import { RateViewModel } from '../models/product/rate';
+import { CommentViewModel } from '../models/product/comment';
 
 @Injectable()
 export class ProductService {
@@ -71,4 +72,41 @@ export class ProductService {
             );
     }
 
+    public comment(productId: number, content: string): Observable<boolean> {
+        return this.http
+            .get(this.apiUrl + '/Comment?productId=' + productId + '&content=' + content)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    public reply(productId, parentId: number, content: string) {
+        return this.http
+            .get(this.apiUrl +
+                '/Comment?productId=' + productId +
+                '&content=' + content +
+                '&parentId=' + parentId)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    public getComments(id: number, pageNumber = 1, pageSize = 10): Observable<PagedList<CommentViewModel>> {
+        let params = new HttpParams();
+        params = params
+            .set('productId', id.toString())
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
+        return this.http
+            .get(this.apiUrl + '/GetComments', { params })
+            .pipe(
+                map((res: PagedList<CommentViewModel>) => {
+                    return res;
+                })
+            );
+    }
 }

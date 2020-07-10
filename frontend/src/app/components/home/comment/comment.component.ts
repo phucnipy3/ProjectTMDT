@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommentViewModel } from '../../../../models/product/comment';
+import { ProductService } from '../../../../services/product.service';
 
 @Component({
     selector: 'comment',
@@ -8,21 +9,26 @@ import { CommentViewModel } from '../../../../models/product/comment';
 export class CommentComponent implements OnInit {
 
     @Input() isChild = false;
-    @Output() callback: EventEmitter<null> = new EventEmitter();
+    @Output() callbackToParent: EventEmitter<null> = new EventEmitter();
     showReply = false;
-
+    @Output() callback: EventEmitter<string> = new EventEmitter();
     @Input() comment: CommentViewModel;
 
-    constructor() { }
+    constructor(
+    ) { }
 
     ngOnInit(): void { }
 
-    reply() {
+    showReplyInput() {
         if (this.isChild) {
-            this.callback.emit();
+            this.callbackToParent.emit();
         }
-        else{
+        else {
             this.showReply = !this.showReply;
         }
+    }
+
+    reply(content: string) {
+        this.callback.emit(content);
     }
 }

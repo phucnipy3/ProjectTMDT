@@ -39,6 +39,7 @@ const APP_POPUP_COMPONENTS: any[] = [
     fromHome.SignUpPopupComponent,
     fromHome.ForgetPasswordPopupComponent,
     fromHome.ChangePasswordPopupComponent,
+    fromHome.CartRedictPopupComponent,
 ];
 
 @NgModule({

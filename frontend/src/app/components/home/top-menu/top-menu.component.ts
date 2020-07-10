@@ -37,6 +37,9 @@ export class TopMenuComponent implements OnInit {
         this.messageService.onItemCount().subscribe(count => {
             this.itemCount = count;
         });
+        this.messageService.onLogin().subscribe(user => {
+            this.user = user;
+        });
     }
 
     ngOnInit(): void {
