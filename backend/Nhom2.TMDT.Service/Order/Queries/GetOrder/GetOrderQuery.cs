@@ -19,14 +19,14 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
 
         public async Task<PagedList<OrderViewModel>> ExecutedAsync(int userId, string searchString, int status, int pageNumber, int pageSize)
         {
-            var table = db.Orders.Where(x => x.Status != -1).AsQueryable();
+            var table = db.Orders.Where(x => x.Status != (int)OrderStatus.Deleted).AsQueryable();
 
-            if (await db.Users.AnyAsync(x => x.Id == userId && x.Role == (int)Role.Customer))
+            if (await db.Users.AnyAsync(x => x.Id == userId))
             {
                 table = table.Where(x => x.CreatedBy == userId);
             }
 
-            if (status != -2)
+            if (status != 0)
             {
                 table = table.Where(x => x.Status == status);
             }    
@@ -50,9 +50,10 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
                     Price = y.Price.GetValueOrDefault(),
                     PromotionPrice = y.PromotionPrice
                 }).ToList(),
+                StatusCode = x.Status.GetValueOrDefault(),
                 DeliveryMothod = x.DeliveryMethod,
                 TotalShipping = x.TotalShipping.GetValueOrDefault()
-            }).Skip((pageSize - 1) * pageNumber).Take(pageNumber).ToListAsync();
+            }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             data.PageNumber = pageNumber;
             data.PageSize = pageSize;

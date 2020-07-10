@@ -2,10 +2,12 @@
 using Nhom2.TMDT.Common.Constants;
 using Nhom2.TMDT.Common.Encryption;
 using Nhom2.TMDT.Common.Verification;
+using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.ViewModels;
 using Nhom2.TMDT.Service.Mail.SendMail;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -51,12 +53,13 @@ namespace Nhom2.TMDT.Service.Account.Commands.Register
                         Image = Constants.DEFAUFT_IMAGE,
                         Password = passwordEncrypt,
                         Sex = registerViewModel.IsMale ? 0 : 1,
-                        ShipmentDetail = new Data.Entities.ShipmentDetail()
+                        ShipmentDetails = new List<ShipmentDetail> { new Data.Entities.ShipmentDetail()
                         {
+                            Name = registerViewModel.FullName,
                             Address = registerViewModel.Address,
                             Email = registerViewModel.Email,
-                            Phone = registerViewModel.Phone,
-                        },
+                            PhoneNumber = registerViewModel.Phone,
+                        } },
                         Verification = verificationCode
                     });
 

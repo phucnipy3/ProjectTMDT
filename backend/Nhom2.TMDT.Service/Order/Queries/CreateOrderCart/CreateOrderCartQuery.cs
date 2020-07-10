@@ -27,6 +27,12 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
             {
                 Data.Entities.Order order = new Data.Entities.Order();
 
+                if (userId != 0)
+                {
+                    order.CreatedBy = userId;
+                    orderCartViewModel.ShipmentDetail.UserId = userId;
+                }
+                    
                 if (await db.ShipmentDetails.AnyAsync(x => x.Id == orderCartViewModel.ShipmentDetail.Id))
                 {
                     order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
@@ -56,9 +62,6 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
                 order.Ordered = DateTime.Now;
                 order.Status = 1;
 
-                if (userId != 0)
-                    order.CreatedBy = userId;
-
                 db.Orders.Add(order);
 
                 string body = File.ReadAllText("./Templates/MailOrderInformationTemplate.html");
@@ -69,7 +72,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
                 body = body.Replace("@Status", "được đặt");
                 body = body.Replace("@Time", DateTime.Now.ToString());
 
-                await sendMail.ExecutedAsync(order.User.ShipmentDetail.Email, "Order information", body);
+                await sendMail.ExecutedAsync(order.User.ShipmentDetails.First().Email, "Order information", body);
                 await db.SaveChangesAsync();
                 return true;
             }

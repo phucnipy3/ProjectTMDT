@@ -11,6 +11,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail;
+using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
 
 namespace Nhom2.TMDT.WebApi.Controllers
 {
@@ -25,8 +26,9 @@ namespace Nhom2.TMDT.WebApi.Controllers
         private readonly ICreateOrderCartQuery createOrderCartQuery;
         private readonly IGetShipmentDetailQuery getShipmentDetailQuery;
         private readonly IUpdateShipmentDetailCommand updateShipmentDetailCommand;
+        private readonly IGetOrderStatusQuery getOrderStatusQuery;
 
-        public OrderController(IGetOrderQuery getOrderQuery, IGetOrderDetailQuery getOrderDetailQuery, IGetDeliveryMethodQuery getDeliveryMethodQuery, IGetPaymentMethodQuery getPaymentMethodQuery, ICreateOrderCartQuery createOrderCartQuery, IGetShipmentDetailQuery getShipmentDetailQuery, IUpdateShipmentDetailCommand updateShipmentDetailCommand)
+        public OrderController(IGetOrderQuery getOrderQuery, IGetOrderDetailQuery getOrderDetailQuery, IGetDeliveryMethodQuery getDeliveryMethodQuery, IGetPaymentMethodQuery getPaymentMethodQuery, ICreateOrderCartQuery createOrderCartQuery, IGetShipmentDetailQuery getShipmentDetailQuery, IUpdateShipmentDetailCommand updateShipmentDetailCommand, IGetOrderStatusQuery getOrderStatusQuery)
         {
             this.getOrderQuery = getOrderQuery;
             this.getOrderDetailQuery = getOrderDetailQuery;
@@ -35,11 +37,12 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.createOrderCartQuery = createOrderCartQuery;
             this.getShipmentDetailQuery = getShipmentDetailQuery;
             this.updateShipmentDetailCommand = updateShipmentDetailCommand;
+            this.getOrderStatusQuery = getOrderStatusQuery;
         }
 
         [HttpGet("GetOrder")]
         [Authorize]
-        public async Task<IActionResult> GetOrderAsync(string searchString, int status = -2, int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetOrderAsync(string searchString, int status = 0, int pageNumber = 1, int pageSize = 10)
         {
             return new ObjectResult(await getOrderQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), searchString, status, pageNumber, pageSize));
         }
@@ -79,6 +82,13 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public async Task<IActionResult> GetShipmentDetailAsync()
         {
             return new ObjectResult(await getShipmentDetailQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid))));
+        }
+
+        [HttpGet("GetOrderStatus")]
+        [Authorize]
+        public IActionResult GetOrderStatusAsync()
+        {
+            return new ObjectResult(getOrderStatusQuery.Executed());
         }
 
         [HttpPost("UpdateShipmentDetail")]

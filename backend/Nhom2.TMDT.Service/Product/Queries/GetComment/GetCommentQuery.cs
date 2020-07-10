@@ -43,7 +43,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetComment
 
             PagedList<CommentViewModel> data = new PagedList<CommentViewModel>();
 
-            data.Items = await table.Skip((pageSize - 1) * pageNumber).Take(pageNumber).ToListAsync();
+            data.Items = await table.Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
 
             data.PageNumber = pageNumber;
             data.PageSize = pageSize;

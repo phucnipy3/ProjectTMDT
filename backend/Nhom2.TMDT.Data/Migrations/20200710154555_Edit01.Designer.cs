@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Nhom2.TMDT.Data.Services;
 
 namespace Nhom2.TMDT.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    partial class ApplicationContextModelSnapshot : ModelSnapshot
+    [Migration("20200710154555_Edit01")]
+    partial class Edit01
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -301,10 +303,7 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("NVARCHAR(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Name")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Phone")
                         .HasColumnType("NVARCHAR(500)")
                         .HasMaxLength(500);
 

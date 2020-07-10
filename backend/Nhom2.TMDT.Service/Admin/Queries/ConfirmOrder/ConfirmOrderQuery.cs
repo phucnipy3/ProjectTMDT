@@ -23,7 +23,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder
         {
             try
             {
-                var order = await db.Orders.Include(x => x.User.ShipmentDetail).Where(x => x.Id == orderId).FirstOrDefaultAsync();
+                var order = await db.Orders.Include(x => x.ShipmentDetail).Where(x => x.Id == orderId).FirstOrDefaultAsync();
                 if (order != null)
                 {
                     string body = File.ReadAllText("./Templates/MailOrderInformationTemplate.html");
@@ -68,7 +68,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder
                                 break;
                         }
 
-                        await sendMail.ExecutedAsync(order.User.ShipmentDetail.Email, "Order information", body);
+                        await sendMail.ExecutedAsync(order.ShipmentDetail.Email, "Order information", body);
                         await db.SaveChangesAsync();
                     }
                 }
