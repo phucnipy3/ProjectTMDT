@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Nhom2.TMDT.Service.Product.Commands.CreateComment;
 using Nhom2.TMDT.Service.Product.Commands.CreateRate;
+using Nhom2.TMDT.Service.Product.Commands.DeleteCommand;
+using Nhom2.TMDT.Service.Product.Commands.UpdateComment;
 using Nhom2.TMDT.Service.Product.Queries.GetCategory;
 using Nhom2.TMDT.Service.Product.Queries.GetComment;
 using Nhom2.TMDT.Service.Product.Queries.GetProduct;
@@ -25,8 +27,10 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public readonly IGetCategoryQuery getCategoryQuery;
         public readonly ICreateCommentCommand createCommentCommand;
         public readonly ICreateRateCommand createRateCommand;
+        public readonly IUpdateCommentCommand updateCommentCommand;
+        public readonly IDeleteCommentCommand deleteCommentCommand;
 
-        public ProductController(IGetProductQuery getProductQuery, IGetRelatedProductQuery getRelatedProductQuery, IGetProductDetailQuery getProductDetailQuery, IGetRateQuery getRateQuery, IGetCommentQuery getCommentQuery, IGetCategoryQuery getCategoryQuery, ICreateCommentCommand createCommentCommand, ICreateRateCommand createRateCommand)
+        public ProductController(IGetProductQuery getProductQuery, IGetRelatedProductQuery getRelatedProductQuery, IGetProductDetailQuery getProductDetailQuery, IGetRateQuery getRateQuery, IGetCommentQuery getCommentQuery, IGetCategoryQuery getCategoryQuery, ICreateCommentCommand createCommentCommand, ICreateRateCommand createRateCommand, IUpdateCommentCommand updateCommentCommand, IDeleteCommentCommand deleteCommentCommand)
         {
             this.getProductQuery = getProductQuery;
             this.getRelatedProductQuery = getRelatedProductQuery;
@@ -36,6 +40,8 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.getCategoryQuery = getCategoryQuery;
             this.createCommentCommand = createCommentCommand;
             this.createRateCommand = createRateCommand;
+            this.updateCommentCommand = updateCommentCommand;
+            this.deleteCommentCommand = deleteCommentCommand;
         }
 
         [HttpGet("GetProduct")]
@@ -89,6 +95,20 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public async Task<IActionResult> CreateCommentAsync(int productId, string content, int? parrentId = null)
         {
             return new ObjectResult(await createCommentCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, content, parrentId));
+        }
+
+        [HttpGet("UpdateComment")]
+        [Authorize]
+        public async Task<IActionResult> UpdateCommentAsync(int commentId, string content)
+        {
+            return new ObjectResult(await updateCommentCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), commentId, content));
+        }
+
+        [HttpGet("DeleteComment")]
+        [Authorize]
+        public async Task<IActionResult> DeleteCommentAsync(int commentId)
+        {
+            return new ObjectResult(await deleteCommentCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), commentId));
         }
 
         [HttpGet("CreateRate")]

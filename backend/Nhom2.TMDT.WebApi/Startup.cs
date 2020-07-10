@@ -25,6 +25,8 @@ using Nhom2.TMDT.Service.Order.Queries.GetPaymentMethod;
 using Nhom2.TMDT.Service.Order.Queries.GetShipmentDetail;
 using Nhom2.TMDT.Service.Product.Commands.CreateComment;
 using Nhom2.TMDT.Service.Product.Commands.CreateRate;
+using Nhom2.TMDT.Service.Product.Commands.DeleteCommand;
+using Nhom2.TMDT.Service.Product.Commands.UpdateComment;
 using Nhom2.TMDT.Service.Product.Queries.GetCategory;
 using Nhom2.TMDT.Service.Product.Queries.GetComment;
 using Nhom2.TMDT.Service.Product.Queries.GetProduct;
@@ -102,6 +104,9 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IGetShipmentDetailQuery, GetShipmentDetailQuery>();
             services.AddScoped<ISendMail, SendMail>();
             services.AddScoped<IForgetPasswordQuery, ForgetPasswordQuery>();
+            services.AddScoped<IUpdateCommentCommand, UpdateCommentCommand>();
+            services.AddScoped<IDeleteCommentCommand, DeleteCommentCommand>();
+            services.AddScoped<IRegisterQuery, RegisterQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
