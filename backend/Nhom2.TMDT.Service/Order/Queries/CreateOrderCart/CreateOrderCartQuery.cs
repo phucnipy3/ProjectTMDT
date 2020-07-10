@@ -19,44 +19,51 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
 
         public async Task<bool> ExecutedAsync(int userId, OrderCartViewModel orderCartViewModel)
         {
-            Data.Entities.Order order = new Data.Entities.Order();
-
-            if (await db.ShipmentDetails.AnyAsync(x => x.Id == orderCartViewModel.ShipmentDetail.Id))
+            try
             {
-                order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
-            }
-            else
-            {
-                order.ShipmentDetail = orderCartViewModel.ShipmentDetail;
-            }
+                Data.Entities.Order order = new Data.Entities.Order();
 
-            foreach (CartItemViewModel item in orderCartViewModel.CartItems)
-            {
-                if (await db.Products.Where(x => x.Id == item.Id).AnyAsync(x => x.Quantity.GetValueOrDefault() < orderCartViewModel.CartItems.Count))
-                    return false;
-
-                await db.OrderDetails.AddAsync(new OrderDetail()
+                if (await db.ShipmentDetails.AnyAsync(x => x.Id == orderCartViewModel.ShipmentDetail.Id))
                 {
-                    ProductId = item.Id,
-                    Count = item.Count,
-                    Price = item.Price,
-                    PromotionPrice = item.PromotionPrice
-                });
+                    order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
+                }
+                else
+                {
+                    order.ShipmentDetail = orderCartViewModel.ShipmentDetail;
+                }
+
+                foreach (CartItemViewModel item in orderCartViewModel.CartItems)
+                {
+                    if (await db.Products.Where(x => x.Id == item.Id).AnyAsync(x => x.Quantity.GetValueOrDefault() < orderCartViewModel.CartItems.Count))
+                        return false;
+
+                    order.OrderDetails.Add(new OrderDetail()
+                    {
+                        ProductId = item.Id,
+                        Count = item.Count,
+                        Price = item.Price,
+                        PromotionPrice = item.PromotionPrice
+                    });
+                }
+
+                order.DeliveryMethod = orderCartViewModel.DeliveryMethod.Name;
+                order.TotalShipping = orderCartViewModel.DeliveryMethod.Cost;
+                order.PaymentMethod = orderCartViewModel.PaymentMethod;
+                order.Ordered = DateTime.Now;
+                order.Status = 1;
+
+                if (userId != 0)
+                    order.CreatedBy = userId;
+
+                await db.Orders.AddAsync(order);
+
+                await db.SaveChangesAsync();
+                return true;
             }
-
-            order.DeliveryMethod = orderCartViewModel.DeliveryMethod.Name;
-            order.TotalShipping = orderCartViewModel.DeliveryMethod.Cost;
-            order.PaymentMethod = orderCartViewModel.PaymentMethod;
-            order.Ordered = DateTime.Now;
-            order.Status = 1;
-
-            if (userId != 0)
-                order.CreatedBy = userId;
-
-            await db.Orders.AddAsync(order);
-
-            await db.SaveChangesAsync();
-            return true;
+            catch (Exception ex)
+            {
+                return false;
+            }
         }
     }
 }
