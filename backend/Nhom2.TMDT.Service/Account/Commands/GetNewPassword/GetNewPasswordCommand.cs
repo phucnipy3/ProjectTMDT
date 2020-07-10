@@ -23,7 +23,7 @@ namespace Nhom2.TMDT.Service.Account.Commands.GetNewPassword
         {
             try
             {
-                var user = await db.Users.Where(x => x.Username == newPasswordViewModel.Email && x.Verification == newPasswordViewModel.Code && x.ExprireTime <= DateTime.Now).FirstOrDefaultAsync();
+                var user = await db.Users.Where(x => x.Username == newPasswordViewModel.Email && x.Verification == newPasswordViewModel.Code && x.ExprireTime >= DateTime.Now).FirstOrDefaultAsync();
 
                 if (user == null)
                     return false;
