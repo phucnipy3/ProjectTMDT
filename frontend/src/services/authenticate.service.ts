@@ -111,9 +111,9 @@ export class AuthenticateService {
             );
     }
 
-    public getNewPassword(newPassword: string, code: string): Observable<boolean> {
+    public getNewPassword(newPassword: string, code: string, email: string): Observable<boolean> {
         return this.http
-            .post(this.apiUrl + '/GetNewPassword', { newPassword, code })
+            .post(this.apiUrl + '/GetNewPassword', { newPassword, code, email })
             .pipe(
                 map((res: boolean) => {
                     return res;

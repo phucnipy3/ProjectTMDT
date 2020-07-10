@@ -6,6 +6,7 @@ import { MessageService } from '../../../../services/message.service';
 import { OrderStatusViewModel } from '../../../../models/order/order-status';
 import { OrderService } from '../../../../services/order.service';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'orders',
@@ -25,7 +26,8 @@ export class OrdersComponent implements OnInit {
     constructor(
         private messageService: MessageService,
         private orderService: OrderService,
-        private router: Router) {
+        private router: Router,
+        private toastr: ToastrService) {
         this.messageService.clearActivePage();
     }
 
@@ -62,15 +64,25 @@ export class OrdersComponent implements OnInit {
         this.getOrders(this.searchString, 1);
     }
 
-    changePage(page){
+    changePage(page) {
         this.getOrders(this.searchString, page);
     }
 
-    moveToDetail(id: number){
+    moveToDetail(id: number) {
         this.router.navigate(['/chi-tiet-don-hang/' + id]);
     }
 
-    cancelOrder(id: number){
-        
+    cancelOrder(id: number) {
+        this.orderService.cancelOrder(id).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Đã hủy đơn hàng');
+                this.getOrders(this.searchString, this.pageNumber);
+            }
+            else {
+                this.toastr.warning('Hủy đơn hàng thất bại');
+            }
+        }, () => {
+            this.toastr.warning('Đã xảy ra lỗi');
+        });
     }
 }

@@ -114,4 +114,14 @@ export class OrderService {
                 })
             );
     }
+
+    cancelOrder(orderId: number): Observable<boolean> {
+        return this.http
+            .get(this.apiUrl + '/cancelOrder?orderId=' + orderId)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
 }

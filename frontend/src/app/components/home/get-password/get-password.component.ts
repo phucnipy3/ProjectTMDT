@@ -42,16 +42,18 @@ export class GetPasswordComponent implements OnInit {
                 }
                 else {
                     this.toastr.warning('Gửi mã thất bại');
+                    this.router.navigate(['/']);
                 }
             }, () => {
                 this.toastr.warning('Đã xảy ra lỗi');
+                this.router.navigate(['/']);
             });
         });
     }
 
     getPassword() {
         if (this.inputValid()) {
-            this.authenticateService.getNewPassword(this.password, this.code).subscribe((res) => {
+            this.authenticateService.getNewPassword(this.password, this.code, this.email).subscribe((res) => {
                 if (res) {
                     this.toastr.success('Đổi mật khẩu thành công');
                     this.router.navigate(['/']);
