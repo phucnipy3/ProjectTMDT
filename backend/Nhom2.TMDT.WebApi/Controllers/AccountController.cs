@@ -7,6 +7,8 @@ using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
+using Nhom2.TMDT.Service.Account.Queries.ForgetPassword;
+using Nhom2.TMDT.Service.Account.Queries.Register;
 using Nhom2.TMDT.Service.Account.ViewModels;
 using System.Linq;
 using System.Security.Claims;
@@ -20,11 +22,15 @@ namespace Nhom2.TMDT.WebApi.Controllers
     {
         private readonly ApplicationContext db;
         private readonly ILoginQuery loginQuery;
+        private readonly IRegisterQuery registerQuery;
+        private readonly IForgetPasswordQuery forgetPasswordQuery;
 
-        public AccountController(ApplicationContext db, ILoginQuery loginQuery)
+        public AccountController(ApplicationContext db, ILoginQuery loginQuery, IRegisterQuery registerQuery, IForgetPasswordQuery forgetPasswordQuery)
         {
             this.db = db;
             this.loginQuery = loginQuery;
+            this.registerQuery = registerQuery;
+            this.forgetPasswordQuery = forgetPasswordQuery;
         }
 
         [HttpPost("Login")]
@@ -86,12 +92,18 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(null);
         }
 
-        [HttpGet("Register")]
+        [HttpPost("Register")]
         [AllowAnonymous]
-        public IActionResult Register()
+        public async Task<IActionResult> RegisterAsync([FromBody]RegisterViewModel registerViewModel)
         {
-            
-            return new ObjectResult(null);
+            return new ObjectResult(await registerQuery.ExecutedAsync(registerViewModel));
+        }
+
+        [HttpPost("ForgerPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ForgerPasswordAsync([FromBody]string email)
+        {
+            return new ObjectResult(await forgetPasswordQuery.ExecutedAsync(email));
         }
     }
 }

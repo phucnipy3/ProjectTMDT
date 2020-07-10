@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
+using Nhom2.TMDT.Service.Mail.SendMail;
 using Nhom2.TMDT.Service.Order.ViewModels;
 using System;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +13,12 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
     public class CreateOrderCartQuery : ICreateOrderCartQuery
     {
         private readonly ApplicationContext db;
+        private ISendMail sendMail;
 
-        public CreateOrderCartQuery(ApplicationContext db)
+        public CreateOrderCartQuery(ApplicationContext db, ISendMail sendMail)
         {
             this.db = db;
+            this.sendMail = sendMail;
         }
 
         public async Task<bool> ExecutedAsync(int userId, OrderCartViewModel orderCartViewModel)
@@ -55,8 +59,17 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
                 if (userId != 0)
                     order.CreatedBy = userId;
 
-                await db.Orders.AddAsync(order);
+                db.Orders.Add(order);
 
+                string body = File.ReadAllText("./Templates/MailOrderInformationTemplate.html");
+
+                var user = await db.Users.FirstOrDefaultAsync(x => x.Id == userId);
+
+                body = body.Replace("@Name", user == null ? "" : user.Name);
+                body = body.Replace("@Status", "được đặt");
+                body = body.Replace("@Time", DateTime.Now.ToString());
+
+                await sendMail.ExecutedAsync(order.User.ShipmentDetail.Email, "Order information", body);
                 await db.SaveChangesAsync();
                 return true;
             }

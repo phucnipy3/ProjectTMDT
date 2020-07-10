@@ -39,9 +39,9 @@ namespace Nhom2.TMDT.WebApi.Controllers
 
         [HttpGet("GetOrder")]
         [Authorize]
-        public async Task<IActionResult> GetOrderAsync(string searchString, int pageNumber = 1, int pageSize = 10)
+        public async Task<IActionResult> GetOrderAsync(string searchString, int status = -2, int pageNumber = 1, int pageSize = 10)
         {
-            return new ObjectResult(await getOrderQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), searchString, pageNumber, pageSize));
+            return new ObjectResult(await getOrderQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), searchString, status, pageNumber, pageSize));
         }
 
         [HttpGet("GetOrderDetail")]

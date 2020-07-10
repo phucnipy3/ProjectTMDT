@@ -17,7 +17,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
             this.db = db;
         }
 
-        public async Task<PagedList<OrderViewModel>> ExecutedAsync(int userId, string searchString, int pageNumber, int pageSize)
+        public async Task<PagedList<OrderViewModel>> ExecutedAsync(int userId, string searchString, int status, int pageNumber, int pageSize)
         {
             var table = db.Orders.Where(x => x.Status != -1).AsQueryable();
 
@@ -25,6 +25,11 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
             {
                 table = table.Where(x => x.CreatedBy == userId);
             }
+
+            if (status != -2)
+            {
+                table = table.Where(x => x.Status == status);
+            }    
 
             if (!string.IsNullOrEmpty(searchString))
             {

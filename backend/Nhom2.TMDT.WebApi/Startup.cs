@@ -9,6 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
+using Nhom2.TMDT.Service.Account.Queries.ForgetPassword;
+using Nhom2.TMDT.Service.Account.Queries.Register;
 using Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder;
 using Nhom2.TMDT.Service.Admin.Queries.GetOrderManager;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
@@ -99,6 +101,7 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IUpdateShipmentDetailCommand, UpdateShipmentDetailCommand>();
             services.AddScoped<IGetShipmentDetailQuery, GetShipmentDetailQuery>();
             services.AddScoped<ISendMail, SendMail>();
+            services.AddScoped<IForgetPasswordQuery, ForgetPasswordQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

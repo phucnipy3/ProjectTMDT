@@ -10,6 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Hosting.Abstractions" Version="2.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Nhom2.TMDT.Common\Nhom2.TMDT.Common.csproj" />
     <ProjectReference Include="..\Nhom2.TMDT.Data\Nhom2.TMDT.Data.csproj" />
   </ItemGroup>
