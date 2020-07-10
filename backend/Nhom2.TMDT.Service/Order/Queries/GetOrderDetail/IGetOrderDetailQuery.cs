@@ -5,6 +5,6 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
 {
     public interface IGetOrderDetailQuery
     {
-        Task<OrderDetailViewModel> ExecutedAsync(int orderId);
+        Task<OrderDetailViewModel> ExecutedAsync(int userId, int orderId);
     }
 }

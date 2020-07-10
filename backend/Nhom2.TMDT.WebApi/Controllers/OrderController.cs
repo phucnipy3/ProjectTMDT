@@ -51,7 +51,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetOrderDetailAsync(int orderId)
         {
-            return new ObjectResult(await getOrderDetailQuery.ExecutedAsync(orderId));
+            return new ObjectResult(await getOrderDetailQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), orderId));
         }
 
         [HttpGet("GetDeliveryMethod")]
