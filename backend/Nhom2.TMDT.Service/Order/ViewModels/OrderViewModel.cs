@@ -32,6 +32,13 @@ namespace Nhom2.TMDT.Service.Order.ViewModels
             {
                 return StatusCode == (int)OrderStatus.Ordered;
             }
-        } 
+        }
+        public decimal TotalMoney
+        {
+            get
+            {
+                return TotalProductMoney + TotalShipping;
+            }
+        }
     }
 }
