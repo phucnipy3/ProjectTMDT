@@ -26,7 +26,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetComment
                 Content = x.Content,
                 Time = x.CreatedDate.GetValueOrDefault().ToString("HH:mm"),
                 Date = x.CreatedDate.GetValueOrDefault().ToString("dd/MM/yyyy"),
-                Children = x.Children.Select(y => new CommentViewModel()
+                Children = x.Children.OrderByDescending(y => y.CreatedDate).Select(y => new CommentViewModel()
                 {
                     Id = y.Id,
                     Author = y.User.Name,
