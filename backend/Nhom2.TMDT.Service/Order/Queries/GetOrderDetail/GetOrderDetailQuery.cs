@@ -18,9 +18,9 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
             this.db = db;
         }
 
-        public async Task<OrderDetailViewModel> ExecutedAsync(int orderId)
+        public async Task<OrderDetailViewModel> ExecutedAsync(int userId, int orderId)
         {
-            var data = await db.Orders.Where(x => x.Id == orderId).Select(x => new OrderDetailViewModel()
+            var data = await db.Orders.Where(x => x.Id == orderId && x.CreatedBy == userId).Select(x => new OrderDetailViewModel()
             {
                 Id = x.Id,
                 ShipmentDetail = x.ShipmentDetail,
