@@ -5,18 +5,20 @@
   </div>
   <div class="col-12 col-lg-8 col-xl-9">
     <div class="row post-feed">
-      <div class="col-6 col-md-4 col-xl-3 py-3 post ">
-        <ng-container *ngIf="products.length">
+      <ng-container *ngIf="products.length">
+        <div class="col-6 col-md-4 col-xl-3 py-3 post "
+          *ngFor="let product of products | paginate : {itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalCount}">
 
-          <product-card [product]="product" *ngFor="let product of products">
+          <product-card [product]="product">
 
           </product-card>
-        </ng-container>
-
-        <ng-container *ngIf="!products.length">
-          No result
-        </ng-container>
-      </div>
+        </div>
+      </ng-container>
+      
+      <ng-container *ngIf="!products.length">
+        No result
+      </ng-container>
     </div>
+    <pagination-controls *ngIf="products.length" (pageChange)="changePage($event)"></pagination-controls>
   </div>
 </div>

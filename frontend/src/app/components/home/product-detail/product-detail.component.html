@@ -21,11 +21,11 @@
         <hr />
         <ng-container *ngIf="product.promotionPrice">
           <p>Giá gốc: <del>{{product.price | number}} <u>đ</u></del> </p>
-          <p>Giá bán: <span class="h2 text-danger">{{product.promotionPrice}} <u>đ</u></span></p>
+          <p>Giá bán: <span class="h2 text-danger">{{product.promotionPrice | number}} <u>đ</u></span></p>
           <p>Tiết kiệm: {{product.savePersent}}</p>
         </ng-container>
         <ng-container *ngIf="!product.promotionPrice">
-          <p>Giá bán: <span class="h2 text-danger">{{product.price}} <u>đ</u></span></p>
+          <p>Giá bán: <span class="h2 text-danger">{{product.price | number}} <u>đ</u></span></p>
         </ng-container>
         <a href="#" class="btn btn-info text-black btn-buy">Mua ngay</a>
       </div>
@@ -34,7 +34,7 @@
 </div>
 <div class="row pt-5">
   <div class="col-12 col-lg-8">
-    <rate></rate>
+    <rate [rate] = "rate" (callback) = "onRate($event)"></rate>
     <div class="row">
       <div class="col-auto">
         <button class="btn btn-info mb-3" (click)="showCreateComment = !showCreateComment">New

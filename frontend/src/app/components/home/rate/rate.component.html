@@ -26,8 +26,9 @@
       <span class="mr-3">Please rate us</span>
       <span>
         <ng-container *ngFor="let star of stars; let i = index">
-          <i class="icon mx-1" [class.icon-star-o]="star == 1" [class.icon-star]="star == 2" [class.text-warning]="star == 2" (mouseover) = "setStar(i)" (mouseout) = "resetStar()"></i>
-
+          <span class="px-1" (mouseover) = "setStar(i)" (mouseout) = "resetStar()" (click) = "onClick(i)">
+            <i class="icon" [class.icon-star-o]="star == 1" [class.icon-star]="star == 2" [class.text-warning]="star == 2" ></i>
+          </span>
         </ng-container>
       </span>
     </div>

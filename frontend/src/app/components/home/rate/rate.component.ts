@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { RateViewModel } from '../../../../models/product/rate';
 
 @Component({
@@ -7,15 +7,13 @@ import { RateViewModel } from '../../../../models/product/rate';
 })
 export class RateComponent implements OnInit {
 
-    rate: RateViewModel;
+    @Input() rate: RateViewModel;
     stars: number[] = [1, 1, 1, 1, 1];
+    @Output() callback: EventEmitter<number> = new EventEmitter();
 
     constructor() { }
 
     ngOnInit(): void {
-        this.rate = new RateViewModel();
-        this.rate.ratePoint = 4.7;
-        this.rate.persentPoints = [16, 19, 30, 70, 20];
     }
 
     resetStar() {
@@ -31,5 +29,9 @@ export class RateComponent implements OnInit {
         for (let i = 0; i <= index; i++) {
             this.stars[i] = 2;
         }
+    }
+
+    onClick(i) {
+        this.callback.emit(i + 1);
     }
 }

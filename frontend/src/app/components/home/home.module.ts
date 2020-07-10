@@ -5,6 +5,7 @@ import { HomeRoutingModule } from './home-routing.module';
 import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import {NgxPaginationModule} from 'ngx-pagination';
 
 
 const APP_COMPONENTS: any[] = [
@@ -46,6 +47,7 @@ const APP_POPUP_COMPONENTS: any[] = [
         CommonModule,
         FormsModule,
         HomeRoutingModule,
+        NgxPaginationModule,
     ],
     exports: [APP_POPUP_COMPONENTS],
     entryComponents: [APP_POPUP_COMPONENTS],

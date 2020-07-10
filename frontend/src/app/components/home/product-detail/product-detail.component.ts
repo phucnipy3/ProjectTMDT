@@ -7,6 +7,12 @@ import { ActivatedRoute } from '@angular/router';
 import { ViewedProductService } from '../../../../services/viewed-product.service';
 import { ProductSildeViewModel } from '../../../../models/product/product-slide';
 import { SessionHelper } from '../../../common/helper/SessionHelper';
+import { ProductService } from '../../../../services/product.service';
+import { RateViewModel } from '../../../../models/product/rate';
+import { User } from '../../../../models/account/user';
+import { SimpleModalService } from 'ngx-simple-modal';
+import { LoginPopupComponent } from '../login/login-popup-component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'product-detail',
@@ -16,7 +22,7 @@ export class ProductDetailComponent implements OnInit {
 
     product: ProductViewModel;
     showCreateComment = false;
-
+    rate: RateViewModel = new RateViewModel();
     comments: CommentViewModel[] = [];
 
     relatedProducts: ProductCardViewModel[] = [];
@@ -28,45 +34,71 @@ export class ProductDetailComponent implements OnInit {
     constructor(
         private messageService: MessageService,
         private activatedRoute: ActivatedRoute,
-        private viewedProductService: ViewedProductService) {
+        private viewedProductService: ViewedProductService,
+        private productService: ProductService,
+        private simpleModalService: SimpleModalService,
+        private toastr: ToastrService) {
         this.messageService.sendActivePage('product');
     }
 
     ngOnInit(): void {
         this.activatedRoute.paramMap.subscribe(params => {
             this.id = Number(params.get('id'));
+            this.getProduct();
+            this.getRelatedProduct();
+            this.getRate();
         });
-        this.product = new ProductViewModel();
-        this.product.name = 'name name an aemd á á';
-        this.product.promotionPrice = 14356;
-        this.product.price = 25776434;
-        this.product.savePersent = '32%';
-        this.product.image = '../../../assets/image/banner1.jpg';
-        this.product.detail = '<p>details  ấ gs fa dhedf a</p>';
-        this.product.brand = 'AOE';
-
-        let xa = new ProductSildeViewModel(this.product.id, this.product.image);
-        this.viewedProductService.addProduct(xa);
-        // const x = new CommentViewModel();
         this.viewedProducts = SessionHelper.getViewedProductFromStorage();
-        // x.time = '12:12';
-        // x.date = '21/2/2020';
-        // x.content = 'this is a comment';
-        // x.author = 'Phúc Nguyễn';
-        // x.image = '../../../assets/image/banner1.jpg';
-        // const y = {...x};
-        // x.children = [];
-        // x.children.push(y);
-        // this.comments.push(x);
+    }
 
-        const x = new ProductCardViewModel();
-        x.id = 1;
-        x.image = '../../../assets/image/banner1.jpg';
-        x.name = 'abcasfa asd a eqa';
-        x.price = 12435;
-        x.promotionPrice = 1356;
-        this.relatedProducts.push(x);
-        this.relatedProducts.push({ ...x });
+    getProduct() {
+        this.productService.getProductDetails(this.id).subscribe((res: ProductViewModel) => {
+            this.product = res;
+            let viewedProduct = new ProductSildeViewModel(this.product.id, this.product.image);
+            this.viewedProductService.addProduct(viewedProduct);
+            this.viewedProducts = SessionHelper.getViewedProductFromStorage();
 
+        });
+    }
+    getRelatedProduct() {
+        this.productService.getRelatedProducs(this.id).subscribe((res: ProductCardViewModel[]) => {
+            this.relatedProducts = res;
+        });
+    }
+
+    getRate() {
+        this.productService.getRate(this.id).subscribe((res: RateViewModel) => {
+            this.rate = res;
+        });
+    }
+
+    onRate(point: number) {
+        const user: User = SessionHelper.getUserFromStorage();
+        if (!user) {
+            this.simpleModalService.addModal(LoginPopupComponent).subscribe((res) => {
+                if (res) {
+                    this.productService.rate(this.id, point).subscribe((success) => {
+                        if (success) {
+                            this.toastr.success('Đánh giá thành công');
+                            this.getRate();
+                        }
+                        else{
+                            this.toastr.warning('Đánh giá thất bại');
+                        }
+                    });
+                }
+            });
+        }
+        else{
+            this.productService.rate(this.id, point).subscribe((success) => {
+                if (success) {
+                    this.toastr.success('Đánh giá thành công');
+                    this.getRate();
+                }
+                else{
+                    this.toastr.warning('Đánh giá thất bại');
+                }
+            });
+        }
     }
 }
