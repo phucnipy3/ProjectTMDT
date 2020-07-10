@@ -42,7 +42,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
                         new Claim(ClaimTypes.Sid, user.Id.ToString()),
                         new Claim(ClaimTypes.Uri, user.Image ?? ""),
                         new Claim(ClaimTypes.Name, user.Name ?? ""),
-                        new Claim(ClaimTypes.NameIdentifier, user.UserName),
+                        new Claim(ClaimTypes.NameIdentifier, user.Username),
                         new Claim(ClaimTypes.Role, ((Role)user.Role).ToString())
                     }, CookieAuthenticationDefaults.AuthenticationScheme);
 

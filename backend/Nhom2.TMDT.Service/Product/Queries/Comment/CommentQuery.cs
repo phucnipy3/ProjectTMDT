@@ -18,7 +18,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.Comment
         {
             try
             {
-                var user = await db.Users.Where(x => x.UserName == userName).SingleOrDefaultAsync();
+                var user = await db.Users.Where(x => x.Username == userName).SingleOrDefaultAsync();
 
                 await db.Comments.AddAsync(new Data.Entities.Comment()
                 {

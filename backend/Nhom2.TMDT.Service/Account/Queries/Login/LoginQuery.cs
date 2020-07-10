@@ -24,7 +24,7 @@ namespace Nhom2.TMDT.Service.Account.Login.Queries
 
             string passwordEncrypt = new Encryption().EncryptionMD5(loginViewModel.Password);
 
-            var data = await db.Users.Where(x => x.UserName == loginViewModel.Username && x.Password == passwordEncrypt).SingleOrDefaultAsync();
+            var data = await db.Users.Where(x => x.Username == loginViewModel.Username && x.Password == passwordEncrypt).SingleOrDefaultAsync();
 
             return data;
         }

@@ -355,7 +355,7 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .HasColumnType("NVARCHAR(50)")
                         .HasMaxLength(50);
 

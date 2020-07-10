@@ -10,7 +10,7 @@ using Nhom2.TMDT.Data.Services;
 namespace Nhom2.TMDT.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200708145139_Init")]
+    [Migration("20200710061934_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -357,7 +357,7 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(true);
 
-                    b.Property<string>("UserName")
+                    b.Property<string>("Username")
                         .HasColumnType("NVARCHAR(50)")
                         .HasMaxLength(50);
 
