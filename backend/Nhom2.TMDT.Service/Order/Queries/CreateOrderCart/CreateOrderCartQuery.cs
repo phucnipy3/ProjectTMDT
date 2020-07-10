@@ -44,9 +44,11 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
             order.TotalShipping = orderCartViewModel.DeliveryMethod.Cost;
             order.PaymentMethod = orderCartViewModel.PaymentMethod;
             order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
-            order.CreatedBy = userId;
             order.Ordered = DateTime.Now;
             order.Status = 1;
+
+            if (userId != 0)
+                order.CreatedBy = userId;
 
             await db.Orders.AddAsync(order);
 

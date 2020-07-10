@@ -85,5 +85,18 @@ namespace Nhom2.TMDT.WebApi.Controllers
                 return new ObjectResult(new UserViewModel() { FullName = User.FindFirstValue(ClaimTypes.Name), Image = User.FindFirstValue(ClaimTypes.Uri) });
             return new ObjectResult(null);
         }
+
+        [HttpGet("Register")]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            if (!User.Identity.IsAuthenticated)
+                return new ObjectResult(null);
+
+            int userRole = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
+            if (userRole > 0 && userRole <= role)
+                return new ObjectResult(new UserViewModel() { FullName = User.FindFirstValue(ClaimTypes.Name), Image = User.FindFirstValue(ClaimTypes.Uri) });
+            return new ObjectResult(null);
+        }
     }
 }

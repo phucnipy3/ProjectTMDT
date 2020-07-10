@@ -67,9 +67,11 @@ namespace Nhom2.TMDT.WebApi.Controllers
 
         [HttpPost("CreateOrderCart")]
         [AllowAnonymous]
-        public async Task<IActionResult> CreateOrderCartAsync(OrderCartViewModel orderCartViewModel)
+        public async Task<IActionResult> CreateOrderCartAsync([FromBody]OrderCartViewModel orderCartViewModel)
         {
-            return new ObjectResult(await createOrderCartQuery.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), orderCartViewModel));
+            int userId;
+            int.TryParse(User.FindFirstValue(ClaimTypes.Sid), out userId);
+            return new ObjectResult(await createOrderCartQuery.ExecutedAsync(userId, orderCartViewModel));
         }
 
         [HttpPost("GetShipmentDetails")]
