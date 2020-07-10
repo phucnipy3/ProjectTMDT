@@ -6,6 +6,9 @@
 
   <ItemGroup>
     <Folder Include="Admin\Command\" />
+    <Folder Include="Admin\Queries\CategoryManager\Update\" />
+    <Folder Include="Admin\Queries\ProductManager\Update\" />
+    <Folder Include="Admin\Queries\UserManager\Update\" />
     <Folder Include="Home\Commands\" />
     <Folder Include="Account\Commands\" />
     <Folder Include="Order\Command\" />

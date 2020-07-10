@@ -2,7 +2,7 @@
 {
     public class LoginViewModel
     {
-        public bool Authenticated;
-        public int Role;
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 }

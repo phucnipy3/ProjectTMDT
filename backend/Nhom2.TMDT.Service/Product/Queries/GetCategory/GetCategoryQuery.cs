@@ -18,7 +18,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetCategory
 
         public async Task<List<CategoryViewModel>> ExecutedAsync()
         {
-            var data = await db.Categories.Select(x => new CategoryViewModel()
+            var data = await db.Categories.Where(x => x.Status == true).Select(x => new CategoryViewModel()
             {
                 Id = x.Id,
                 Name = x.Name
