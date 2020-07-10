@@ -105,7 +105,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         }
 
         [HttpGet("CancelOrder")]
-        [Authorize]
+        [Authorize]6
         public async Task<IActionResult> CancelOrderAsync(int orderId)
         {
             return new ObjectResult(await cancelOrderCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), orderId));
