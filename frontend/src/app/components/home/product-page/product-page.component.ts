@@ -29,7 +29,6 @@ export class ProductPageComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getProducts();
         this.getCategories();
     }
 
@@ -40,12 +39,13 @@ export class ProductPageComponent implements OnInit {
                 res.forEach((x) => {
                     this.data.push(new SideBarData(x.id, x, x.name));
                 });
+                this.getProducts();
+
             }
         });
     }
-
     getProducts() {
-        this.productService.getProducts(0, '').subscribe((res: PagedList<ProductCardViewModel>) => {
+        this.productService.getProducts(this.activeKey, '').subscribe((res: PagedList<ProductCardViewModel>) => {
             if (res) {
                 this.products = res.items;
                 this.totalCount = res.totalCount;
