@@ -93,13 +93,13 @@
       <div class="col-2 px-4">
         <div class="row">
           <div class="col-12">
-            <span class="text-danger h6 float-right">{{order.totalProductMoney}}đ</span>
+            <span class="text-danger h6 float-right">{{order.totalProductMoney | number}}đ</span>
           </div>
           <div class="col-12">
-            <span class="text-danger h6 float-right">{{order.totalShipping}}đ</span>
+            <span class="text-danger h6 float-right">{{order.totalShipping | number }}đ</span>
           </div>
           <div class="col-12">
-            <span class="text-danger h5 float-right">{{order.totalMoney}}đ</span>
+            <span class="text-danger h5 float-right">{{order.totalMoney | number}}đ</span>
           </div>
         </div>
       </div>
