@@ -16,7 +16,7 @@ import { Router } from '@angular/router';
 export class CheckoutComponent implements OnInit {
 
     shippingMethods: ShippingMethod[] = [];
-    selectedShippingMethod: ShippingMethod;
+    selectedShippingMethod: ShippingMethod = new ShippingMethod();
     paymentMethods: string[] = [];
     selectedPaymentMethod: string;
     shipping: ShipmentDetailViewModel;
@@ -47,6 +47,7 @@ export class CheckoutComponent implements OnInit {
     getShippingMethods() {
         this.orderService.getShippingMethods().subscribe((res: ShippingMethod[]) => {
             this.shippingMethods = res;
+            this.selectedShippingMethod = res[0];
         });
     }
 
