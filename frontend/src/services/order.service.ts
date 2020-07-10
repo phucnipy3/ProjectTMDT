@@ -1,12 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Config } from '../app/config';
 import { PathController } from '../app/common/consts/path-controllers.const';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ShippingMethod } from '../models/order/shipping-method';
 import { map } from 'rxjs/operators';
 import { CartItemViewModel } from '../models/cart/cart-item';
 import { ShipmentDetailViewModel } from '../models/order/shipment-detail';
+import { OrderStatusViewModel } from '../models/order/order-status';
+import { PagedList } from '../models/paged-list/paged-list';
+import { OrderViewModel } from '../models/order/order';
 
 @Injectable()
 export class OrderService {
@@ -48,16 +51,37 @@ export class OrderService {
             );
     }
 
-    getShipmentDetails(): Observable<ShipmentDetailViewModel[]>{
+    getShipmentDetails(): Observable<ShipmentDetailViewModel[]> {
         return this.http
-        .get(this.apiUrl + '/GetShipmentDetails')
-        .pipe(
-            map((res: ShipmentDetailViewModel[]) => {
-                return res;
-            })
-        );
+            .get(this.apiUrl + '/GetShipmentDetails')
+            .pipe(
+                map((res: ShipmentDetailViewModel[]) => {
+                    return res;
+                })
+            );
     }
-    getOrders(){
+    getOrders(searchString = '', status = 0, pageNumber = 1, pageSize = 10): Observable<PagedList<OrderViewModel>> {
+        let params = new HttpParams();
+        params = params.set('searchString', searchString)
+            .set('status', status.toString())
+            .set('pageNumber', pageNumber.toString())
+            .set('pageSize', pageSize.toString());
+        return this.http
+            .get(this.apiUrl + '/GetOrders', { params })
+            .pipe(
+                map((res: PagedList<OrderViewModel>) => {
+                    return res;
+                })
+            );
+    }
 
+    getOrderStatus(): Observable<OrderStatusViewModel[]> {
+        return this.http
+            .get(this.apiUrl + '/GetOrderStatus')
+            .pipe(
+                map((res: OrderStatusViewModel[]) => {
+                    return res;
+                })
+            );
     }
 }

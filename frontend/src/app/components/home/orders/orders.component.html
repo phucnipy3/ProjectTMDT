@@ -5,12 +5,8 @@
   </button>
   <div class="collapse navbar-collapse" id="navbarOrderContent">
     <ul class="navbar-nav mr-auto order-navbar-nav">
-      <li class="nav-item order-bar" id="All"><a class="nav-link cursor-pointer">Tất cả</a></li>
-      <li class="nav-item order-bar" id="Ordered"><a class="nav-link cursor-pointer">Chờ xác nhận</a></li>
-      <li class="nav-item order-bar" id="Confirmed"> <a class="nav-link cursor-pointer">Chờ lấy hàng</a></li>
-      <li class="nav-item order-bar" id="TookProducts"> <a class="nav-link cursor-pointer">Đang giao hàng</a></li>
-      <li class="nav-item order-bar" id="Complete"> <a class="nav-link cursor-pointer">Đã giao</a></li>
-      <li class="nav-item order-bar" id="Canceled"> <a class="nav-link cursor-pointer">Đã hủy</a></li>
+      <li *ngFor="let status of orderStatus" class="nav-item order-bar" (click)="changeStatus(status)"><a
+          class="nav-link cursor-pointer">{{status.description}}</a></li>
     </ul>
   </div>
 </div>
@@ -18,12 +14,19 @@
   <div class="my-3">
     <div class="form-row">
       <div class="col-3">
-        <input type="text" name="Status" value="@ViewBag.Status" hidden id="status" />
-        <input class="form-control" type="text" name="SearchString" value="" placeholder="Tìm kiếm..." id="TextOrder" />
+        <input class="form-control" type="text" [(ngModel)]="tempString" placeholder="Tìm kiếm..." />
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-secondary" (click)="search()">Tìm kiếm</button>
       </div>
     </div>
   </div>
-  <ng-container *ngFor="let order of orders">
+  <ng-container *ngIf="!orders.length">
+    Không có đơn hàng nào
+  </ng-container>
+  
+  <ng-container
+    *ngFor="let order of orders | paginate : {itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalCount}">
     <div class="container py-2 bg-dark-light my-3">
       <div class="row">
         <div class="col-12 px-4">
@@ -32,7 +35,7 @@
           </span>
         </div>
       </div>
-      <ng-container *ngFor="let product of order.products">
+      <ng-container *ngFor="let product of order.products ">
         <div class="row pb-1">
           <div class="col-1">
             <div class="row">
@@ -80,4 +83,6 @@
       </div>
     </div>
   </ng-container>
+
 </div>
+<pagination-controls *ngIf="orders.length" (pageChange)="changePage($event)"></pagination-controls>
