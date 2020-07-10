@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail;
 using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
+using Nhom2.TMDT.Service.Order.Commands.CancelOrder;
 
 namespace Nhom2.TMDT.WebApi.Controllers
 {
@@ -27,8 +28,9 @@ namespace Nhom2.TMDT.WebApi.Controllers
         private readonly IGetShipmentDetailQuery getShipmentDetailQuery;
         private readonly IUpdateShipmentDetailCommand updateShipmentDetailCommand;
         private readonly IGetOrderStatusQuery getOrderStatusQuery;
+        private readonly ICancelOrderCommand cancelOrderCommand;
 
-        public OrderController(IGetOrderQuery getOrderQuery, IGetOrderDetailQuery getOrderDetailQuery, IGetDeliveryMethodQuery getDeliveryMethodQuery, IGetPaymentMethodQuery getPaymentMethodQuery, ICreateOrderCartQuery createOrderCartQuery, IGetShipmentDetailQuery getShipmentDetailQuery, IUpdateShipmentDetailCommand updateShipmentDetailCommand, IGetOrderStatusQuery getOrderStatusQuery)
+        public OrderController(IGetOrderQuery getOrderQuery, IGetOrderDetailQuery getOrderDetailQuery, IGetDeliveryMethodQuery getDeliveryMethodQuery, IGetPaymentMethodQuery getPaymentMethodQuery, ICreateOrderCartQuery createOrderCartQuery, IGetShipmentDetailQuery getShipmentDetailQuery, IUpdateShipmentDetailCommand updateShipmentDetailCommand, IGetOrderStatusQuery getOrderStatusQuery, ICancelOrderCommand cancelOrderCommand)
         {
             this.getOrderQuery = getOrderQuery;
             this.getOrderDetailQuery = getOrderDetailQuery;
@@ -38,6 +40,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.getShipmentDetailQuery = getShipmentDetailQuery;
             this.updateShipmentDetailCommand = updateShipmentDetailCommand;
             this.getOrderStatusQuery = getOrderStatusQuery;
+            this.cancelOrderCommand = cancelOrderCommand;
         }
 
         [HttpGet("GetOrders")]
@@ -96,6 +99,13 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public async Task<IActionResult> UpdateShipmentDetailAsync([FromBody]ShipmentDetail shipmentDetail)
         {
             return new ObjectResult(await updateShipmentDetailCommand.ExecutedAsync(shipmentDetail));
+        }
+
+        [HttpGet("CancelOrder")]
+        [Authorize]
+        public async Task<IActionResult> CancelOrderAsync(int orderId)
+        {
+            return new ObjectResult(await cancelOrderCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), orderId));
         }
     }
 }
