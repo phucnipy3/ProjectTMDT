@@ -59,7 +59,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(await getProductDetailQuery.ExecutedAsync(productId));
         }
 
-        [HttpGet("GetRates")]
+        [HttpGet("GetRate")]
         [AllowAnonymous]
         public async Task<IActionResult> GetRateAsync(int productId)
         {
