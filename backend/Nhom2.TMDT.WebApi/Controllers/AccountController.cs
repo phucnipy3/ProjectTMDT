@@ -142,7 +142,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(await getNewPasswordCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), newPasswordViewModel));
         }
 
-        [HttpPost("ForgerPassword")]
+        [HttpPost("ForgetPassword")]
         [AllowAnonymous]
         public async Task<IActionResult> ForgerPasswordAsync([FromBody] string email)
         {
