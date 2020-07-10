@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Product.Commands.UpdateComment
@@ -30,7 +31,7 @@ namespace Nhom2.TMDT.Service.Product.Commands.UpdateComment
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return true;
             }

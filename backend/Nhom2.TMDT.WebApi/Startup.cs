@@ -9,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
-using Nhom2.TMDT.Service.Account.Queries.ForgetPassword;
-using Nhom2.TMDT.Service.Account.Queries.Register;
+using Nhom2.TMDT.Service.Account.Commands.ForgetPassword;
+using Nhom2.TMDT.Service.Account.Commands.Register;
 using Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder;
 using Nhom2.TMDT.Service.Admin.Queries.GetOrderManager;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
@@ -34,6 +34,7 @@ using Nhom2.TMDT.Service.Product.Queries.GetProductDetail;
 using Nhom2.TMDT.Service.Product.Queries.GetRate;
 using Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct;
 using System;
+using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
 
 namespace Nhom2.TMDT.WebApi
 {
@@ -103,10 +104,11 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IUpdateShipmentDetailCommand, UpdateShipmentDetailCommand>();
             services.AddScoped<IGetShipmentDetailQuery, GetShipmentDetailQuery>();
             services.AddScoped<ISendMail, SendMail>();
-            services.AddScoped<IForgetPasswordQuery, ForgetPasswordQuery>();
+            services.AddScoped<IForgetPasswordCommand, ForgetPasswordCommand>();
             services.AddScoped<IUpdateCommentCommand, UpdateCommentCommand>();
             services.AddScoped<IDeleteCommentCommand, DeleteCommentCommand>();
-            services.AddScoped<IRegisterQuery, RegisterQuery>();
+            services.AddScoped<IRegisterCommand, RegisterCommand>();
+            services.AddScoped<IActiveAccountCommand, ActiveAccountCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

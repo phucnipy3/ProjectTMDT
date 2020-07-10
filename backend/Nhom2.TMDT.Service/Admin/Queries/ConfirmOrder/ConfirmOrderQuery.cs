@@ -74,7 +74,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder
                 }
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

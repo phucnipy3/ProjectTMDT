@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Admin.Queries.ProductManager.Update
@@ -21,7 +22,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.ProductManager.Update
                 await db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

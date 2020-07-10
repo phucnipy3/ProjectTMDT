@@ -1,4 +1,5 @@
 ﻿using Nhom2.TMDT.Data.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Product.Commands.CreateComment
@@ -28,7 +29,7 @@ namespace Nhom2.TMDT.Service.Product.Commands.CreateComment
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return true;
             }

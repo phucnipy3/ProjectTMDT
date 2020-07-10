@@ -5,14 +5,14 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Account.Queries.ForgetPassword
+namespace Nhom2.TMDT.Service.Account.Commands.ForgetPassword
 {
-    public class ForgetPasswordQuery : IForgetPasswordQuery
+    public class ForgetPasswordCommand : IForgetPasswordCommand
     {
         private readonly ApplicationContext db;
         private readonly ISendMail sendMail;
 
-        public ForgetPasswordQuery(ApplicationContext db, ISendMail sendMail)
+        public ForgetPasswordCommand(ApplicationContext db, ISendMail sendMail)
         {
             this.db = db;
             this.sendMail = sendMail;
@@ -39,7 +39,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.ForgetPassword
                 await db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

@@ -1,5 +1,6 @@
 ﻿using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Admin.Commands.UserManager.Add
@@ -21,7 +22,7 @@ namespace Nhom2.TMDT.Service.Admin.Commands.UserManager.Add
                 await db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

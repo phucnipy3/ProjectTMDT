@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Services;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -26,7 +27,7 @@ namespace Nhom2.TMDT.Service.Admin.Commands.ProductManager.Delete
                 }
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

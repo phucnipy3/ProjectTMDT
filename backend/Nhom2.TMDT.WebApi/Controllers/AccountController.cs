@@ -6,10 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
+using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
+using Nhom2.TMDT.Service.Account.Commands.ForgetPassword;
+using Nhom2.TMDT.Service.Account.Commands.Register;
 using Nhom2.TMDT.Service.Account.Login.Queries;
-using Nhom2.TMDT.Service.Account.Queries.ForgetPassword;
-using Nhom2.TMDT.Service.Account.Queries.Register;
 using Nhom2.TMDT.Service.Account.ViewModels;
+using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
@@ -22,20 +24,22 @@ namespace Nhom2.TMDT.WebApi.Controllers
     {
         private readonly ApplicationContext db;
         private readonly ILoginQuery loginQuery;
-        private readonly IRegisterQuery registerQuery;
-        private readonly IForgetPasswordQuery forgetPasswordQuery;
+        private readonly IRegisterCommand registerCommand;
+        private readonly IForgetPasswordCommand forgetPasswordCommand;
+        private readonly IActiveAccountCommand activeAccountCommand;
 
-        public AccountController(ApplicationContext db, ILoginQuery loginQuery, IRegisterQuery registerQuery, IForgetPasswordQuery forgetPasswordQuery)
+        public AccountController(ApplicationContext db, ILoginQuery loginQuery, IRegisterCommand registerCommand, IForgetPasswordCommand forgetPasswordCommand, IActiveAccountCommand activeAccountCommand)
         {
             this.db = db;
             this.loginQuery = loginQuery;
-            this.registerQuery = registerQuery;
-            this.forgetPasswordQuery = forgetPasswordQuery;
+            this.registerCommand = registerCommand;
+            this.forgetPasswordCommand = forgetPasswordCommand;
+            this.activeAccountCommand = activeAccountCommand;
         }
 
         [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginAsync([FromBody]LoginViewModel loginViewModel)
+        public async Task<IActionResult> LoginAsync([FromBody] LoginViewModel loginViewModel)
         {
             try
             {
@@ -58,7 +62,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
                 }
                 return new ObjectResult(null);
             }
-            catch
+            catch (Exception ex)
             {
                 return new ObjectResult(null);
             }
@@ -94,16 +98,45 @@ namespace Nhom2.TMDT.WebApi.Controllers
 
         [HttpPost("Register")]
         [AllowAnonymous]
-        public async Task<IActionResult> RegisterAsync([FromBody]RegisterViewModel registerViewModel)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterViewModel registerViewModel)
         {
-            return new ObjectResult(await registerQuery.ExecutedAsync(registerViewModel));
+            return new ObjectResult(await registerCommand.ExecutedAsync(registerViewModel));
         }
 
         [HttpPost("ForgerPassword")]
         [AllowAnonymous]
-        public async Task<IActionResult> ForgerPasswordAsync([FromBody]string email)
+        public async Task<IActionResult> ForgerPasswordAsync([FromBody] string email)
         {
-            return new ObjectResult(await forgetPasswordQuery.ExecutedAsync(email));
+            return new ObjectResult(await forgetPasswordCommand.ExecutedAsync(email));
+        }
+
+        [HttpPost("ActivateAccount")]
+        [AllowAnonymous]
+        public async Task<IActionResult> ActivateAccountAsync([FromBody] ActiveViewModel activeViewModel)
+        {
+            if (!await activeAccountCommand.ExecutedAsync(activeViewModel))
+                return new ObjectResult(false);
+
+            try
+            {
+                var user = await db.Users.FirstOrDefaultAsync(x => x.Username == activeViewModel.Username);
+
+                ClaimsIdentity identity = new ClaimsIdentity(new Claim[]
+                {
+                new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                new Claim(ClaimTypes.Uri, user.Image ?? ""),
+                new Claim(ClaimTypes.Name, user.Name ?? ""),
+                new Claim(ClaimTypes.NameIdentifier, user.Username),
+                new Claim(ClaimTypes.Role, ((Role)user.Role).ToString())
+                }, CookieAuthenticationDefaults.AuthenticationScheme);
+
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                return new ObjectResult(true);
+            }
+            catch (Exception ex)
+            {
+                return new ObjectResult(false);
+            }
         }
     }
 }
