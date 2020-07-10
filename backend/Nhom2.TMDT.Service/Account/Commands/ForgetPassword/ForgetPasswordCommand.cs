@@ -33,7 +33,7 @@ namespace Nhom2.TMDT.Service.Account.Commands.ForgetPassword
 
                 body = body.Replace("@Name", user.Name);
                 body = body.Replace("@Code", user.Verification);
-                body = body.Replace("@Time", user.ExprireTime.ToString());
+                body = body.Replace("@Time", user.ExprireTime.GetValueOrDefault().ToString("dd/MM/yyyy HH:mm"));
 
                 await sendMail.ExecutedAsync(user.Username, "Verification forget password", body);
                 await db.SaveChangesAsync();
