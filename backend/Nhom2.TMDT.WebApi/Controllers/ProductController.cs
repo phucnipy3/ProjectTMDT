@@ -92,9 +92,9 @@ namespace Nhom2.TMDT.WebApi.Controllers
 
         [HttpGet("CreateComment")]
         [Authorize]
-        public async Task<IActionResult> CreateCommentAsync(int productId, string content, int? parrentId = null)
+        public async Task<IActionResult> CreateCommentAsync(int productId, string content, int? parentId = null)
         {
-            return new ObjectResult(await createCommentCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, content, parrentId));
+            return new ObjectResult(await createCommentCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), productId, content, parentId));
         }
 
         [HttpGet("UpdateComment")]

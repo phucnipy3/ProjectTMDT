@@ -13,7 +13,7 @@ namespace Nhom2.TMDT.Service.Product.Commands.CreateComment
             this.db = db;
         }
 
-        public async Task<bool> ExecutedAsync(int userId, int productId, string content, int? parrentId)
+        public async Task<bool> ExecutedAsync(int userId, int productId, string content, int? parentId)
         {
             try
             {
@@ -22,7 +22,7 @@ namespace Nhom2.TMDT.Service.Product.Commands.CreateComment
                     ProductId = productId,
                     Content = content.Trim(),
                     CreatedBy = userId,
-                    ParentId = parrentId
+                    ParentId = parentId
                 });
 
                 await db.SaveChangesAsync();
