@@ -33,15 +33,13 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
                     Price = y.Price.GetValueOrDefault(),
                     PromotionPrice = y.PromotionPrice
                 }).ToList(),
+                StatusCode = x.Status.GetValueOrDefault(),
                 DeliveryMothod = x.DeliveryMethod,
                 TotalShipping = x.TotalShipping.GetValueOrDefault(),
-                PaymentMethod = x.PaymentMethod,
-                CreatedDate = x.CreatedDate.GetValueOrDefault()
+                PaymentMethod = x.PaymentMethod
             }).FirstOrDefaultAsync();
 
             var order = await db.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
-
-            data.Status = ((OrderStatus)order.Status).GetDescription();
 
             var timeLogs = new List<TimeLog>();
             if (order.Ordered.HasValue)

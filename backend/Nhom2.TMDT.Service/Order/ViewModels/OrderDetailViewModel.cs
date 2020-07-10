@@ -1,4 +1,6 @@
-﻿using Nhom2.TMDT.Data.Entities;
+﻿using Nhom2.TMDT.Common.Enums;
+using Nhom2.TMDT.Common.Extensions;
+using Nhom2.TMDT.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,10 +10,17 @@ namespace Nhom2.TMDT.Service.Order.ViewModels
     public class OrderDetailViewModel
     {
         public int Id { get; set; }
-        public string Status { get; set; }
-        public ShipmentDetail ShipmentDetail { get; set; }
         public List<CartItemViewModel> Products { get; set; }
-        public List<TimeLog> TimeLogs { get; set; }
+        public string DeliveryMothod { get; set; }
+        public decimal TotalShipping { get; set; }
+        public int StatusCode { private get; set; }
+        public string Status
+        {
+            get
+            {
+                return ((OrderStatus)StatusCode).GetDescription();
+            }
+        }
         public decimal TotalProductMoney
         {
             get
@@ -19,9 +28,16 @@ namespace Nhom2.TMDT.Service.Order.ViewModels
                 return Products.Sum(x => (x.PromotionPrice ?? x.Price) * x.Count);
             }
         }
-        public string DeliveryMothod { get; set; }
-        public decimal TotalShipping { get; set; }
+        public bool CanCancel
+        {
+            get
+            {
+                return StatusCode == (int)OrderStatus.Ordered;
+            }
+        }
         public string PaymentMethod { get; set; }
+        public ShipmentDetail ShipmentDetail { get; set; }
+        public List<TimeLog> TimeLogs { get; set; }
         public decimal TotalMoney
         {
             get
@@ -29,7 +45,6 @@ namespace Nhom2.TMDT.Service.Order.ViewModels
                 return TotalProductMoney + TotalShipping;
             }
         }
-        public DateTime CreatedDate { get; set; }
     }
 
     public class TimeLog
