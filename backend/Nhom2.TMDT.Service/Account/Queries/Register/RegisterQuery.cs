@@ -24,7 +24,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.Register
                 if (await db.Users.AnyAsync(x => x.Username == registerViewModel.Email))
                     return false;
 
-                if (await sendMail.ExecutedAsync(registerViewModel.Email, "", ))
+                if (await sendMail.ExecutedAsync(registerViewModel.Email, "", ""))
                 {
 
                     await db.Users.AddAsync(new Data.Entities.User()
