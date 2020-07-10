@@ -23,6 +23,6 @@ namespace Nhom2.TMDT.Data.Entities
 
         public virtual User User { get; set; }
         public virtual ShipmentDetail ShipmentDetail { get; set; }
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
     }
 }
