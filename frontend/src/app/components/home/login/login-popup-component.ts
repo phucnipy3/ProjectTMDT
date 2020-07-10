@@ -42,7 +42,11 @@ export class LoginPopupComponent extends SimpleModalComponent<null, User> {
     }
 
     signUp() {
-        this.simpleModalService.addModal(SignUpPopupComponent);
+        this.simpleModalService.addModal(SignUpPopupComponent).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Đăng kí thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+            }
+        });
     }
 
     forgetPassword() {

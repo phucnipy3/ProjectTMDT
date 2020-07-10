@@ -96,7 +96,8 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> RegisterAsync([FromBody]RegisterViewModel registerViewModel)
         {
-            return new ObjectResult(await registerQuery.ExecutedAsync(registerViewModel));
+            var result = await registerQuery.ExecutedAsync(registerViewModel);
+            return new ObjectResult(result);
         }
 
         [HttpPost("ForgerPassword")]

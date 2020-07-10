@@ -7,6 +7,7 @@ import { User } from '../models/account/user';
 import { SessionHelper } from '../app/common/helper/SessionHelper';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { SignUpViewModel } from '../models/account/sign-up';
 
 @Injectable()
 export class AuthenticateService {
@@ -47,5 +48,15 @@ export class AuthenticateService {
                     return res;
                 })
             );
+    }
+
+    public register(registerViewModel: SignUpViewModel): Observable<boolean>{
+        return this.http
+        .post(this.apiUrl + '/Register', registerViewModel)
+        .pipe(
+            map((res: boolean) => {
+                return res;
+            })
+        );
     }
 }

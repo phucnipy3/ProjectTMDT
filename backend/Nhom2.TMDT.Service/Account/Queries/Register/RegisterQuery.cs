@@ -5,6 +5,7 @@ using Nhom2.TMDT.Common.Verification;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.ViewModels;
 using Nhom2.TMDT.Service.Mail.SendMail;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 
@@ -66,7 +67,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.Register
 
                 return false;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

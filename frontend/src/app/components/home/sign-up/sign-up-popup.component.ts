@@ -2,13 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { SimpleModalComponent } from 'ngx-simple-modal';
 import { SignUpViewModel } from '../../../../models/account/sign-up';
 import { PasswordCheckService, PasswordCheckStrength } from '../../../../services/check-password';
+import { AuthenticateService } from '../../../../services/authenticate.service';
+import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 
 @Component({
     selector: 'sign-up-popup',
     templateUrl: './sign-up-popup.component.html',
 })
-export class SignUpPopupComponent extends SimpleModalComponent<null, null> {
+export class SignUpPopupComponent extends SimpleModalComponent<null, boolean> {
 
     model: SignUpViewModel = new SignUpViewModel();
 
@@ -24,12 +27,22 @@ export class SignUpPopupComponent extends SimpleModalComponent<null, null> {
     phoneNumberInvalid = false;
 
 
-    constructor(private passwordCheckService: PasswordCheckService) {
+    constructor(
+        private passwordCheckService: PasswordCheckService,
+        private authenticateService: AuthenticateService,
+    ) {
         super();
     }
 
     signUp() {
-        this.inputValid();
+        if (this.inputValid()) {
+            this.authenticateService.register(this.model).subscribe((res) => {
+                if (res) {
+                    this.result = true;
+                    this.close();
+                }
+            });
+        }
     }
 
     resetCondition() {
@@ -116,7 +129,7 @@ export class SignUpPopupComponent extends SimpleModalComponent<null, null> {
         return this.passwordCheckService.checkPasswordStrength(password) === PasswordCheckStrength.Strong;
     }
 
-    phoneNumberValid(phoneNumber: string){
+    phoneNumberValid(phoneNumber: string) {
         const numberr = new RegExp('^0+[0-9]{9}$');
         return numberr.test(phoneNumber);
     }

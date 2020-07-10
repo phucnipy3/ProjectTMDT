@@ -63,6 +63,10 @@ export class TopMenuComponent implements OnInit {
         });
     }
     showSignUp() {
-        this.simpleModalService.addModal(SignUpPopupComponent);
+        this.simpleModalService.addModal(SignUpPopupComponent).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Đăng kí thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+            }
+        });
     }
 }

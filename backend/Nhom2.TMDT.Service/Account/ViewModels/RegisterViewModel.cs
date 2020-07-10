@@ -12,5 +12,6 @@ namespace Nhom2.TMDT.Service.Account.ViewModels
         public string Password { get; set; }
         public string Address { get; set; }
         public bool IsMale { get; set; }
+        public string ConfirmPassword { get; set; }
     }
 }
