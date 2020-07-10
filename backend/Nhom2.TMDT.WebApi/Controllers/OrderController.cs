@@ -65,7 +65,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             return new ObjectResult(getPaymentMethodQuery.Executed());
         }
 
-        [HttpPost("CreateOrderCart")]
+        [HttpGet("CreateOrderCart")]
         [AllowAnonymous]
         public async Task<IActionResult> CreateOrderCartAsync([FromBody]OrderCartViewModel orderCartViewModel)
         {
