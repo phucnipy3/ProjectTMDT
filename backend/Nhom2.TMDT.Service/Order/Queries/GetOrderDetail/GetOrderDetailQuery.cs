@@ -47,21 +47,24 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
                 PaymentMethod = x.PaymentMethod
             }).FirstOrDefaultAsync();
 
+            if (data == null)
+                return null;
+
             var order = await table.FirstOrDefaultAsync();
 
             var timeLogs = new List<TimeLog>();
             if (order.Ordered.HasValue)
-                timeLogs.Add(new TimeLog() { TimeLine = order.Ordered.GetValueOrDefault(), Event = OrderStatus.Ordered.GetDescription() });
+                timeLogs.Add(new TimeLog() { TimeLine = order.Ordered.GetValueOrDefault().ToString("dd/MM/yyyy HH:mm"), Event = OrderStatus.Ordered.GetDescription() });
             if (order.Confirmed.HasValue)
-                timeLogs.Add(new TimeLog() { TimeLine = order.Confirmed.GetValueOrDefault(), Event = OrderStatus.Confirmed.GetDescription() });
+                timeLogs.Add(new TimeLog() { TimeLine = order.Confirmed.GetValueOrDefault().ToString("dd/MM/yyyy HH:mm"), Event = OrderStatus.Confirmed.GetDescription() });
             if (order.Transporting.HasValue)
-                timeLogs.Add(new TimeLog() { TimeLine = order.Transporting.GetValueOrDefault(), Event = OrderStatus.Transporting.GetDescription() });
+                timeLogs.Add(new TimeLog() { TimeLine = order.Transporting.GetValueOrDefault().ToString("dd/MM/yyyy HH:mm"), Event = OrderStatus.Transporting.GetDescription() });
             if (order.Completed.HasValue)
-                timeLogs.Add(new TimeLog() { TimeLine = order.Completed.GetValueOrDefault(), Event = OrderStatus.Completed.GetDescription() });
+                timeLogs.Add(new TimeLog() { TimeLine = order.Completed.GetValueOrDefault().ToString("dd/MM/yyyy HH:mm"), Event = OrderStatus.Completed.GetDescription() });
             if (order.Canceled.HasValue)
-                timeLogs.Add(new TimeLog() { TimeLine = order.Canceled.GetValueOrDefault(), Event = OrderStatus.Canceled.GetDescription() });
+                timeLogs.Add(new TimeLog() { TimeLine = order.Canceled.GetValueOrDefault().ToString("dd/MM/yyyy HH:mm"), Event = OrderStatus.Canceled.GetDescription() });
 
-            data.TimeLogs = timeLogs.OrderByDescending(x => x.TimeLine).ToList();
+            data.TimeLogs = timeLogs;
 
             return data;
         }
