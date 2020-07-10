@@ -6,14 +6,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder
+namespace Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder
 {
-    public class ConfirmOrderQuery : IConfirmOrderQuery
+    public class ConfirmOrderCommand : IConfirmOrderCommand
     {
         private readonly ApplicationContext db;
         private ISendMail sendMail;
 
-        public ConfirmOrderQuery(ApplicationContext db, ISendMail sendMail)
+        public ConfirmOrderCommand(ApplicationContext db, ISendMail sendMail)
         {
             this.db = db;
             this.sendMail = sendMail;

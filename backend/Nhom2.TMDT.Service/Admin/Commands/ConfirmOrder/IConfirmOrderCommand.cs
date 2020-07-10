@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder
+namespace Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder
 {
-    public interface IConfirmOrderQuery
+    public interface IConfirmOrderCommand
     {
         Task<bool> ExecutedAsync(int orderId, bool isCancel);
     }
