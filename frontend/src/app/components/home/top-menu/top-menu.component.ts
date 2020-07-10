@@ -45,7 +45,11 @@ export class TopMenuComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.user = SessionHelper.getUserFromStorage();
+        this.authenticateService.authenticate().subscribe((res) => {
+            if (res) {
+                this.user = res;
+            }
+        });
     }
 
     logout() {

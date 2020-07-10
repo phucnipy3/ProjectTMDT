@@ -41,7 +41,7 @@ export class AuthenticateService {
 
     public authenticate(role: number = 3): Observable<User> {
         return this.http
-            .get(this.apiUrl + '/authenticate?role=' + role)
+            .get(this.apiUrl + '/authentication?role=' + role)
             .pipe(
                 map((res: User) => {
                     SessionHelper.saveUserToStorage(res);
