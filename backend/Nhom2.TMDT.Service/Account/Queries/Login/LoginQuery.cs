@@ -11,10 +11,12 @@ namespace Nhom2.TMDT.Service.Account.Login.Queries
     public class LoginQuery : ILoginQuery
     {
         private readonly ApplicationContext db;
+        private Encryption encryption;
 
         public LoginQuery(ApplicationContext db)
         {
             this.db = db;
+            encryption = new Encryption();
         }
 
         public async Task<User> ExecutedAsync(LoginViewModel loginViewModel)
@@ -22,7 +24,7 @@ namespace Nhom2.TMDT.Service.Account.Login.Queries
             if (string.IsNullOrEmpty(loginViewModel.Username) || string.IsNullOrEmpty(loginViewModel.Password))
                 return null;
 
-            string passwordEncrypt = new Encryption().EncryptionMD5(loginViewModel.Password);
+            string passwordEncrypt = encryption.EncryptionMD5(loginViewModel.Password);
 
             var data = await db.Users.Where(x => x.Username == loginViewModel.Username && x.Password == passwordEncrypt).FirstOrDefaultAsync();
 
