@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder;
+using Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder;
 using Nhom2.TMDT.Service.Admin.Queries.GetOrderManager;
 using System.Threading.Tasks;
 
@@ -10,10 +10,10 @@ namespace Nhom2.TMDT.WebApi.Controllers
     [ApiController]
     public class AdminController : Controller
     {
-        private readonly IConfirmOrderQuery confirmOrderQuery;
+        private readonly IConfirmOrderCommand confirmOrderQuery;
         private readonly IGetOrderManagerQuery getOrderManagerQuery;
 
-        public AdminController(IConfirmOrderQuery confirmOrderQuery, IGetOrderManagerQuery getOrderManagerQuery)
+        public AdminController(IConfirmOrderCommand confirmOrderQuery, IGetOrderManagerQuery getOrderManagerQuery)
         {
             this.confirmOrderQuery = confirmOrderQuery;
             this.getOrderManagerQuery = getOrderManagerQuery;

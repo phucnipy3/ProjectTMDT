@@ -11,7 +11,6 @@ using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
 using Nhom2.TMDT.Service.Account.Commands.ForgetPassword;
 using Nhom2.TMDT.Service.Account.Commands.Register;
-using Nhom2.TMDT.Service.Admin.Queries.ConfirmOrder;
 using Nhom2.TMDT.Service.Admin.Queries.GetOrderManager;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProduct;
 using Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew;
@@ -36,6 +35,7 @@ using Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct;
 using System;
 using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
 using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
+using Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder;
 
 namespace Nhom2.TMDT.WebApi
 {
@@ -95,7 +95,7 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IGetOrderQuery, GetOrderQuery>();
             services.AddScoped<IGetOrderManagerQuery, GetOrderManagerQuery>();
             services.AddScoped<IGetOrderDetailQuery, GetOrderDetailQuery>();
-            services.AddScoped<IConfirmOrderQuery, ConfirmOrderQuery>();
+            services.AddScoped<IConfirmOrderCommand, ConfirmOrderCommand>();
             services.AddScoped<IGetDeliveryMethodQuery, GetDeliveryMethodQuery>();
             services.AddScoped<ICreateOrderCartQuery, CreateOrderCartQuery>();
             services.AddScoped<IGetPaymentMethodQuery, GetPaymentMethodQuery>();

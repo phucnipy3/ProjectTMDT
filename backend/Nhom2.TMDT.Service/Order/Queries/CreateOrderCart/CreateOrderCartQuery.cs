@@ -65,14 +65,11 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
                 db.Orders.Add(order);
 
                 string body = File.ReadAllText("./Templates/MailOrderInformationTemplate.html");
-
-                var user = await db.Users.FirstOrDefaultAsync(x => x.Id == userId);
-
-                body = body.Replace("@Name", user == null ? "" : user.Name);
+                body = body.Replace("@Name", orderCartViewModel.ShipmentDetail.Name);
                 body = body.Replace("@Status", "được đặt");
                 body = body.Replace("@Time", DateTime.Now.ToString());
 
-                await sendMail.ExecutedAsync(order.User.ShipmentDetails.First().Email, "Order information", body);
+                await sendMail.ExecutedAsync(orderCartViewModel.ShipmentDetail.Email, "Order information", body);
                 await db.SaveChangesAsync();
                 return true;
             }
