@@ -10,7 +10,13 @@
           <label>Địa chỉ e-mail <span class="text-danger">*</span></label>
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" placeholder="Nhập địa chỉ e-mail">
+          <input type="text" class="form-control" placeholder="Nhập địa chỉ e-mail" [(ngModel)]="model.email">
+        </div>
+        <div class="col-12" *ngIf="emailEmpty">
+          <small class="text-danger" >Địa chỉ email là bắt buộc</small>
+        </div>
+        <div class="col-12" *ngIf="!emailEmpty && emailInvalid">
+          <small class="text-danger">Địa chỉ email không hợp lệ</small>
         </div>
       </div>
       <div class="row my-3">
@@ -18,7 +24,13 @@
           <label>Mật khẩu <span class="text-danger">*</span></label>
         </div>
         <div class="col-12">
-          <input type="password" class="form-control" placeholder="Nhập mật khẩu">
+          <input type="password" class="form-control" placeholder="Nhập mật khẩu" [(ngModel)]="model.password">
+        </div>
+        <div class="col-12" *ngIf="passwordEmpty">
+          <small class="text-danger">Mật khẩu là bắt buộc</small>
+        </div>
+        <div class="col-12" *ngIf="!passwordEmpty && passwordInvalid">
+          <small class="text-danger">Mật khẩu yếu</small>
         </div>
       </div>
       <div class="row my-3">
@@ -26,7 +38,13 @@
           <label>Xác nhận nật khẩu <span class="text-danger">*</span></label>
         </div>
         <div class="col-12">
-          <input type="password" class="form-control" placeholder="Nhập lại mật khẩu">
+          <input type="password" class="form-control" placeholder="Nhập lại mật khẩu" [(ngModel)]="model.confirmPassword">
+        </div>
+        <div class="col-12" *ngIf="confirmPasswordEmpty">
+          <small class="text-danger">Xác nhận mật khẩu là bắt buộc</small>
+        </div>
+        <div class="col-12" *ngIf="!confirmPasswordEmpty && confirmPasswordInvalid">
+          <small class="text-danger">Mật khẩu không trùng</small>
         </div>
       </div>
       <div class="row my-3">
@@ -34,7 +52,10 @@
           <label>Họ và tên <span class="text-danger">*</span></label>
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" placeholder="Nhập họ và tên">
+          <input type="text" class="form-control" placeholder="Nhập họ và tên" [(ngModel)]="model.fullName">
+        </div>
+        <div class="col-12" *ngIf="nameEmpty">
+          <small class="text-danger">Họ và tên là bắt buộc</small>
         </div>
       </div>
       <div class="row my-3">
@@ -42,7 +63,13 @@
           <label>Số điện thoại <span class="text-danger">*</span></label>
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" placeholder="Nhập số điện thoại">
+          <input type="text" class="form-control" placeholder="Nhập số điện thoại" [(ngModel)]="model.phoneNumber">
+        </div>
+        <div class="col-12" *ngIf="phoneNumberEmpty">
+          <small class="text-danger">Số điện thoại là bắt buộc</small>
+        </div>
+        <div class="col-12" *ngIf="!phoneNumberEmpty && phoneNumberInvalid">
+          <small class="text-danger">Số điện thoại không hợp lệ</small>
         </div>
       </div>
       <div class="row my-3 align-items-center">
@@ -50,11 +77,11 @@
           <label>Giới tính <span class="text-danger">*</span></label>
         </div>
         <div class="col-auto">
-          <input type="radio" class="form-control-radio" checked name="sex">
+          <input type="radio" class="form-control-radio" checked name="sex" (change) = "model.isMale = true">
           <label class="ml-2">Nam</label>
         </div>
         <div class="col-auto">
-          <input type="radio" class="form-control-radio" name="sex">
+          <input type="radio" class="form-control-radio" name="sex" (change) = "model.isMale = false">
           <label class="ml-2">Nữ</label>
         </div>
       </div>
@@ -63,13 +90,17 @@
           <label>Địa chỉ <span class="text-danger">*</span></label>
         </div>
         <div class="col-12">
-          <input type="text" class="form-control" placeholder="Nhập địa chỉ">
+          <textarea class="form-control" cols="30" rows="3" placeholder="Nhập địa chỉ" [(ngModel)]="model.address"></textarea>
         </div>
+        <div class="col-12" *ngIf="addressEmpty">
+          <small class="text-danger">Địa chỉ là bắt buộc</small>
+        </div>
+        
       </div>
     </div>
     <div class="modal-footer">
       <button type="button" class="btn btn-secondary" (click)="close()">Hủy</button>
-      <button type="button" class="btn btn-primary">Đăng ký</button>
+      <button type="button" class="btn btn-primary" (click)="signUp()">Đăng ký</button>
     </div>
   </div>
 </div>
