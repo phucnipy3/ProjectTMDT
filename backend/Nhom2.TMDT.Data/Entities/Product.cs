@@ -19,9 +19,9 @@ namespace Nhom2.TMDT.Data.Entities
         public DateTime? CreatedDate { get; set; }
         public bool? Status { get; set; }
 
-        public virtual ICollection<OrderDetail> OrderDetails { get; set; }
-        public virtual ICollection<Rate> Rates { get; set; }
-        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<OrderDetail> OrderDetails { get; set; } = new HashSet<OrderDetail>();
+        public virtual ICollection<Rate> Rates { get; set; } = new HashSet<Rate>();
+        public virtual ICollection<Comment> Comments { get; set; } = new HashSet<Comment>();
         public virtual Category Category { get; set; }
     }
 }

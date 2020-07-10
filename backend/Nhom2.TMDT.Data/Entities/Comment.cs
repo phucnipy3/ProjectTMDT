@@ -16,6 +16,6 @@ namespace Nhom2.TMDT.Data.Entities
         public virtual User User { get; set; }
         public virtual Product Product { get; set; }
         public virtual Comment Parent { get; set; }
-        public virtual ICollection<Comment> Children { get; set; }
+        public virtual ICollection<Comment> Children { get; set; } = new HashSet<Comment>();
     }
 }

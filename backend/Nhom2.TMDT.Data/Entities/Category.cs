@@ -13,7 +13,7 @@ namespace Nhom2.TMDT.Data.Entities
         public bool? Status { get; set; }
 
         public virtual Category Parent { get; set; }
-        public virtual ICollection<Category> Children { get; set; }
-        public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Category> Children { get; set; } = new HashSet<Category>();
+        public virtual ICollection<Product> Products { get; set; } = new HashSet<Product>();
     }
 }
