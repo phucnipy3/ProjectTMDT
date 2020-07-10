@@ -16,7 +16,7 @@ export class AuthenticateService {
 
     public login(username: string, password: string): Observable<User> {
         return this.http
-            .post(this.apiUrl + '/Login?username=' + username + '&password=' + password, null)
+            .post(this.apiUrl + '/Login', { username, password })
             .pipe(
                 map((res: User) => {
                     SessionHelper.saveUserToStorage(res);
