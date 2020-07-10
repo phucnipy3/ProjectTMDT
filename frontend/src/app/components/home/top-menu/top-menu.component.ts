@@ -65,7 +65,7 @@ export class TopMenuComponent implements OnInit {
 
     showLogin() {
         this.simpleModalService.addModal(LoginPopupComponent).subscribe((res) => {
-            this.user = res;
+            if (res) { this.user = res; }
         });
     }
     showSignUp() {

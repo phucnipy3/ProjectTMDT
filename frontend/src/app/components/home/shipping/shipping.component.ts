@@ -3,6 +3,7 @@ import { ShipmentDetailViewModel } from '../../../../models/order/shipment-detai
 import { SessionHelper } from '../../../common/helper/SessionHelper';
 import { Router } from '@angular/router';
 import { User } from '../../../../models/account/user';
+import { OrderService } from '../../../../services/order.service';
 declare var $: any;
 @Component({
     selector: 'shipping',
@@ -15,22 +16,18 @@ export class ShippingComponent implements OnInit {
     shippings: ShipmentDetailViewModel[] = [];
     selectedShipping: ShipmentDetailViewModel;
     constructor(
-        private router: Router
+        private router: Router,
+        private orderService: OrderService
     ) { }
 
     ngOnInit(): void {
-
         this.user = SessionHelper.getUserFromStorage();
-        let shipping = new ShipmentDetailViewModel();
-        shipping.phoneNumber = '3544572334';
-        shipping.id = 1;
-        shipping.name = 'phuc sag á d';
-        shipping.address = 'quận 9';
-        shipping.email = 'abc.asdas@ấ.ádasd';
-        this.shippings.push(shipping);
-        this.shippings.push({ ...shipping });
 
-        this.shippings.push({ ...shipping });
+        this.orderService.getShipmentDetails().subscribe((res: ShipmentDetailViewModel[]) => {
+            if (res) {
+                this.shippings = res;
+            }
+        });
 
         $('.collapse').collapse({
             toggle: false
@@ -50,7 +47,7 @@ export class ShippingComponent implements OnInit {
         this.router.navigate(['/thanh-toan']);
     }
 
-    onDelete(id: number){
+    onDelete(id: number) {
         // call api delete shipping, toast
     }
 }

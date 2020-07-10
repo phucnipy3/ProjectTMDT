@@ -47,4 +47,17 @@ export class OrderService {
                 })
             );
     }
+
+    getShipmentDetails(): Observable<ShipmentDetailViewModel[]>{
+        return this.http
+        .get(this.apiUrl + '/GetShipmentDetails')
+        .pipe(
+            map((res: ShipmentDetailViewModel[]) => {
+                return res;
+            })
+        );
+    }
+    getOrders(){
+
+    }
 }
