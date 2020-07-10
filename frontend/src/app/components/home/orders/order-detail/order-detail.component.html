@@ -4,14 +4,14 @@
       <div class="col-5">
         <div class="row">
           <div class="col-12 py-2">
-            <span class="h6">{{order.information.name}}</span>
+            <span class="h6">{{order.shipmentDetail.name}}</span>
           </div>
           <div class="col-12  py-2">
-            <span>{{order.information.phoneNumber}}</span>
+            <span>{{order.shipmentDetail.phoneNumber}}</span>
           </div>
           <div class="col-12  py-2">
             <span>
-              {{order.information.address}}
+              {{order.shipmentDetail.address}}
             </span>
           </div>
         </div>
@@ -75,7 +75,7 @@
             <span class="text-danger h6 float-right">Tổng tiền hàng:</span>
           </div>
           <div class="col-12">
-            <span class="text-danger h6 float-right">Vận chuyển - {{order.transport}}:</span>
+            <span class="text-danger h6 float-right">Vận chuyển - {{order.deliveryMethod}}:</span>
           </div>
           <div class="col-12">
             <span class="text-danger h5 float-right">Tổng tiền:</span>
@@ -88,7 +88,7 @@
             <span class="text-danger h6 float-right">{{order.totalProductMoney}}đ</span>
           </div>
           <div class="col-12">
-            <span class="text-danger h6 float-right">{{order.transportFee}}đ</span>
+            <span class="text-danger h6 float-right">{{order.totalShipping}}đ</span>
           </div>
           <div class="col-12">
             <span class="text-danger h5 float-right">{{order.totalMoney}}đ</span>
@@ -98,7 +98,6 @@
     </div>
     <div class="row">
       <div class="col-auto ml-auto pr-4">
-        <a href="#" class="btn btn-info">Mua lần nữa</a>
       </div>
     </div>
   </div>
