@@ -1,0 +1,57 @@
+<div class="container bg-light py-2">
+    <div class="row my-3">
+        <div class="col-6 mx-auto">
+            <div class="row align-items-center my-2">
+                <div class="col-3">
+                    <label> Họ và tên </label>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Nhập họ và tên" [(ngModel)]="shipping.name">
+                </div>   
+                 
+            </div>
+            <div class="row align-items-center my-2">
+                <div class="col-3">
+                    <label> Địa chỉ e-mail </label>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Nhập địa chỉ e-mail" [(ngModel)]="shipping.email"> 
+                </div>   
+            </div>
+            <div class="row align-items-center my-2">
+                <div class="col-3">
+                    <label> Địa chỉ</label>
+                </div>
+                <div class="col">
+                    <textarea cols="30" rows="3" class="form-control" placeholder="Nhập địa chỉ" [(ngModel)]="shipping.address"></textarea>
+                </div>   
+            </div>
+            <div class="row align-items-center my-2">
+                <div class="col-3">
+                    <label>Số điện thoại</label>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" placeholder="Nhập số điên thoại" [(ngModel)]="shipping.phoneNumber">
+                </div>   
+            </div>
+            <div class="row" *ngIf="!updating">
+                <div class="col-3"></div>
+                <div class="col pr-1">
+                    <button class="btn btn-secondary w-100 " (click)="onCancel()" >Hủy</button>
+                </div>
+                <div class="col pl-1">
+                    <button class="btn btn-primary w-100">Giao đến địa chỉ này</button>
+                </div>
+            </div>
+            <div class="row" *ngIf="updating">
+                <div class="col-3"></div>
+                <div class="col pr-1">
+                    <button class="btn btn-secondary w-100" (click)="onCancel()">Hủy</button>
+                </div>
+                <div class="col pl-1">
+                    <button class="btn btn-primary w-100">Cập nhật</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

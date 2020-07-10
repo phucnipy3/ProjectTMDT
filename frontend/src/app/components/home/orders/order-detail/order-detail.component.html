@@ -1,0 +1,105 @@
+<div class="container">
+  <div class="container bg-dark-light my-4 px-5 py-4">
+    <div class="row">
+      <div class="col-5">
+        <div class="row">
+          <div class="col-12 py-2">
+            <span class="h6">{{order.information.name}}</span>
+          </div>
+          <div class="col-12  py-2">
+            <span>{{order.information.phoneNumber}}</span>
+          </div>
+          <div class="col-12  py-2">
+            <span>
+              {{order.information.address}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-7">
+        <div class="row">
+          <ng-container *ngFor="let item of order.timeLogs">
+            <div class="col-12 py-1">
+              <span><i class="fas fa-circle text-info"></i> &emsp;</span>
+
+              <span>{{item.timeLine}} &emsp; {{item.event}}</span>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-2 bg-dark-light">
+    <div class="row">
+      <div class="col-12 px-4">
+        <span class="text-danger float-right h6">
+          {{order.status}}
+        </span>
+      </div>
+    </div>
+    <ng-container *ngFor="let product of order.products">
+      <div class="row pb-1">
+        <div class="col-1">
+          <div class="row">
+            <div class="col-auto mx-auto">
+              <a href="{{'/chi-tiet/' + product.id}}">
+                <img src="{{product.image}}" alt="Alternate Text" width="80" height="130" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-9 px-4 align-self-center">
+          <span class="h5">{{product.name}}</span>
+          <br />
+          <span>x{{product.count}}</span>
+        </div>
+        <div class="col-2 align-self-center px-4">
+          <span class="float-right text-right">
+            <ng-container *ngIf="product.promotionPrice">
+              <del>{{product.price | number}}đ</del> <br />
+              <span class="text-danger">{{product.promotionPrice | number}}đ</span>
+            </ng-container>
+            <ng-container *ngIf="!product.promotionPrice">
+              <span>{{product.price | number}}đ</span>
+
+            </ng-container>
+          </span>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="row mt-3">
+      <div class="col-4 offset-6">
+        <div class="row">
+          <div class="col-12">
+            <span class="text-danger h6 float-right">Tổng tiền hàng:</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h6 float-right">Vận chuyển - {{order.transport}}:</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h5 float-right">Tổng tiền:</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 px-4">
+        <div class="row">
+          <div class="col-12">
+            <span class="text-danger h6 float-right">{{order.totalProductMoney}}đ</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h6 float-right">{{order.transportFee}}đ</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h5 float-right">{{order.totalMoney}}đ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto ml-auto pr-4">
+        <a href="#" class="btn btn-info">Mua lần nữa</a>
+      </div>
+    </div>
+  </div>
+</div>

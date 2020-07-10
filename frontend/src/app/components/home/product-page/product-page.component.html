@@ -1,0 +1,22 @@
+<img src="../../../../assets/image/banner3.jpg" alt="Image-KhuyenMai" width="100%" />
+<div class="row mx-0">
+  <div class="col-12 col-lg-4 col-xl-3 pb-3">
+    <side-bar [title]="'Danh mục'" [haveSearch]="true" [data]="data"></side-bar>
+  </div>
+  <div class="col-12 col-lg-8 col-xl-9">
+    <div class="row post-feed">
+      <div class="col-6 col-md-4 col-xl-3 py-3 post ">
+        <ng-container *ngIf="products.length">
+
+          <product-card [product]="product" *ngFor="let product of products">
+
+          </product-card>
+        </ng-container>
+
+        <ng-container *ngIf="!products.length">
+          No result
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

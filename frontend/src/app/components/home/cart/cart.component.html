@@ -1,0 +1,83 @@
+<ng-container *ngIf="!cartItems.length">
+    <h2 class="m-5"> Không có sản phẩm nào trong giỏ hàng!</h2>
+</ng-container>
+<ng-container *ngIf="cartItems.length">
+    <h2 class="m-5"> Giỏ hàng của bạn</h2>
+    <div class="mx-5">
+        <div class="cart table-responsive-lg">
+                <table class="table">
+                    <thead class="bg-info text-white">
+                        <tr>
+                            <th class="first-cell"> </th>
+                            <th colspan="2" class="flex-nowrap">Tên sản phẩm</th>
+                            <th>Giá</th>
+                            <th>Số lượng</th>
+                            <th>Thành tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            <ng-container *ngFor="let item of cartItems">
+                                <tr>
+                                    <td class="first-cell">
+                                        <div class="row">
+                                            <div class="col-auto align-self-center">
+                                                <a class="close float-left text-danger cursor-pointer" (click)="remove(item)">
+                                                    x
+                                                </a>
+                                            </div>
+                                            <div class="col-8 h-100">
+                                                <a>
+                                                    <img src="{{item.image}}" alt="Alternate Text" class="image-on-cart" />
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td colspan="2">
+                                        <div class="name-cell my-auto">
+                                           {{item.name}}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="price-cell">
+                                          {{item.price | number}} <u>đ</u>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="quantity-cell">
+                                            <span class="btn btn-secondary mr-4" (click)="increase(item)">+</span>{{item.count | number}} <span class="btn btn-secondary ml-4" (click)="decrease(item)">-</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="sub-total-cell">
+                                            {{item.price * item.count | number}}<u>đ</u>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            
+                        <tr>
+                            <td colspan="6">
+                                <div class="row text-total">
+                                    <div class="col-auto ml-auto pr-4">
+                                        Tổng tiền
+                                    </div>
+                                    <div class="col-auto pr-4">
+                                       {{total | number}}<u>đ</u>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">
+                                <div class="row">
+                                    <div class="col-auto ml-auto pr-4">
+                                        <a class="btn btn-primary btn-checkout">Đi đến đặt hàng <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+        </div>
+</div>
+</ng-container>
