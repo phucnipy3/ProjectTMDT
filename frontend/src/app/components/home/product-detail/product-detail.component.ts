@@ -22,7 +22,7 @@ import { CartService } from '../../../../services/cart.service';
 })
 export class ProductDetailComponent implements OnInit {
 
-    product: ProductViewModel;
+    product: ProductViewModel = new ProductViewModel();
     showCreateComment = false;
     rate: RateViewModel = new RateViewModel();
     comments: CommentViewModel[] = [];
@@ -110,27 +110,63 @@ export class ProductDetailComponent implements OnInit {
     }
 
     onComment(content: string) {
-        this.productService.comment(this.product.id, content).subscribe((res) => {
-            if (res) {
-                this.getComments();
-                this.toastr.success('Bình luận thành công');
-            }
-            else {
-                this.toastr.warning('Bình luận thất bại');
-            }
-        });
+        const user: User = SessionHelper.getUserFromStorage();
+        if (!user) {
+            this.simpleModalService.addModal(LoginPopupComponent).subscribe((res) => {
+                if (res) {
+                    this.productService.comment(this.product.id, content).subscribe((success) => {
+                        if (success) {
+                            this.getComments();
+                            this.toastr.success('Bình luận thành công');
+                        }
+                        else {
+                            this.toastr.warning('Bình luận thất bại');
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            this.productService.comment(this.product.id, content).subscribe((success) => {
+                if (success) {
+                    this.getComments();
+                    this.toastr.success('Bình luận thành công');
+                }
+                else {
+                    this.toastr.warning('Bình luận thất bại');
+                }
+            });
+        }
     }
 
     onReply(content: string, parentId: number) {
-        this.productService.reply(this.product.id, parentId, content).subscribe((res) => {
-            if (res) {
-                this.getComments();
-                this.toastr.success('Trả lời bình luận thành công');
-            }
-            else {
-                this.toastr.warning('Trả lời bình luận thất bại');
-            }
-        });
+        const user: User = SessionHelper.getUserFromStorage();
+        if (!user) {
+            this.simpleModalService.addModal(LoginPopupComponent).subscribe((res) => {
+                if (res) {
+                    this.productService.reply(this.product.id, parentId, content).subscribe((success) => {
+                        if (success) {
+                            this.getComments();
+                            this.toastr.success('Trả lời bình luận thành công');
+                        }
+                        else {
+                            this.toastr.warning('Trả lời bình luận thất bại');
+                        }
+                    });
+                }
+            });
+        }
+        else {
+            this.productService.reply(this.product.id, parentId, content).subscribe((success) => {
+                if (success) {
+                    this.getComments();
+                    this.toastr.success('Trả lời bình luận thành công');
+                }
+                else {
+                    this.toastr.warning('Trả lời bình luận thất bại');
+                }
+            });
+        }
     }
 
     getComments(pageNumber = 1, pageSize = 10) {
@@ -143,11 +179,11 @@ export class ProductDetailComponent implements OnInit {
         });
     }
 
-    changePage(page: number){
+    changePage(page: number) {
         this.getComments(page);
     }
 
-    addToCart(){
+    addToCart() {
         this.cartService.addProductToCart(this.product);
     }
 }
