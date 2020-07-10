@@ -13,8 +13,8 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    MetaTitle = table.Column<string>(type: "VARCHAR(500)", maxLength: 500, nullable: true),
+                    Name = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
+                    MetaTitle = table.Column<string>(type: "VARCHAR(1000)", maxLength: 1000, nullable: true),
                     ParentId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
                     Status = table.Column<bool>(nullable: true, defaultValue: true)
@@ -35,9 +35,9 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Address = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    Email = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
-                    Phone = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true)
+                    Address = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
+                    Email = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Phone = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,14 +50,14 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    MetaTitle = table.Column<string>(type: "VARCHAR(500)", maxLength: 500, nullable: true),
-                    Brand = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    Image = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Name = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
+                    MetaTitle = table.Column<string>(type: "VARCHAR(1000)", maxLength: 1000, nullable: true),
+                    Brand = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
+                    Image = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     Price = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: true),
                     PromotionPrice = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: true),
                     Quantity = table.Column<int>(nullable: true, defaultValue: 0),
-                    Detail = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Detail = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     Warranty = table.Column<int>(nullable: true, defaultValue: 0),
                     CategoryId = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),
@@ -79,15 +79,15 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Username = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
-                    Password = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Username = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Password = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     Role = table.Column<int>(nullable: true, defaultValue: 3),
-                    Name = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
+                    Name = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
                     Sex = table.Column<int>(nullable: true, defaultValue: 0),
-                    Image = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Image = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     ShipmentDetailId = table.Column<int>(nullable: true),
                     Active = table.Column<bool>(nullable: true, defaultValue: false),
-                    Verification = table.Column<string>(type: "VARCHAR(10)", maxLength: 10, nullable: true),
+                    Verification = table.Column<string>(type: "VARCHAR(500)", maxLength: 500, nullable: true),
                     ExprireTime = table.Column<DateTime>(nullable: true),
                     Status = table.Column<bool>(nullable: true, defaultValue: true)
                 },
@@ -107,7 +107,7 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Content = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Content = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     ProductId = table.Column<int>(nullable: true),
                     ParentId = table.Column<int>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: true),
@@ -140,10 +140,10 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Note = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
-                    DeliveryMethod = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    Note = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
+                    DeliveryMethod = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     TotalShipping = table.Column<decimal>(type: "DECIMAL(18,0)", nullable: true),
-                    PaymentMethod = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
+                    PaymentMethod = table.Column<string>(type: "NVARCHAR(1000)", maxLength: 1000, nullable: true),
                     ShipmentDetailId = table.Column<int>(nullable: true),
                     CreatedBy = table.Column<int>(nullable: true),
                     CreatedDate = table.Column<DateTime>(nullable: true, defaultValueSql: "getdate()"),

@@ -29,13 +29,13 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<Category>()
                 .Property(e => e.Name)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Category>()
                .Property(e => e.MetaTitle)
-               .HasMaxLength(500)
-               .HasColumnType("VARCHAR(500)");
+               .HasMaxLength(1000)
+               .HasColumnType("VARCHAR(1000)");
 
             modelBuilder.Entity<Category>()
                .Property(e => e.ParentId);
@@ -64,8 +64,8 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<Comment>()
                 .Property(e => e.Content)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Comment>()
                 .Property(e => e.CreatedDate)
@@ -103,13 +103,13 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.Note)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.DeliveryMethod)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.TotalShipping)
@@ -117,8 +117,8 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.PaymentMethod)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Order>()
                 .Property(e => e.CreatedDate)
@@ -200,23 +200,23 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.Name)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.MetaTitle)
-                .HasMaxLength(500)
-                .HasColumnType("VARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("VARCHAR(1000)");
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.Brand)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.Image)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.Price)
@@ -232,8 +232,8 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.Detail)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<Product>()
                 .Property(e => e.Warranty)
@@ -291,18 +291,18 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<ShipmentDetail>()
                 .Property(e => e.Address)
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
+
+            modelBuilder.Entity<ShipmentDetail>()
+                .Property(e => e.Email)
                 .HasMaxLength(500)
                 .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<ShipmentDetail>()
-                .Property(e => e.Email)
-                .HasMaxLength(50)
-                .HasColumnType("NVARCHAR(50)");
-
-            modelBuilder.Entity<ShipmentDetail>()
                 .Property(e => e.Phone)
-                .HasMaxLength(50)
-                .HasColumnType("NVARCHAR(50)");
+                .HasMaxLength(500)
+                .HasColumnType("NVARCHAR(500)");
             #endregion
 
             #region User
@@ -314,13 +314,13 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Username)
-                .HasMaxLength(50)
-                .HasColumnType("NVARCHAR(50)");
+                .HasMaxLength(500)
+                .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Password)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Role)
@@ -328,8 +328,8 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Name)
-                .HasMaxLength(50)
-                .HasColumnType("NVARCHAR(50)");
+                .HasMaxLength(500)
+                .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Sex)
@@ -337,8 +337,8 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Image)
-                .HasMaxLength(500)
-                .HasColumnType("NVARCHAR(500)");
+                .HasMaxLength(1000)
+                .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<User>()
                 .Property(e => e.ShipmentDetailId);
@@ -349,8 +349,8 @@ namespace Nhom2.TMDT.Data.Services
 
             modelBuilder.Entity<User>()
                 .Property(e => e.Verification)
-                .HasMaxLength(10)
-                .HasColumnType("VARCHAR(10)");
+                .HasMaxLength(500)
+                .HasColumnType("VARCHAR(500)");
 
             modelBuilder.Entity<User>()
                 .Property(e => e.ExprireTime);

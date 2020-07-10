@@ -10,7 +10,7 @@ using Nhom2.TMDT.Data.Services;
 namespace Nhom2.TMDT.Data.Migrations
 {
     [DbContext(typeof(ApplicationContext))]
-    [Migration("20200710061934_Init")]
+    [Migration("20200710105308_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -34,12 +34,12 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("VARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("VARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Name")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int?>("ParentId")
                         .HasColumnType("int");
@@ -64,8 +64,8 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Content")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int?>("CreatedBy")
                         .HasColumnType("int");
@@ -125,19 +125,19 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("DeliveryMethod")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Note")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<DateTime?>("Ordered")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PaymentMethod")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int?>("ShipmentDetailId")
                         .HasColumnType("int");
@@ -201,8 +201,8 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Brand")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int?>("CategoryId")
                         .HasColumnType("int");
@@ -213,20 +213,20 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Detail")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Image")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("MetaTitle")
-                        .HasColumnType("VARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("VARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Name")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("DECIMAL(18,0)");
@@ -296,16 +296,16 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Address")
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
+
+                    b.Property<string>("Email")
                         .HasColumnType("NVARCHAR(500)")
                         .HasMaxLength(500);
 
-                    b.Property<string>("Email")
-                        .HasColumnType("NVARCHAR(50)")
-                        .HasMaxLength(50);
-
                     b.Property<string>("Phone")
-                        .HasColumnType("NVARCHAR(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("NVARCHAR(500)")
+                        .HasMaxLength(500);
 
                     b.HasKey("Id");
 
@@ -328,16 +328,16 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Image")
-                        .HasColumnType("NVARCHAR(500)")
-                        .HasMaxLength(500);
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<string>("Name")
-                        .HasColumnType("NVARCHAR(50)")
-                        .HasMaxLength(50);
-
-                    b.Property<string>("Password")
                         .HasColumnType("NVARCHAR(500)")
                         .HasMaxLength(500);
+
+                    b.Property<string>("Password")
+                        .HasColumnType("NVARCHAR(1000)")
+                        .HasMaxLength(1000);
 
                     b.Property<int?>("Role")
                         .ValueGeneratedOnAdd()
@@ -358,12 +358,12 @@ namespace Nhom2.TMDT.Data.Migrations
                         .HasDefaultValue(true);
 
                     b.Property<string>("Username")
-                        .HasColumnType("NVARCHAR(50)")
-                        .HasMaxLength(50);
+                        .HasColumnType("NVARCHAR(500)")
+                        .HasMaxLength(500);
 
                     b.Property<string>("Verification")
-                        .HasColumnType("VARCHAR(10)")
-                        .HasMaxLength(10);
+                        .HasColumnType("VARCHAR(500)")
+                        .HasMaxLength(500);
 
                     b.HasKey("Id");
 

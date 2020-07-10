@@ -21,9 +21,13 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
         {
             Data.Entities.Order order = new Data.Entities.Order();
 
-            if (!await db.ShipmentDetails.AnyAsync(x => x.Id == orderCartViewModel.ShipmentDetail.Id))
+            if (await db.ShipmentDetails.AnyAsync(x => x.Id == orderCartViewModel.ShipmentDetail.Id))
             {
-                await db.ShipmentDetails.AddAsync(orderCartViewModel.ShipmentDetail);
+                order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
+            }
+            else
+            {
+                order.ShipmentDetail = orderCartViewModel.ShipmentDetail;
             }
 
             foreach (CartItemViewModel item in orderCartViewModel.CartItems)
@@ -43,7 +47,6 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
             order.DeliveryMethod = orderCartViewModel.DeliveryMethod.Name;
             order.TotalShipping = orderCartViewModel.DeliveryMethod.Cost;
             order.PaymentMethod = orderCartViewModel.PaymentMethod;
-            order.ShipmentDetailId = orderCartViewModel.ShipmentDetail.Id;
             order.Ordered = DateTime.Now;
             order.Status = 1;
 
