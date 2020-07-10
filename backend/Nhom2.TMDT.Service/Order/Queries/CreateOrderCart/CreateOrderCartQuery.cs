@@ -67,7 +67,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.CreateOrderCart
                 string body = File.ReadAllText("./Templates/MailOrderInformationTemplate.html");
                 body = body.Replace("@Name", orderCartViewModel.ShipmentDetail.Name);
                 body = body.Replace("@Status", "được đặt");
-                body = body.Replace("@Time", DateTime.Now.ToString());
+                body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
 
                 await sendMail.ExecutedAsync(orderCartViewModel.ShipmentDetail.Email, "Order information", body);
                 await db.SaveChangesAsync();

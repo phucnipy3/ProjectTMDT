@@ -8,5 +8,6 @@ namespace Nhom2.TMDT.Service.Account.ViewModels
     {
         public string NewPassword { get; set; }
         public string Code { get; set; }
+        public string Email { get; set; }
     }
 }

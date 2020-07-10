@@ -36,7 +36,7 @@ namespace Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder
                         order.Canceled = DateTime.Now;
 
                         body = body.Replace("@Status", "bị hủy");
-                        body = body.Replace("@Time", DateTime.Now.ToString());
+                        body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
                     }
                     else
                     {
@@ -46,25 +46,25 @@ namespace Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder
                                 order.Ordered = DateTime.Now;
                                 order.Status++;
                                 body = body.Replace("@Status", "được đặt");
-                                body = body.Replace("@Time", DateTime.Now.ToString());
+                                body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
                                 break;
                             case 1:
                                 order.Confirmed = DateTime.Now;
                                 order.Status++;
                                 body = body.Replace("@Status", "được xác nhận");
-                                body = body.Replace("@Time", DateTime.Now.ToString());
+                                body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
                                 break;
                             case 2:
                                 order.Transporting = DateTime.Now;
                                 order.Status++;
                                 body = body.Replace("@Status", "chuyển sang trạng thái lấy hàng");
-                                body = body.Replace("@Time", DateTime.Now.ToString());
+                                body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
                                 break;
                             case 3:
                                 order.Completed = DateTime.Now;
                                 order.Status++;
                                 body = body.Replace("@Status", "hoàn thành");
-                                body = body.Replace("@Time", DateTime.Now.ToString());
+                                body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
                                 break;
                         }
 

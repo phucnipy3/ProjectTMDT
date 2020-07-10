@@ -93,7 +93,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             {
                 Id = x.Id,
                 Username = x.Username,
-                FullName = x.Username,
+                FullName = x.Name,
                 IsMale = x.Sex == 0,
                 PhoneNumber = x.ShipmentDetails.First().PhoneNumber,
                 Email = x.ShipmentDetails.First().Email,
@@ -139,7 +139,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GetNewPasswordAsync([FromBody] NewPasswordViewModel newPasswordViewModel)
         {
-            return new ObjectResult(await getNewPasswordCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), newPasswordViewModel));
+            return new ObjectResult(await getNewPasswordCommand.ExecutedAsync(newPasswordViewModel));
         }
 
         [HttpPost("ForgetPassword")]
