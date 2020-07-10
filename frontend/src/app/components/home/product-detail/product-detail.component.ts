@@ -54,6 +54,7 @@ export class ProductDetailComponent implements OnInit {
             this.getProduct();
             this.getRelatedProduct();
             this.getRate();
+            this.getComments();
         });
         this.viewedProducts = SessionHelper.getViewedProductFromStorage();
     }

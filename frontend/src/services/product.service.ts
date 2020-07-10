@@ -86,7 +86,7 @@ export class ProductService {
     public reply(productId, parentId: number, content: string) {
         return this.http
             .get(this.apiUrl +
-                '/Comment?productId=' + productId +
+                '/CreateComment?productId=' + productId +
                 '&content=' + content +
                 '&parentId=' + parentId)
             .pipe(
