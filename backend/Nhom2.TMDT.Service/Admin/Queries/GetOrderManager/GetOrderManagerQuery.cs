@@ -42,6 +42,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrderManager
                     Price = y.Price.GetValueOrDefault(),
                     PromotionPrice = y.PromotionPrice
                 }).ToList(),
+                StatusCode = x.Status.GetValueOrDefault(),
                 DeliveryMothod = x.DeliveryMethod,
                 TotalShipping = x.TotalShipping.GetValueOrDefault()
             }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();

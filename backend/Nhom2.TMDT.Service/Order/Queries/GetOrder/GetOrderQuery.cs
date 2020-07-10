@@ -21,7 +21,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
         {
             var table = db.Orders.Where(x => x.Status != (int)OrderStatus.Deleted).AsQueryable();
 
-            if (await db.Users.AnyAsync(x => x.Id == userId && x.Role == (int)Role.Customer))
+            if (await db.Users.AnyAsync(x => x.Id == userId))
             {
                 table = table.Where(x => x.CreatedBy == userId);
             }
@@ -50,6 +50,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrder
                     Price = y.Price.GetValueOrDefault(),
                     PromotionPrice = y.PromotionPrice
                 }).ToList(),
+                StatusCode = x.Status.GetValueOrDefault(),
                 DeliveryMothod = x.DeliveryMethod,
                 TotalShipping = x.TotalShipping.GetValueOrDefault()
             }).Skip((pageNumber - 1) * pageSize).Take(pageSize).ToListAsync();
