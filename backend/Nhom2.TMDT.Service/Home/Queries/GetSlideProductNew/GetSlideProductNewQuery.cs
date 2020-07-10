@@ -18,7 +18,8 @@ namespace Nhom2.TMDT.Service.Home.Queries.GetSlideProductNew
 
         public async Task<List<ProductSlideViewModel>> ExecutedAsync()
         {
-            var data = await db.Products.OrderByDescending(x => x.CreatedDate).Take(10)
+            var data = await db.Products.Where(x => x.Status == true)
+                .OrderByDescending(x => x.CreatedDate).Take(10)
                 .Select(x => new ProductSlideViewModel()
                 {
                     Id = x.Id,

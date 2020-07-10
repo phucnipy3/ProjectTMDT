@@ -18,7 +18,8 @@ namespace Nhom2.TMDT.Service.Home.Queries.GetSlideProduct
 
         public async Task<List<ProductSlideViewModel>> ExecutedAsync()
         {
-            var data = await db.Products.OrderBy(x => x.PromotionPrice / x.Price).Take(10)
+            var data = await db.Products.Where(x => x.Status == true)
+                .OrderBy(x => x.PromotionPrice / x.Price).Take(10)
                 .Select(x => new ProductSlideViewModel()
                 {
                     Id = x.Id,

@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Common.Enums;
+using Nhom2.TMDT.Data.Entities;
+using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Login.Queries;
-using Nhom2.TMDT.Service.Account.Queries.GetProfile;
-using Nhom2.TMDT.Service.Account.Queries.GetRole;
-using Nhom2.TMDT.Service.Account.Queries.GetUser;
 using Nhom2.TMDT.Service.Account.ViewModels;
+using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -17,38 +18,44 @@ namespace Nhom2.TMDT.WebApi.Controllers
     [ApiController]
     public class AccountController : Controller
     {
+        private readonly ApplicationContext db;
         private readonly ILoginQuery loginQuery;
-        private readonly IGetProfileQuery getProfileQuery;
-        private readonly IGetUserQuery getUserQuery;
-        private readonly IGetRoleQuery getRoleQuery;
 
-        public AccountController(ILoginQuery loginQuery, IGetProfileQuery getProfileQuery, IGetUserQuery getUserQuery, IGetRoleQuery getRoleQuery)
+        public AccountController(ApplicationContext db, ILoginQuery loginQuery)
         {
+            this.db = db;
             this.loginQuery = loginQuery;
-            this.getProfileQuery = getProfileQuery;
-            this.getUserQuery = getUserQuery;
-            this.getRoleQuery = getRoleQuery;
         }
 
-        [HttpGet("Login")]
+        [HttpPost("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> LoginAsync(string userName, string password)
+        public async Task<IActionResult> LoginAsync([FromBody]LoginViewModel loginViewModel)
         {
-            LoginViewModel login = await loginQuery.ExecutedAsync(userName, password);
-
-            if (login.Authenticated)
+            try
             {
-                ClaimsIdentity identity = new ClaimsIdentity(new Claim[]
+                User user = await loginQuery.ExecutedAsync(loginViewModel);
+
+                if (user != null)
                 {
-                    new Claim(ClaimTypes.Name, userName.Trim()),
-                    new Claim(ClaimTypes.Role, ((Role)login.Role).ToString())
-                }, CookieAuthenticationDefaults.AuthenticationScheme);
+                    ClaimsIdentity identity = new ClaimsIdentity(new Claim[]
+                    {
+                        new Claim(ClaimTypes.Sid, user.Id.ToString()),
+                        new Claim(ClaimTypes.Uri, user.Image ?? ""),
+                        new Claim(ClaimTypes.Name, user.Name ?? ""),
+                        new Claim(ClaimTypes.NameIdentifier, user.Username),
+                        new Claim(ClaimTypes.Role, ((Role)user.Role).ToString())
+                    }, CookieAuthenticationDefaults.AuthenticationScheme);
 
-                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+                    await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
 
-                return new ObjectResult(await getUserQuery.ExecutedAsync(User.Identity.Name));
+                    return new ObjectResult(new UserViewModel() { FullName = user.Name, Image = user.Image });
+                }
+                return new ObjectResult(null);
             }
-            return new ObjectResult(null);
+            catch
+            {
+                return new ObjectResult(null);
+            }
         }
 
         [HttpGet("Logout")]
@@ -63,18 +70,19 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetProfileAsync()
         {
-            return new ObjectResult(await getProfileQuery.ExecutedAsync(User.Identity.Name));
+            return new ObjectResult(await db.Users.Where(x => x.Id == int.Parse(User.FindFirstValue(ClaimTypes.Sid))).SingleOrDefaultAsync());
         }
 
         [HttpGet("Authentication")]
         [AllowAnonymous]
-        public async Task<IActionResult> AuthenticationAsync(int role = 3)
+        public IActionResult Authentication(int role = 3)
         {
-            int userRole = await getRoleQuery.ExecutedAsync(User.Identity.Name);
+            if (!User.Identity.IsAuthenticated)
+                return new ObjectResult(null);
+
+            int userRole = int.Parse(User.FindFirstValue(ClaimTypes.Sid));
             if (userRole > 0 && userRole <= role)
-            {
-                return new ObjectResult(await getUserQuery.ExecutedAsync(User.Identity.Name));
-            }
+                return new ObjectResult(new UserViewModel() { FullName = User.FindFirstValue(ClaimTypes.Name), Image = User.FindFirstValue(ClaimTypes.Uri) });
             return new ObjectResult(null);
         }
     }

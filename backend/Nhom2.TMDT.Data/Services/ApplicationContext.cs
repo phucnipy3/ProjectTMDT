@@ -313,7 +313,7 @@ namespace Nhom2.TMDT.Data.Services
                 .HasKey(e => e.Id);
 
             modelBuilder.Entity<User>()
-                .Property(e => e.UserName)
+                .Property(e => e.Username)
                 .HasMaxLength(50)
                 .HasColumnType("NVARCHAR(50)");
 

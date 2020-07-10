@@ -18,7 +18,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.Rate
         {
             try
             {
-                var user = await db.Users.Where(x => x.UserName == userName).SingleOrDefaultAsync();
+                var user = await db.Users.Where(x => x.Username == userName).SingleOrDefaultAsync();
 
                 await db.Rates.AddAsync(new Data.Entities.Rate()
                 {

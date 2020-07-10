@@ -34,10 +34,10 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetComment
                     Content = y.Content,
                     Time = y.CreatedDate.GetValueOrDefault().ToString("HH:mm"),
                     Date = y.CreatedDate.GetValueOrDefault().ToString("dd/MM/yyyy"),
-                    CanDelete = y.User.UserName.Equals(userName),
+                    CanDelete = y.User.Username.Equals(userName),
                     Manager = y.User.Role == 1 || y.User.Role == 2
                 }).ToList(),
-                CanDelete = x.User.UserName.Equals(userName),
+                CanDelete = x.User.Username.Equals(userName),
                 Manager = x.User.Role == 1 || x.User.Role == 2
             });
 

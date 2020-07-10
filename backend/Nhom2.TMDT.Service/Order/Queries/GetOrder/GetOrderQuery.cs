@@ -4,7 +4,6 @@ using Nhom2.TMDT.Common.PagedList;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Admin.ViewModels;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
@@ -20,8 +19,8 @@ namespace Nhom2.TMDT.Service.Admin.Queries.GetOrder
 
         public async Task<PagedList<OrderViewModel>> ExecutedAsync(string userName, string searchString, int pageNumber, int pageSize)
         {
-            var table = db.Orders.AsQueryable();
-            var user = await db.Users.SingleOrDefaultAsync(x => x.UserName.Equals(userName));
+            var table = db.Orders.Where(x => x.Status != -1).AsQueryable();
+            var user = await db.Users.SingleOrDefaultAsync(x => x.Username.Equals(userName));
 
             if (user != null && user.Role.GetValueOrDefault() == (int)Role.Customer)
             {

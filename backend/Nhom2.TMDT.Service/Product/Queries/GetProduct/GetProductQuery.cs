@@ -20,7 +20,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetProduct
 
         public async Task<PagedList<ProductCardViewModel>> ExecutedAsync(int category, string searchString, int pageNumber, int pageSize)
         {
-            var table = db.Products.AsQueryable();
+            var table = db.Products.Where(x => x.Status == true).AsQueryable();
 
             switch (category)
             {

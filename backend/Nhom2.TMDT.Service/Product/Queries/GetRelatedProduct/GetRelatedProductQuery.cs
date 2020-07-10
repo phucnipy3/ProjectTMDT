@@ -20,7 +20,8 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct
         {
             var temp = db.Products.Single(x => x.Id == productId);
 
-            var data = await db.Products.OrderByDescending(x => x.CategoryId == temp.CategoryId).ThenByDescending(x => x.CreatedDate)
+            var data = await db.Products.Where(x => x.Status == true)
+                .OrderByDescending(x => x.CategoryId == temp.CategoryId).ThenByDescending(x => x.CreatedDate)
                 .Select(x => new ProductCardViewModel()
                 {
                     Id = x.Id,
@@ -28,7 +29,7 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct
                     Image = x.Image,
                     Price = x.Price.GetValueOrDefault(),
                     PromotionPrice = x.PromotionPrice
-                }).Take(10).ToListAsync();
+                }).Take(6).ToListAsync();
 
             return data;
         }

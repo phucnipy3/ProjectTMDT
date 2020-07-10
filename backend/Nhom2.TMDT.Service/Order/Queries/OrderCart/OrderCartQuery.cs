@@ -47,7 +47,7 @@ namespace Nhom2.TMDT.Service.Admin.Queries.OrderCart
             order.Ordered = DateTime.Now;
             order.Status = 1;
 
-            var user = await db.Users.Where(x => x.UserName == userName).SingleOrDefaultAsync();
+            var user = await db.Users.Where(x => x.Username == userName).SingleOrDefaultAsync();
             order.CreatedBy = user.Id;
 
             await db.Orders.AddAsync(order);

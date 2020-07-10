@@ -79,7 +79,7 @@ namespace Nhom2.TMDT.Data.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
+                    Username = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
                     Password = table.Column<string>(type: "NVARCHAR(500)", maxLength: 500, nullable: true),
                     Role = table.Column<int>(nullable: true, defaultValue: 3),
                     Name = table.Column<string>(type: "NVARCHAR(50)", maxLength: 50, nullable: true),
