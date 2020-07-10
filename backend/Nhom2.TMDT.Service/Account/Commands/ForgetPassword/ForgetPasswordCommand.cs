@@ -29,7 +29,7 @@ namespace Nhom2.TMDT.Service.Account.Commands.ForgetPassword
                 user.Verification = new Random().Next(100000, 1000000).ToString();
                 user.ExprireTime = DateTime.Now.AddMinutes(10);
 
-                string body = File.ReadAllText("./Templates/MailConfirmTemplate.html");
+                string body = File.ReadAllText("./Templates/MailVerificationTemplate.html");
 
                 body = body.Replace("@Name", user.Name);
                 body = body.Replace("@Code", user.Verification);
