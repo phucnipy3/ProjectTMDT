@@ -23,7 +23,7 @@ namespace Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder
         {
             try
             {
-                var order = await db.Orders.Include(x => x.ShipmentDetail).Where(x => x.Id == orderId).FirstOrDefaultAsync();
+                var order = await db.Orders.Include(x => x.ShipmentDetail).Include(x => x.OrderDetails).Where(x => x.Id == orderId).FirstOrDefaultAsync();
                 if (order != null)
                 {
                     string body = File.ReadAllText("./Templates/MailOrderInformationTemplate.html");
@@ -53,6 +53,7 @@ namespace Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder
                                 order.Status++;
                                 body = body.Replace("@Status", "được xác nhận");
                                 body = body.Replace("@Time", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+                                order.OrderDetails.ToList().ForEach(x => x.Product.Quantity -= x.Count);
                                 break;
                             case 2:
                                 order.Transporting = DateTime.Now;
