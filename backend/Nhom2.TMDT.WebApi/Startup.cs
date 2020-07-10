@@ -106,6 +106,7 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IForgetPasswordQuery, ForgetPasswordQuery>();
             services.AddScoped<IUpdateCommentCommand, UpdateCommentCommand>();
             services.AddScoped<IDeleteCommentCommand, DeleteCommentCommand>();
+            services.AddScoped<IRegisterQuery, RegisterQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
