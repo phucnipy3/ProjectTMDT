@@ -20,10 +20,18 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
 
         public async Task<OrderDetailViewModel> ExecutedAsync(int userId, int orderId)
         {
-            var data = await db.Orders.Where(x => x.Id == orderId && x.CreatedBy == userId).Select(x => new OrderDetailViewModel()
+            var table = db.Orders.Where(x => x.Id == orderId && x.CreatedBy == userId);
+            var data = await table.Select(x => new OrderDetailViewModel()
             {
                 Id = x.Id,
-                ShipmentDetail = x.ShipmentDetail,
+                ShipmentDetail = new Data.Entities.ShipmentDetail() 
+                {
+                    Id = x.ShipmentDetail.Id,
+                    Name = x.ShipmentDetail.Name,
+                    Address = x.ShipmentDetail.Address,
+                    Email = x.ShipmentDetail.Email,
+                    PhoneNumber = x.ShipmentDetail.PhoneNumber
+                },
                 Products = x.OrderDetails.Select(y => new CartItemViewModel()
                 {
                     Id = y.Id,
@@ -39,7 +47,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetOrderDetail
                 PaymentMethod = x.PaymentMethod
             }).FirstOrDefaultAsync();
 
-            var order = await db.Orders.Where(x => x.Id == orderId).FirstOrDefaultAsync();
+            var order = await table.FirstOrDefaultAsync();
 
             var timeLogs = new List<TimeLog>();
             if (order.Ordered.HasValue)
