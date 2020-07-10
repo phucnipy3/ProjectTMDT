@@ -36,7 +36,7 @@ export class AuthenticateService {
             );
     }
 
-    public authenticate(role: number): Observable<User> {
+    public authenticate(role: number = 3): Observable<User> {
         return this.http
             .get(this.apiUrl + '/authenticate?role=' + role)
             .pipe(

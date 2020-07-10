@@ -5,12 +5,13 @@ import { ForgetPasswordPopupComponent } from '../forget-password/forget-password
 import { Router } from '@angular/router';
 import { AuthenticateService } from '../../../../services/authenticate.service';
 import { ToastrService } from 'ngx-toastr';
+import { User } from '../../../../models/account/user';
 
 @Component({
     selector: 'login-popup',
     templateUrl: './login-popup-component.html',
 })
-export class LoginPopupComponent extends SimpleModalComponent<null, null> {
+export class LoginPopupComponent extends SimpleModalComponent<null, User> {
 
     username: string;
     password: string;
@@ -28,6 +29,11 @@ export class LoginPopupComponent extends SimpleModalComponent<null, null> {
         this.authenticateService.login(this.username, this.password).subscribe((res) => {
             if (res) {
                 this.toastr.success('Đăng nhập thành công');
+                this.result = res;
+                this.close();
+            }
+            else{
+                this.toastr.warning('Đăng nhập thất bại');
             }
         });
     }

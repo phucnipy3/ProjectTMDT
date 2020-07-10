@@ -16,9 +16,7 @@ export class SlideShowProductComponent implements OnInit {
     readonly itemCount = 6;
 
     constructor() {
-        for (let i = 0; i < 10; i++) {
-            this.products.push(new ProductSildeViewModel(i, '../../../assets/image/banner' + (i % 4 + 1) + '.jpg'));
-        }
+
     }
 
     ngOnInit(): void { }

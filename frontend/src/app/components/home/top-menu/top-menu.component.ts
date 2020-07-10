@@ -4,6 +4,10 @@ import { MessageService } from '../../../../services/message.service';
 import { CartService } from '../../../../services/cart.service';
 import { LoginPopupComponent } from '../login/login-popup-component';
 import { SignUpPopupComponent } from '../sign-up/sign-up-popup.component';
+import { User } from '../../../../models/account/user';
+import { SessionHelper } from '../../../common/helper/SessionHelper';
+import { AuthenticateService } from '../../../../services/authenticate.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'top-menu',
@@ -11,13 +15,15 @@ import { SignUpPopupComponent } from '../sign-up/sign-up-popup.component';
 })
 export class TopMenuComponent implements OnInit {
 
-    authen = false;
     activePage = '';
     itemCount = 0;
+    user: User;
     constructor(
         private simpleModalService: SimpleModalService,
         private messageService: MessageService,
-        private cartService: CartService) {
+        private cartService: CartService,
+        private authenticateService: AuthenticateService,
+        private toastr: ToastrService) {
         this.messageService.onActivePage().subscribe(activePage => {
             if (activePage) {
                 this.activePage = activePage;
@@ -34,15 +40,21 @@ export class TopMenuComponent implements OnInit {
     }
 
     ngOnInit(): void {
-
+        this.user = SessionHelper.getUserFromStorage();
     }
 
-    logout(){
-
+    logout() {
+        this.authenticateService.logout().subscribe((res) => {
+            if (res) {
+                this.user = undefined;
+            }
+        });
     }
 
     showLogin() {
-        this.simpleModalService.addModal(LoginPopupComponent);
+        this.simpleModalService.addModal(LoginPopupComponent).subscribe((res) => {
+            this.user = res;
+        });
     }
     showSignUp() {
         this.simpleModalService.addModal(SignUpPopupComponent);
