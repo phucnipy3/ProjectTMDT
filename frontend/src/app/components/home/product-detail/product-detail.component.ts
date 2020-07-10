@@ -92,6 +92,8 @@ export class ProductDetailComponent implements OnInit {
                         else {
                             this.toastr.warning('Đánh giá thất bại');
                         }
+                    }, () => {
+                        this.toastr.warning('Đánh giá thất bại');
                     });
                 }
             });
@@ -105,6 +107,8 @@ export class ProductDetailComponent implements OnInit {
                 else {
                     this.toastr.warning('Đánh giá thất bại');
                 }
+            }, () => {
+                this.toastr.warning('Đánh giá thất bại');
             });
         }
     }
@@ -122,6 +126,8 @@ export class ProductDetailComponent implements OnInit {
                         else {
                             this.toastr.warning('Bình luận thất bại');
                         }
+                    }, () => {
+                        this.toastr.warning('Bình luận thất bại');
                     });
                 }
             });
@@ -135,6 +141,8 @@ export class ProductDetailComponent implements OnInit {
                 else {
                     this.toastr.warning('Bình luận thất bại');
                 }
+            }, () => {
+                this.toastr.warning('Bình luận thất bại');
             });
         }
     }
@@ -152,6 +160,8 @@ export class ProductDetailComponent implements OnInit {
                         else {
                             this.toastr.warning('Trả lời bình luận thất bại');
                         }
+                    }, () => {
+                        this.toastr.warning('Trả lời bình luận thất bại');
                     });
                 }
             });
@@ -165,6 +175,8 @@ export class ProductDetailComponent implements OnInit {
                 else {
                     this.toastr.warning('Trả lời bình luận thất bại');
                 }
+            }, () => {
+                this.toastr.warning('Trả lời bình luận thất bại');
             });
         }
     }

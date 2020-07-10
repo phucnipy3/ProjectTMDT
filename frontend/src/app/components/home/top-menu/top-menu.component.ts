@@ -54,6 +54,8 @@ export class TopMenuComponent implements OnInit {
                 this.user = undefined;
                 this.router.navigate(['/']);
             }
+        }, () => {
+            this.toastr.warning('Có lỗi xảy ra');
         });
     }
 

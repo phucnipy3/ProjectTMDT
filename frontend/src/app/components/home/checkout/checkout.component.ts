@@ -72,6 +72,9 @@ export class CheckoutComponent implements OnInit {
                 }
                 SessionHelper.removeCartStorage();
                 this.router.navigate(['/']);
+            },
+            () => {
+                this.toastr.warning('Đặt hàng thất bại');
             });
     }
 }

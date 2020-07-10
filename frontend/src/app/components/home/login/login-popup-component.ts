@@ -38,6 +38,8 @@ export class LoginPopupComponent extends SimpleModalComponent<null, User> {
             else{
                 this.toastr.warning('Đăng nhập thất bại');
             }
+        }, () => {
+            this.toastr.warning('Đăng nhập thất bại');
         });
     }
 

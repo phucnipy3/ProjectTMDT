@@ -9,6 +9,5 @@
         public string ConfirmPassword { get; set; }
         public string Address { get; set; }
         public bool IsMale { get; set; }
-        public string ConfirmPassword { get; set; }
     }
 }

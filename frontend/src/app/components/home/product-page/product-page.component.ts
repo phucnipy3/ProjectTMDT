@@ -4,6 +4,7 @@ import { ProductCardViewModel } from '../../../../models/product/product-card';
 import { MessageService } from '../../../../services/message.service';
 import { ProductService } from '../../../../services/product.service';
 import { PagedList } from '../../../../models/paged-list/paged-list';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'product-page',
@@ -20,7 +21,8 @@ export class ProductPageComponent implements OnInit {
     searchString = '';
     constructor(
         private messageService: MessageService,
-        private productService: ProductService) {
+        private productService: ProductService,
+        private toastr: ToastrService) {
         this.messageService.sendActivePage('product');
 
         //side bar
@@ -50,6 +52,8 @@ export class ProductPageComponent implements OnInit {
                 this.totalCount = res.totalCount;
                 this.pageNumber = page;
                 }
+            }, () => {
+                this.toastr.warning('Tải trang lỗi');
             });
     }
 

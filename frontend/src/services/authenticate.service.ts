@@ -50,13 +50,23 @@ export class AuthenticateService {
             );
     }
 
-    public register(registerViewModel: SignUpViewModel): Observable<boolean>{
+    public register(registerViewModel: SignUpViewModel): Observable<boolean> {
         return this.http
-        .post(this.apiUrl + '/Register', registerViewModel)
-        .pipe(
-            map((res: boolean) => {
-                return res;
-            })
-        );
+            .post(this.apiUrl + '/Register', registerViewModel)
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
+    }
+
+    public activateAccount(username: string, code: string): Observable<boolean> {
+        return this.http
+            .post(this.apiUrl + '/ActivateAccount', { username, code })
+            .pipe(
+                map((res: boolean) => {
+                    return res;
+                })
+            );
     }
 }

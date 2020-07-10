@@ -30,6 +30,7 @@ export class SignUpPopupComponent extends SimpleModalComponent<null, boolean> {
     constructor(
         private passwordCheckService: PasswordCheckService,
         private authenticateService: AuthenticateService,
+        private toastr: ToastrService
     ) {
         super();
     }
@@ -41,6 +42,8 @@ export class SignUpPopupComponent extends SimpleModalComponent<null, boolean> {
                     this.result = true;
                     this.close();
                 }
+            }, () => {
+                this.toastr.warning('Có lỗi xảy ra');
             });
         }
     }
