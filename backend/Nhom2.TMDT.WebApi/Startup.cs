@@ -37,6 +37,7 @@ using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
 using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
 using Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder;
 using Nhom2.TMDT.Service.Order.Commands.CancelOrder;
+using Nhom2.TMDT.Service.Order.Commands.DeleteShipmentDetail;
 
 namespace Nhom2.TMDT.WebApi
 {
@@ -113,6 +114,7 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IActiveAccountCommand, ActiveAccountCommand>();
             services.AddScoped<IGetOrderStatusQuery, GetOrderStatusQuery>();
             services.AddScoped<ICancelOrderCommand, CancelOrderCommand>();
+            services.AddScoped<IDeleteShipmentDetailCommand, DeleteShipmentDetailCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
