@@ -13,6 +13,7 @@ using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail;
 using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
 using Nhom2.TMDT.Service.Order.Commands.CancelOrder;
+using Nhom2.TMDT.Service.Order.Commands.DeleteShipmentDetail;
 
 namespace Nhom2.TMDT.WebApi.Controllers
 {
@@ -29,8 +30,9 @@ namespace Nhom2.TMDT.WebApi.Controllers
         private readonly IUpdateShipmentDetailCommand updateShipmentDetailCommand;
         private readonly IGetOrderStatusQuery getOrderStatusQuery;
         private readonly ICancelOrderCommand cancelOrderCommand;
+        private readonly IDeleteShipmentDetailCommand deleteShipmentDetailCommand;
 
-        public OrderController(IGetOrderQuery getOrderQuery, IGetOrderDetailQuery getOrderDetailQuery, IGetDeliveryMethodQuery getDeliveryMethodQuery, IGetPaymentMethodQuery getPaymentMethodQuery, ICreateOrderCartQuery createOrderCartQuery, IGetShipmentDetailQuery getShipmentDetailQuery, IUpdateShipmentDetailCommand updateShipmentDetailCommand, IGetOrderStatusQuery getOrderStatusQuery, ICancelOrderCommand cancelOrderCommand)
+        public OrderController(IGetOrderQuery getOrderQuery, IGetOrderDetailQuery getOrderDetailQuery, IGetDeliveryMethodQuery getDeliveryMethodQuery, IGetPaymentMethodQuery getPaymentMethodQuery, ICreateOrderCartQuery createOrderCartQuery, IGetShipmentDetailQuery getShipmentDetailQuery, IUpdateShipmentDetailCommand updateShipmentDetailCommand, IGetOrderStatusQuery getOrderStatusQuery, ICancelOrderCommand cancelOrderCommand, IDeleteShipmentDetailCommand deleteShipmentDetailCommand)
         {
             this.getOrderQuery = getOrderQuery;
             this.getOrderDetailQuery = getOrderDetailQuery;
@@ -41,6 +43,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
             this.updateShipmentDetailCommand = updateShipmentDetailCommand;
             this.getOrderStatusQuery = getOrderStatusQuery;
             this.cancelOrderCommand = cancelOrderCommand;
+            this.deleteShipmentDetailCommand = deleteShipmentDetailCommand;
         }
 
         [HttpGet("GetOrders")]
@@ -95,7 +98,7 @@ namespace Nhom2.TMDT.WebApi.Controllers
         }
 
         [HttpPost("UpdateShipmentDetail")]
-        [AllowAnonymous]
+        [Authorize]
         public async Task<IActionResult> UpdateShipmentDetailAsync([FromBody]ShipmentDetail shipmentDetail)
         {
             return new ObjectResult(await updateShipmentDetailCommand.ExecutedAsync(shipmentDetail));
@@ -106,6 +109,13 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public async Task<IActionResult> CancelOrderAsync(int orderId)
         {
             return new ObjectResult(await cancelOrderCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), orderId));
+        }
+
+        [HttpGet("DeleteShipmentDetail")]
+        [Authorize]
+        public async Task<IActionResult> DeleteShipmentDetailAsync(int shipmentDetailId)
+        {
+            return new ObjectResult(await deleteShipmentDetailCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), shipmentDetailId));
         }
     }
 }

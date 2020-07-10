@@ -7,8 +7,11 @@ using Nhom2.TMDT.Common.Enums;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
 using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
+using Nhom2.TMDT.Service.Account.Commands.ChangePassword;
 using Nhom2.TMDT.Service.Account.Commands.ForgetPassword;
+using Nhom2.TMDT.Service.Account.Commands.GetNewPassword;
 using Nhom2.TMDT.Service.Account.Commands.Register;
+using Nhom2.TMDT.Service.Account.Commands.UpdateProfile;
 using Nhom2.TMDT.Service.Account.Login.Queries;
 using Nhom2.TMDT.Service.Account.ViewModels;
 using System;
@@ -27,14 +30,20 @@ namespace Nhom2.TMDT.WebApi.Controllers
         private readonly IRegisterCommand registerCommand;
         private readonly IForgetPasswordCommand forgetPasswordCommand;
         private readonly IActiveAccountCommand activeAccountCommand;
+        private readonly IUpdateProfileCommand updateProfileCommand;
+        private readonly IChangePasswordCommand changePasswordCommand;
+        private readonly IGetNewPasswordCommand getNewPasswordCommand;
 
-        public AccountController(ApplicationContext db, ILoginQuery loginQuery, IRegisterCommand registerCommand, IForgetPasswordCommand forgetPasswordCommand, IActiveAccountCommand activeAccountCommand)
+        public AccountController(ApplicationContext db, ILoginQuery loginQuery, IRegisterCommand registerCommand, IForgetPasswordCommand forgetPasswordCommand, IActiveAccountCommand activeAccountCommand, IUpdateProfileCommand updateProfileCommand, IChangePasswordCommand changePasswordCommand, IGetNewPasswordCommand getNewPasswordCommand)
         {
             this.db = db;
             this.loginQuery = loginQuery;
             this.registerCommand = registerCommand;
             this.forgetPasswordCommand = forgetPasswordCommand;
             this.activeAccountCommand = activeAccountCommand;
+            this.updateProfileCommand = updateProfileCommand;
+            this.changePasswordCommand = changePasswordCommand;
+            this.getNewPasswordCommand = getNewPasswordCommand;
         }
 
         [HttpPost("Login")]
@@ -80,7 +89,23 @@ namespace Nhom2.TMDT.WebApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetProfileAsync()
         {
-            return new ObjectResult(await db.Users.Where(x => x.Id == int.Parse(User.FindFirstValue(ClaimTypes.Sid))).FirstOrDefaultAsync());
+            return new ObjectResult(await db.Users.Where(x => x.Id == int.Parse(User.FindFirstValue(ClaimTypes.Sid))).Select(x => new ProfileViewModel() 
+            {
+                Id = x.Id,
+                Username = x.Username,
+                FullName = x.Username,
+                IsMale = x.Sex == 0,
+                PhoneNumber = x.ShipmentDetails.First().PhoneNumber,
+                Email = x.ShipmentDetails.First().Email,
+                Address = x.ShipmentDetails.First().Address
+            }).FirstOrDefaultAsync());
+        }
+
+        [HttpPost("UpdateProfile")]
+        [Authorize]
+        public async Task<IActionResult> UpdateProfileAsync([FromBody]ProfileViewModel profileViewModel)
+        {
+            return new ObjectResult(await updateProfileCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), profileViewModel));
         }
 
         [HttpGet("Authentication")]
@@ -101,6 +126,20 @@ namespace Nhom2.TMDT.WebApi.Controllers
         public async Task<IActionResult> RegisterAsync([FromBody] RegisterViewModel registerViewModel)
         {
             return new ObjectResult(await registerCommand.ExecutedAsync(registerViewModel));
+        }
+
+        [HttpPost("ChangePassword")]
+        [Authorize]
+        public async Task<IActionResult> ChangePasswordAsync([FromBody] ChangePasswordViewModel changePasswordViewModel)
+        {
+            return new ObjectResult(await changePasswordCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), changePasswordViewModel));
+        }
+
+        [HttpPost("GetNewPassword")]
+        [AllowAnonymous]
+        public async Task<IActionResult> GetNewPasswordAsync([FromBody] NewPasswordViewModel newPasswordViewModel)
+        {
+            return new ObjectResult(await getNewPasswordCommand.ExecutedAsync(int.Parse(User.FindFirstValue(ClaimTypes.Sid)), newPasswordViewModel));
         }
 
         [HttpPost("ForgerPassword")]

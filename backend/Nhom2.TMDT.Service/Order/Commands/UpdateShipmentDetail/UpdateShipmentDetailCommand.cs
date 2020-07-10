@@ -23,10 +23,6 @@ namespace Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail
                 {
                     db.Entry(shipmentDetail).State = EntityState.Modified;
                 }
-                else
-                {
-                    await db.ShipmentDetails.AddAsync(shipmentDetail);
-                }
 
                 await db.SaveChangesAsync();
                 return true;

@@ -37,6 +37,10 @@ using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
 using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
 using Nhom2.TMDT.Service.Admin.Commands.ConfirmOrder;
 using Nhom2.TMDT.Service.Order.Commands.CancelOrder;
+using Nhom2.TMDT.Service.Order.Commands.DeleteShipmentDetail;
+using Nhom2.TMDT.Service.Account.Commands.UpdateProfile;
+using Nhom2.TMDT.Service.Account.Commands.ChangePassword;
+using Nhom2.TMDT.Service.Account.Commands.GetNewPassword;
 
 namespace Nhom2.TMDT.WebApi
 {
@@ -113,6 +117,10 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IActiveAccountCommand, ActiveAccountCommand>();
             services.AddScoped<IGetOrderStatusQuery, GetOrderStatusQuery>();
             services.AddScoped<ICancelOrderCommand, CancelOrderCommand>();
+            services.AddScoped<IDeleteShipmentDetailCommand, DeleteShipmentDetailCommand>();
+            services.AddScoped<IUpdateProfileCommand, UpdateProfileCommand>();
+            services.AddScoped<IChangePasswordCommand, ChangePasswordCommand>();
+            services.AddScoped<IGetNewPasswordCommand, GetNewPasswordCommand>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
