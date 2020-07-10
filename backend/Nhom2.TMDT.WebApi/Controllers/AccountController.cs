@@ -85,5 +85,13 @@ namespace Nhom2.TMDT.WebApi.Controllers
                 return new ObjectResult(new UserViewModel() { FullName = User.FindFirstValue(ClaimTypes.Name), Image = User.FindFirstValue(ClaimTypes.Uri) });
             return new ObjectResult(null);
         }
+
+        [HttpGet("Register")]
+        [AllowAnonymous]
+        public IActionResult Register()
+        {
+            
+            return new ObjectResult(null);
+        }
     }
 }
