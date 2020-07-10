@@ -58,7 +58,7 @@ namespace Nhom2.TMDT.Service.Account.Commands.Register
                             Name = registerViewModel.FullName,
                             Address = registerViewModel.Address,
                             Email = registerViewModel.Email,
-                            PhoneNumber = registerViewModel.Phone,
+                            PhoneNumber = registerViewModel.PhoneNumber,
                         } },
                         Verification = verificationCode
                     });
