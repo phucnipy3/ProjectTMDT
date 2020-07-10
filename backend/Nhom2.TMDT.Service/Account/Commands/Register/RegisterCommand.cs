@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Nhom2.TMDT.Common.Constants;
 using Nhom2.TMDT.Common.Encryption;
 using Nhom2.TMDT.Common.Verification;
 using Nhom2.TMDT.Data.Services;
@@ -47,6 +48,7 @@ namespace Nhom2.TMDT.Service.Account.Commands.Register
                     {
                         Username = registerViewModel.Email,
                         Name = registerViewModel.FullName,
+                        Image = Constants.DEFAUFT_IMAGE,
                         Password = passwordEncrypt,
                         Sex = registerViewModel.IsMale ? 0 : 1,
                         ShipmentDetail = new Data.Entities.ShipmentDetail()
