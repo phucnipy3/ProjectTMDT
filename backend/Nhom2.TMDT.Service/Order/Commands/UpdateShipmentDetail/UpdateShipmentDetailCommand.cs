@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Entities;
 using Nhom2.TMDT.Data.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail
@@ -30,7 +31,7 @@ namespace Nhom2.TMDT.Service.Order.Commands.UpdateShipmentDetail
                 await db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

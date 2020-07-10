@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Common.Encryption;
 using Nhom2.TMDT.Common.Verification;
 using Nhom2.TMDT.Data.Services;
@@ -9,21 +8,19 @@ using System;
 using System.IO;
 using System.Threading.Tasks;
 
-namespace Nhom2.TMDT.Service.Account.Queries.Register
+namespace Nhom2.TMDT.Service.Account.Commands.Register
 {
-    public class RegisterQuery : IRegisterQuery
+    public class RegisterCommand : IRegisterCommand
     {
         private readonly ApplicationContext db;
         private readonly ISendMail sendMail;
         private Encryption encryption;
         private Verification verification;
-        private readonly IHostingEnvironment environment;
 
-        public RegisterQuery(ApplicationContext db, ISendMail sendMail, IHostingEnvironment environment)
+        public RegisterCommand(ApplicationContext db, ISendMail sendMail)
         {
             this.db = db;
             this.sendMail = sendMail;
-            this.environment = environment;
             encryption = new Encryption();
             verification = new Verification();
         }
@@ -40,7 +37,7 @@ namespace Nhom2.TMDT.Service.Account.Queries.Register
                 string body = File.ReadAllText("./Templates/MailConfirmTemplate.html");
 
                 body = body.Replace("@Name", registerViewModel.FullName);
-                body = body.Replace("@Link", "http://localhost:4200/Activation?username=" + registerViewModel.Email + "&code=" + verificationCode);
+                body = body.Replace("@Link", "http://localhost:4200/Activation/" + registerViewModel.Email + "/" + verificationCode);
 
                 if (await sendMail.ExecutedAsync(registerViewModel.Email, "Account activation", body))
                 {

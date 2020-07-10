@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
 
@@ -27,7 +28,7 @@ namespace Nhom2.TMDT.Service.Mail.SendMail
 
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return false;
             }

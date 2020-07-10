@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Nhom2.TMDT.Data.Services;
+using System;
 using System.Threading.Tasks;
 
 namespace Nhom2.TMDT.Service.Product.Commands.DeleteCommand
@@ -29,7 +30,7 @@ namespace Nhom2.TMDT.Service.Product.Commands.DeleteCommand
                 await db.SaveChangesAsync();
                 return true;
             }
-            catch
+            catch (Exception ex)
             {
                 return true;
             }
