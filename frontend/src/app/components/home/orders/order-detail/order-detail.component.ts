@@ -26,13 +26,17 @@ export class OrderDetailComponent implements OnInit {
         this.activatedRoute.paramMap.subscribe((res: ParamMap) => {
             if (res) {
                 this.id = Number(res.get('id'));
-                this.orderService.getOrderDetail(this.id).subscribe((res: OrderViewModel) => {
-                    if (res) {
-                        this.order = res;
+                this.orderService.getOrderDetail(this.id).subscribe((order: OrderViewModel) => {
+                    if (order) {
+                        this.order = order;
                     }
                 });
             }
         });
+
+    }
+
+    cancelOrder() {
 
     }
 }

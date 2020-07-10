@@ -69,4 +69,8 @@ export class OrdersComponent implements OnInit {
     moveToDetail(id: number){
         this.router.navigate(['/chi-tiet-don-hang/' + id]);
     }
+
+    cancelOrder(id: number){
+        
+    }
 }

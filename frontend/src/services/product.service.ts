@@ -9,6 +9,7 @@ import { PagedList } from '../models/paged-list/paged-list';
 import { ProductViewModel } from '../models/product/product';
 import { RateViewModel } from '../models/product/rate';
 import { CommentViewModel } from '../models/product/comment';
+import { CategoryViewModel } from '../models/product/category';
 
 @Injectable()
 export class ProductService {
@@ -108,5 +109,15 @@ export class ProductService {
                     return res;
                 })
             );
+    }
+
+    getCateries(): Observable<CategoryViewModel[]>{
+        return this.http
+        .get(this.apiUrl + '/GetCategory')
+        .pipe(
+            map((res: CategoryViewModel[]) => {
+                return res;
+            })
+        );
     }
 }

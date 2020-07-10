@@ -16,13 +16,21 @@
           </div>
         </div>
       </div>
-      <div class="col-7">
+      <div class="col-5 ml-auto">
         <div class="row">
           <ng-container *ngFor="let item of order.timeLogs">
             <div class="col-12 py-1">
-              <span><i class="fas fa-circle text-info"></i> &emsp;</span>
-
-              <span>{{item.timeLine}} &emsp; {{item.event}}</span>
+              <div class="row">
+                <div class="col-auto">
+                  <span>{{item.timeLine}} </span>
+                </div>
+                <div class="col-auto">
+                  -
+                </div>
+                <div class="col-auto">
+                  <span> {{item.event}}</span>
+                </div>
+              </div>
             </div>
           </ng-container>
         </div>
@@ -98,6 +106,7 @@
     </div>
     <div class="row">
       <div class="col-auto ml-auto pr-4">
+        <button class="btn btn-outline-secondary" *ngIf="order.canCancel" (click)="cancelOrder()">Hủy</button>
       </div>
     </div>
   </div>

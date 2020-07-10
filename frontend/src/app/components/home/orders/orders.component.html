@@ -77,6 +77,7 @@
       <div class="row">
         <div class="col-auto ml-auto">
           <div class="w-auto">
+            <button class="btn btn-outline-secondary mr-3" *ngIf="order.canCancel" (click)="cancelOrder(order.id)">Hủy</button>
             <button class="btn btn-info" (click)="moveToDetail(order.id)">Xem chi tiết</button>
           </div>
         </div>

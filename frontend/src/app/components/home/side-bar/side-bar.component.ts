@@ -13,7 +13,7 @@ export class SideBarComponent implements OnInit {
     @Output() public callback: EventEmitter<SideBarData> = new EventEmitter();
     @Output() public search: EventEmitter<string> = new EventEmitter();
 
-    keyActive: any;
+    @Input() public keyActive: any;
     searchString = '';
 
     constructor() { }
