@@ -5,6 +5,6 @@ namespace Nhom2.TMDT.Service.Product.Queries.GetRate
 {
     public interface IGetRateQuery
     {
-        Task<RateViewModel> ExecutedAsync(int userId, int productId);
+        Task<RateViewModel> ExecutedAsync(int productId, int userId);
     }
 }
