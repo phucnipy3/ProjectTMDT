@@ -18,7 +18,7 @@ namespace Nhom2.TMDT.Service.Order.Queries.GetShipmentDetail
 
         public async Task<List<ShipmentDetail>> ExecutedAsync(int userId)
         {
-            var data = await db.Users.Where(x => x.Id == userId).Select(x => x.ShipmentDetail).ToListAsync();
+            var data = await db.ShipmentDetails.Where(x => x.UserId == userId).ToListAsync();
 
             return data;
         }

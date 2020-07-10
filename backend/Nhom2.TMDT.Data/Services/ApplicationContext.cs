@@ -300,9 +300,15 @@ namespace Nhom2.TMDT.Data.Services
                 .HasColumnType("NVARCHAR(500)");
 
             modelBuilder.Entity<ShipmentDetail>()
-                .Property(e => e.Phone)
+                .Property(e => e.PhoneNumber)
                 .HasMaxLength(500)
                 .HasColumnType("NVARCHAR(500)");
+
+            modelBuilder.Entity<ShipmentDetail>()
+                .HasOne(e => e.User)
+                .WithMany(e => e.ShipmentDetails)
+                .HasForeignKey(e => e.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
             #endregion
 
             #region User
@@ -341,9 +347,6 @@ namespace Nhom2.TMDT.Data.Services
                 .HasColumnType("NVARCHAR(1000)");
 
             modelBuilder.Entity<User>()
-                .Property(e => e.ShipmentDetailId);
-
-            modelBuilder.Entity<User>()
                 .Property(e => e.Active)
                 .HasDefaultValue(false);
 
@@ -358,12 +361,6 @@ namespace Nhom2.TMDT.Data.Services
             modelBuilder.Entity<User>()
                 .Property(e => e.Status)
                 .HasDefaultValue(true);
-
-            modelBuilder.Entity<User>()
-                .HasOne(e => e.ShipmentDetail)
-                .WithOne(e => e.User)
-                .HasForeignKey<User>(e => e.ShipmentDetailId)
-                .OnDelete(DeleteBehavior.NoAction);
             #endregion
         }
     }

@@ -35,6 +35,7 @@ using Nhom2.TMDT.Service.Product.Queries.GetRate;
 using Nhom2.TMDT.Service.Product.Queries.GetRelatedProduct;
 using System;
 using Nhom2.TMDT.Service.Account.Commands.ActiveAccount;
+using Nhom2.TMDT.Service.Order.Queries.GetOrderStatus;
 
 namespace Nhom2.TMDT.WebApi
 {
@@ -109,6 +110,7 @@ namespace Nhom2.TMDT.WebApi
             services.AddScoped<IDeleteCommentCommand, DeleteCommentCommand>();
             services.AddScoped<IRegisterCommand, RegisterCommand>();
             services.AddScoped<IActiveAccountCommand, ActiveAccountCommand>();
+            services.AddScoped<IGetOrderStatusQuery, GetOrderStatusQuery>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
