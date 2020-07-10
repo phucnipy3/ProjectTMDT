@@ -10,9 +10,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor } from '../../interceptors/jwt.interceptor';
+import { Guards } from '../../guards/guards.decalaration';
 
 const APP_PROVIDERS: any[] = [
-  Services,
+  Services, Guards
 ]
 
 @NgModule({

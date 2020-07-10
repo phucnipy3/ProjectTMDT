@@ -74,6 +74,9 @@ export class TopMenuComponent implements OnInit {
             if (res) {
                 this.toastr.success('Đăng kí thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
             }
+            else {
+                this.toastr.warning('Đăng kí thất bại');
+            }
         });
     }
 }

@@ -35,7 +35,7 @@ export class LoginPopupComponent extends SimpleModalComponent<null, User> {
                 this.messageService.sendLogin(res);
                 this.close();
             }
-            else{
+            else {
                 this.toastr.warning('Đăng nhập thất bại');
             }
         }, () => {
@@ -47,6 +47,8 @@ export class LoginPopupComponent extends SimpleModalComponent<null, User> {
         this.simpleModalService.addModal(SignUpPopupComponent).subscribe((res) => {
             if (res) {
                 this.toastr.success('Đăng kí thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+            } else {
+                this.toastr.warning('Đăng kí thất bại');
             }
         });
     }
