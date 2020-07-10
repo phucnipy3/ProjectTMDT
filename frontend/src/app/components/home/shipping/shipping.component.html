@@ -1,9 +1,9 @@
-<ng-container *ngIf="!authen">
-  <shipping-input>
+<ng-container *ngIf="!user">
+  <shipping-input (callback) = "moveToCheckout($event)">
 
   </shipping-input>
 </ng-container>
-<ng-container *ngIf="authen">
+<ng-container *ngIf="user">
   <div class="container">
     <div class="row">
       <div class="col-12">
@@ -29,9 +29,9 @@
             <div class="row py-2">
               <div class="col-auto">
 
-                <button class="btn mr-2" [class.btn-primary] = "i==0" [class.btn-secondary] = "i!=0">Giao đến địa chỉ này</button>
-                <button class="btn btn-light" (click)="updateShipping(shipping.id)">Sửa</button>
-                <button class="btn btn-light ml-2" *ngIf="i!=0">Xóa</button>
+                <button class="btn mr-2" [class.btn-primary] = "i==0" [class.btn-secondary] = "i!=0" (click)="moveToCheckout(shipping)">Giao đến địa chỉ này</button>
+                <button class="btn btn-light" (click)="updateShipping(shipping)">Sửa</button>
+                <button class="btn btn-light ml-2" *ngIf="i!=0" (click)="onDelete(shipping.id)">Xóa</button>
               </div>
             </div>
           </div>
@@ -50,7 +50,7 @@
     </div>
   </div>
   <div class="collapse" id="shippingCollapse">
-    <shipping-input [id] = "shippingId" (cancel) = "closeCollapse()">
+    <shipping-input [shippingInput] = "selectedShipping" (cancel) = "closeCollapse()" (callback) = "moveToCheckout($event)" (updated) = "getShipmentDetails()">
 
     </shipping-input>
   </div>

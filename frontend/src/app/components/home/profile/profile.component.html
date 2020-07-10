@@ -12,7 +12,7 @@
     <div class="col-8">
       <div class="form-group">
         <label>User ID</label>
-        <input type="text" class="form-control" [value]="profile.userId" readonly>
+        <input type="text" class="form-control" [value]="profile.username" readonly>
       </div>
     </div>
   </div>
@@ -76,7 +76,7 @@
   </div>
   <div class="row">
     <div class="col-auto">
-      <button class="btn btn-primary" (click)="logData()">Cập nhật</button>
+      <button class="btn btn-primary" (click)="update()">Cập nhật</button>
     </div>
   </div>
 </div>

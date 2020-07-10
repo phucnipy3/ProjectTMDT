@@ -27,7 +27,7 @@ export class SlideShowProductComponent implements OnInit {
             if (i + index < items.length) {
                 subItems.push({ ...items[i + index] });
             } else {
-                subItems.push({ ...items[i + index - 10] });
+                subItems.push({ ...items[i + index - items.length] });
             }
         }
         return subItems;

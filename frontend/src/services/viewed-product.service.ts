@@ -9,6 +9,9 @@ export class ViewedProductService {
         let p = products.find((x) => x.id === product.id);
         if (!p) {
             products.push(product);
+            while (products.length > 10) {
+                products = products.filter((x) => x.id !== products[0].id);
+            }
             SessionHelper.saveViewedProductToStorage(products);
         }
     }

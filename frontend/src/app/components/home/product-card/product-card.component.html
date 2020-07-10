@@ -22,10 +22,10 @@
             <div class="row">
               <div class="col-12 pt-2 product-price">
                 <ng-container *ngIf="product.promotionPrice">
-                  {{product.promotionPrice}} <u>đ</u>
+                  {{product.promotionPrice | number}} <u>đ</u>
                 </ng-container>
                 <ng-container *ngIf="!product.promotionPrice">
-                  {{product.price}} <u>đ</u>
+                  {{product.price | number}} <u>đ</u>
                 </ng-container>
               </div>
             </div>
@@ -33,7 +33,7 @@
               <div class="col-12 pt-2 product-discount">
                 <ng-container *ngIf="product.promotionPrice">
                   <del>
-                    {{product.price}} <u>đ</u>
+                    {{product.price | number}} <u>đ</u>
                   </del>
                 </ng-container>
               </div>

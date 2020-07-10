@@ -4,6 +4,7 @@ import { ProductCardViewModel } from '../models/product/product-card';
 import { CartItemViewModel } from '../models/cart/cart-item';
 import { MessageService } from './message.service';
 import { ToastrService } from 'ngx-toastr';
+import { ProductViewModel } from '../models/product/product';
 
 @Injectable()
 export class CartService {
@@ -15,7 +16,7 @@ export class CartService {
 
     }
 
-    public addProductToCart(product: ProductCardViewModel): boolean {
+    public addProductToCart(product: ProductCardViewModel | ProductViewModel): boolean {
         const cartItems = SessionHelper.getCartFromStorage();
         const item = cartItems.find((x) => x.id === product.id);
         if (item) {
@@ -94,4 +95,5 @@ export class CartService {
 
         return true;
     }
+
 }

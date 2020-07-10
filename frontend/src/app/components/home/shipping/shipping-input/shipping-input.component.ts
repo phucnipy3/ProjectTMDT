@@ -1,36 +1,67 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { ShipmentDetailViewModel } from 'src/models/order/shipment-detail';
+import { OrderService } from '../../../../../services/order.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'shipping-input',
     templateUrl: './shipping-input.component.html',
 })
-export class ShippingInputComponent implements OnInit {
+export class ShippingInputComponent implements OnInit, OnChanges {
 
-    @Input() id: number;
+    @Input() shippingInput: ShipmentDetailViewModel;
     @Output() cancel: EventEmitter<null> = new EventEmitter();
+    @Output() callback: EventEmitter<ShipmentDetailViewModel> = new EventEmitter();
+    @Output() updated: EventEmitter<null> = new EventEmitter();
     updating = false;
     shipping: ShipmentDetailViewModel;
-    constructor() {
-        this.shipping = new ShipmentDetailViewModel();
+    constructor(
+        private orderService: OrderService,
+        private toastr: ToastrService
+    ) {
     }
-
-    ngOnInit(): void {
-        if (this.id) {
+    ngOnChanges(changes: SimpleChanges): void {
+        if (this.shippingInput) {
             this.updating = true;
-            this.getData();
+            this.shipping = { ...this.shippingInput }
+        }
+        else {
+            this.shipping = new ShipmentDetailViewModel();
+            this.updating = false;
         }
     }
 
-    getData() {
-        this.shipping = new ShipmentDetailViewModel();
-        this.shipping.phoneNumber = '3544572334';
-        this.shipping.name = 'phuc sag á d';
-        this.shipping.address = 'quận 9';
-        this.shipping.email = 'abc.asdas@ấ.ádasd';
+    ngOnInit(): void {
+        if (this.shippingInput) {
+            this.updating = true;
+            this.shipping = { ...this.shippingInput }
+        }
+        else {
+            this.shipping = new ShipmentDetailViewModel();
+            this.updating = false;
+        }
     }
 
-    onCancel(){
+    onCancel() {
         this.cancel.emit();
+    }
+
+    onUpdate() {
+        this.orderService.updateShipping(this.shipping).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Cập nhật thành công');
+                this.updated.emit();
+                this.cancel.emit();
+            }
+            else {
+                this.toastr.warning('Cập nhật thất bại');
+            }
+        }, () => {
+            this.toastr.warning('Có lỗi xảy ra');
+        });
+    }
+
+    onMoveToCheckout() {
+        this.callback.emit(this.shipping);
     }
 }

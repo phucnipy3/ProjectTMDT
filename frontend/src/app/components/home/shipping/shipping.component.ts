@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ShipmentDetailViewModel } from '../../../../models/order/shipment-detail';
+import { SessionHelper } from '../../../common/helper/SessionHelper';
+import { Router } from '@angular/router';
+import { User } from '../../../../models/account/user';
+import { OrderService } from '../../../../services/order.service';
+import { ToastrService } from 'ngx-toastr';
 declare var $: any;
 @Component({
     selector: 'shipping',
@@ -7,35 +12,58 @@ declare var $: any;
 })
 export class ShippingComponent implements OnInit {
 
-    authen = true;
+    user: User;
 
     shippings: ShipmentDetailViewModel[] = [];
-    shippingId: number;
-    constructor() { }
+    selectedShipping: ShipmentDetailViewModel;
+    constructor(
+        private router: Router,
+        private orderService: OrderService,
+        private toastr: ToastrService
+    ) { }
 
     ngOnInit(): void {
+        this.user = SessionHelper.getUserFromStorage();
 
-        let shipping = new ShipmentDetailViewModel();
-        shipping.phoneNumber = '3544572334';
-        shipping.id = 1;
-        shipping.name = 'phuc sag á d';
-        shipping.address = 'quận 9';
-        shipping.email = 'abc.asdas@ấ.ádasd';
-        this.shippings.push(shipping);
-        this.shippings.push({ ...shipping });
-
-        this.shippings.push({ ...shipping });
+        this.getShipmentDetails();
 
         $('.collapse').collapse({
             toggle: false
         });
     }
 
-    updateShipping(id) {
-        this.shippingId = id;
+    getShipmentDetails() {
+        this.orderService.getShipmentDetails().subscribe((res: ShipmentDetailViewModel[]) => {
+            if (res) {
+                this.shippings = res;
+            }
+        });
+    }
+
+    updateShipping(shipping: ShipmentDetailViewModel) {
+        this.selectedShipping = shipping;
         $('#shippingCollapse').collapse('show');
     }
-    closeCollapse(){
+    closeCollapse() {
         $('#shippingCollapse').collapse('hide');
+    }
+
+    moveToCheckout(shipping: ShipmentDetailViewModel) {
+        SessionHelper.saveShippingToStorage(shipping);
+        this.router.navigate(['/thanh-toan']);
+    }
+
+    onDelete(id: number) {
+        this.orderService.deleteShipping(id).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Xóa thành công');
+                this.getShipmentDetails();
+            }
+            else {
+                this.toastr.warning('Thất bại');
+            }
+        }, () => {
+            this.toastr.warning('Đã có lỗi xảy ra');
+        });
     }
 }

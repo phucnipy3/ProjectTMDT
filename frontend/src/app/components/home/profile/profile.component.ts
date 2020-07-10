@@ -3,6 +3,8 @@ import { ProfileViewModel } from '../../../../models/account/profile';
 import { SimpleModalService } from 'ngx-simple-modal';
 import { MessageService } from '../../../../services/message.service';
 import { ChangePasswordPopupComponent } from '../change-password/change-password-popup.component';
+import { AuthenticateService } from '../../../../services/authenticate.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
     selector: 'profile',
@@ -14,23 +16,20 @@ export class ProfileComponent implements OnInit {
 
     constructor(
         private simpleModalService: SimpleModalService,
-        private messageService: MessageService) {
+        private messageService: MessageService,
+        private authenticateService: AuthenticateService,
+        private toastr: ToastrService) {
         this.messageService.clearActivePage();
     }
 
     ngOnInit(): void {
-        this.profile = new ProfileViewModel();
-        this.profile.userId = 'phucnipy3';
-        this.profile.fullName = 'Phúc Nguyễn';
-        this.profile.isMale = true;
-        this.profile.phoneNumber = '0346646603';
-        this.profile.email = 'phucnipy3@gmail.com';
-        this.profile.address = 'Quận 9, Tp.HCM';
+        this.authenticateService.getProfile().subscribe((res: ProfileViewModel) => {
+            if (res) {
+                this.profile = res;
+            }
+        });
     }
 
-    logData() {
-        console.log(this.profile);
-    }
     setMale() {
         this.profile.isMale = true;
     }
@@ -39,5 +38,18 @@ export class ProfileComponent implements OnInit {
     }
     changePassword() {
         this.simpleModalService.addModal(ChangePasswordPopupComponent);
+    }
+
+    update() {
+        this.authenticateService.updateProfile(this.profile).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Cập nhật thành công');
+            }
+            else {
+                this.toastr.warning('Cập nhật thất bại');
+            }
+        }, () => {
+            this.toastr.warning('Đã xảy ra lỗi');
+        });
     }
 }

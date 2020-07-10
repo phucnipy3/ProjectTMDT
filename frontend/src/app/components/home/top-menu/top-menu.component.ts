@@ -8,6 +8,7 @@ import { User } from '../../../../models/account/user';
 import { SessionHelper } from '../../../common/helper/SessionHelper';
 import { AuthenticateService } from '../../../../services/authenticate.service';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'top-menu',
@@ -23,7 +24,8 @@ export class TopMenuComponent implements OnInit {
         private messageService: MessageService,
         private cartService: CartService,
         private authenticateService: AuthenticateService,
-        private toastr: ToastrService) {
+        private toastr: ToastrService,
+        private router: Router) {
         this.messageService.onActivePage().subscribe(activePage => {
             if (activePage) {
                 this.activePage = activePage;
@@ -37,26 +39,41 @@ export class TopMenuComponent implements OnInit {
         this.messageService.onItemCount().subscribe(count => {
             this.itemCount = count;
         });
+        this.messageService.onLogin().subscribe(user => {
+            this.user = user;
+        });
     }
 
     ngOnInit(): void {
-        this.user = SessionHelper.getUserFromStorage();
+        this.authenticateService.authenticate().subscribe((res: User) => {
+            if (res) {
+                this.user = res;
+                SessionHelper.saveUserToStorage(res);
+            }
+        });
     }
 
     logout() {
         this.authenticateService.logout().subscribe((res) => {
             if (res) {
                 this.user = undefined;
+                this.router.navigate(['/']);
             }
+        }, () => {
+            this.toastr.warning('Có lỗi xảy ra');
         });
     }
 
     showLogin() {
         this.simpleModalService.addModal(LoginPopupComponent).subscribe((res) => {
-            this.user = res;
+            if (res) { this.user = res; }
         });
     }
     showSignUp() {
-        this.simpleModalService.addModal(SignUpPopupComponent);
+        this.simpleModalService.addModal(SignUpPopupComponent).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Đăng kí thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+            }
+        });
     }
 }

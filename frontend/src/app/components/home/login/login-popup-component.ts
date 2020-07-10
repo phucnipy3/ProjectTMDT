@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { AuthenticateService } from '../../../../services/authenticate.service';
 import { ToastrService } from 'ngx-toastr';
 import { User } from '../../../../models/account/user';
+import { MessageService } from '../../../../services/message.service';
 
 @Component({
     selector: 'login-popup',
@@ -20,7 +21,8 @@ export class LoginPopupComponent extends SimpleModalComponent<null, User> {
         private simpleModalService: SimpleModalService,
         private router: Router,
         private authenticateService: AuthenticateService,
-        private toastr: ToastrService
+        private toastr: ToastrService,
+        private messageService: MessageService,
     ) {
         super();
     }
@@ -30,16 +32,23 @@ export class LoginPopupComponent extends SimpleModalComponent<null, User> {
             if (res) {
                 this.toastr.success('Đăng nhập thành công');
                 this.result = res;
+                this.messageService.sendLogin(res);
                 this.close();
             }
             else{
                 this.toastr.warning('Đăng nhập thất bại');
             }
+        }, () => {
+            this.toastr.warning('Đăng nhập thất bại');
         });
     }
 
     signUp() {
-        this.simpleModalService.addModal(SignUpPopupComponent);
+        this.simpleModalService.addModal(SignUpPopupComponent).subscribe((res) => {
+            if (res) {
+                this.toastr.success('Đăng kí thành công, vui lòng kiểm tra email để kích hoạt tài khoản');
+            }
+        });
     }
 
     forgetPassword() {

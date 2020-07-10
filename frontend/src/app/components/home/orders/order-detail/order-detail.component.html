@@ -4,25 +4,33 @@
       <div class="col-5">
         <div class="row">
           <div class="col-12 py-2">
-            <span class="h6">{{order.information.name}}</span>
+            <span class="h6">{{order.shipmentDetail.name}}</span>
           </div>
           <div class="col-12  py-2">
-            <span>{{order.information.phoneNumber}}</span>
+            <span>{{order.shipmentDetail.phoneNumber}}</span>
           </div>
           <div class="col-12  py-2">
             <span>
-              {{order.information.address}}
+              {{order.shipmentDetail.address}}
             </span>
           </div>
         </div>
       </div>
-      <div class="col-7">
+      <div class="col-5 ml-auto">
         <div class="row">
           <ng-container *ngFor="let item of order.timeLogs">
             <div class="col-12 py-1">
-              <span><i class="fas fa-circle text-info"></i> &emsp;</span>
-
-              <span>{{item.timeLine}} &emsp; {{item.event}}</span>
+              <div class="row">
+                <div class="col-auto">
+                  <span>{{item.timeLine}} </span>
+                </div>
+                <div class="col-auto">
+                  -
+                </div>
+                <div class="col-auto">
+                  <span> {{item.event}}</span>
+                </div>
+              </div>
             </div>
           </ng-container>
         </div>
@@ -75,7 +83,7 @@
             <span class="text-danger h6 float-right">Tổng tiền hàng:</span>
           </div>
           <div class="col-12">
-            <span class="text-danger h6 float-right">Vận chuyển - {{order.transport}}:</span>
+            <span class="text-danger h6 float-right">Vận chuyển - {{order.deliveryMethod}}:</span>
           </div>
           <div class="col-12">
             <span class="text-danger h5 float-right">Tổng tiền:</span>
@@ -88,7 +96,7 @@
             <span class="text-danger h6 float-right">{{order.totalProductMoney}}đ</span>
           </div>
           <div class="col-12">
-            <span class="text-danger h6 float-right">{{order.transportFee}}đ</span>
+            <span class="text-danger h6 float-right">{{order.totalShipping}}đ</span>
           </div>
           <div class="col-12">
             <span class="text-danger h5 float-right">{{order.totalMoney}}đ</span>
@@ -98,7 +106,7 @@
     </div>
     <div class="row">
       <div class="col-auto ml-auto pr-4">
-        <a href="#" class="btn btn-info">Mua lần nữa</a>
+        <button class="btn btn-outline-secondary" *ngIf="order.canCancel" (click)="cancelOrder()">Hủy</button>
       </div>
     </div>
   </div>

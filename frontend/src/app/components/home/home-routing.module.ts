@@ -10,6 +10,7 @@ import { OrdersComponent } from './orders/orders.component';
 import { OrderDetailComponent } from './orders/order-detail/order-detail.component';
 import { ShippingComponent } from './shipping/shipping.component';
 import { CheckoutComponent } from './checkout/checkout.component';
+import { AccountActivationComponent } from './account-activation/account-activation.component';
 
 const routes: Routes = [
     {
@@ -51,6 +52,10 @@ const routes: Routes = [
     {
         path: 'thanh-toan',
         component: CheckoutComponent
+    },
+    {
+        path: 'Activation/:username/:code',
+        component: AccountActivationComponent
     },
 ];
 
