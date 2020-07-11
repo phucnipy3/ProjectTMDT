@@ -1,0 +1,27 @@
+<div class="align-items-center d-flex py-3" >
+    <input type="text"  placeholder="Search..." class="form-control" [(ngModel)]="searchString" (keyup) = "onKeyup($event)"/>
+    <button class="btn btn-link navbar-toggler bg-white navbar-light d-lg-none pr-0" type="button" data-toggle="collapse" data-target="#sidebar" aria-controls="sidebar" aria-expanded="false" aria-label="Toggle sidebar">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</div>
+<nav class="navbar-expand-lg bg-light navbar-light px-5 px-lg-4 ">
+
+    <div id="sidebar" class="collapse navbar-collapse py-3 d-flex flex-column align-items-start">
+        <ng-container *ngIf="title">
+            <div>
+                <h3>Danh mục</h3>
+            </div>
+            <div class="devider">
+    
+            </div>
+        </ng-container>
+        
+        <ng-container *ngFor="let item of data">
+            <div class="ml-3 my-2 item-menu cursor-pointer" [class.active] = "item.key == keyActive" (click)="onClick(item)">
+                {{item.displayValue}}
+            </div>
+        </ng-container>
+        
+
+    </div>
+</nav>

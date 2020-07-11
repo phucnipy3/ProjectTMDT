@@ -1,0 +1,36 @@
+<ng-container *ngIf="rate">
+  <div class="row p-3 border-dark">
+    <div class="rate-point col-2 align-self-center text-warning px-0 offset-lg-1">
+      {{rate.ratePoint}} <i class="icon icon-star"></i>
+    </div>
+    <div class="col-5">
+      <ul class="navbar-nav d-flex flex-column-reverse">
+        <ng-container *ngFor="let ratePersent of rate.persentPoints; let i = index">
+          <li>
+            {{i + 1}} <i class="icon icon-star text-warning"></i>
+            <div style="width:80%" class="float-right pt-1">
+              <div class="progress bg">
+                <div class="progress-bar progress-bar-striped bg-secondary" role="progressbar" aria-valuenow="0"
+                  aria-valuemin="0" aria-valuemax="100" [style]="'width:'+ratePersent+'%'"></div>
+              </div>
+            </div>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+    <div class="col-auto align-self-center mx-auto">
+      <a href="#RateBar" data-toggle="collapse" aria-controls="RateBar" class="btn btn-primary" id="OpenRate">Rate your
+        point</a>
+    </div>
+    <div class="col-12 offset-lg-1 rate-pick p-3 collapse" id="RateBar">
+      <span class="mr-3">Please rate us</span>
+      <span>
+        <ng-container *ngFor="let star of stars; let i = index">
+          <span class="px-1" (mouseover) = "setStar(i)" (mouseout) = "resetStar()" (click) = "onClick(i)">
+            <i class="icon" [class.icon-star-o]="star == 1" [class.icon-star]="star == 2" [class.text-warning]="star == 2" ></i>
+          </span>
+        </ng-container>
+      </span>
+    </div>
+  </div>
+</ng-container>

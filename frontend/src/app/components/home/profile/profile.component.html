@@ -1,0 +1,82 @@
+<div class="mx-5">
+  <h2>Thông tin cá nhân</h2>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label>Cập nhật hình đại diện</label>
+        <input type="file" class="form-control-file" />
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label>User ID</label>
+        <input type="text" class="form-control" [value]="profile.username" readonly>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <small class="text-info cursor-pointer" (click)="changePassword()">Đổi mật khẩu</small>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label>Họ và tên</label>
+        <input type="text" class="form-control" [(ngModel)]="profile.fullName">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label>Số điện thoại</label>
+        <input type="text" class="form-control" [(ngModel)]="profile.phoneNumber">
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-2">
+      <label>Giới tính: </label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input type="radio" [checked] = "profile.isMale" (change) = "setMale()" name="sex">
+      <label class="form-check-label" for="MaleRadio">
+        Nam
+      </label>
+    </div>
+    <div class="form-check form-check-inline">
+      <input type="radio" name="sex" [checked] = "!profile.isMale" (change) = "setFemale()">
+      <label class="form-check-label" for="FemaleRadio">
+        Nữ
+      </label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label>Địa chỉ e-mail</label>
+        <input type="text " class="form-control" [(ngModel)]="profile.email">
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-8">
+      <div class="form-group">
+        <label>Địa chỉ</label>
+        <input type="text " class="form-control" [(ngModel)]="profile.address">
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-auto">
+      <button class="btn btn-primary" (click)="update()">Cập nhật</button>
+    </div>
+  </div>
+</div>

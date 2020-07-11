@@ -1,0 +1,49 @@
+<nav class="navbar bg-info navbar-dark navbar-expand-lg ">
+  <a class="navbar-brand" href="">Đồ xịn</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+    aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto topbar">
+      <li class="nav-item" [class.active] = "activePage === 'home'" id="HomeBtn"><a class="nav-link" href="">Trang chủ</a></li>
+      <li class="nav-item" [class.active] = "activePage === 'product'" id="ProductBtn"><a class="nav-link" href="/san-pham">Sản phẩm</a></li>
+    </ul>
+    <ul class="navbar-nav ml-auto">
+      <ng-container *ngIf="user">   
+        <li class="nav-item">
+          <div class="dropdown">
+            <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+              data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <img src="{{user.image}}" alt="User's Avatar" class="rounded-circle" width="20px" />
+
+              <span class="text-white p-2 my-1"> {{user.fullName}}</span>
+
+            </a>
+
+            <div class="dropdown-menu dropdown-menu-right offset-2" aria-labelledby="dropdownMenuLink">
+              <a class="dropdown-item cursor-pointer" data-toggle="modal" (click) = "showLogin()">Chuyển tài khoản</a>
+              <a class="dropdown-item" href="/xem-don-hang">Đơn hàng</a>
+              <a class="dropdown-item" href="/thong-tin-ca-nhan">Thông tin cá nhân<span class="float-right"><i
+                    class="far fa-user"></i></span></a>
+              <a class="dropdown-item cursor-pointer" (click)="logout()">Đăng xuất<span class="float-right"><i
+                    class="fas fa-sign-out-alt"></i></span></a>
+            </div>
+          </div>
+        </li>
+      </ng-container>
+      <ng-container *ngIf="!user">
+        <li class="nav-item"><a class="btn btn-success text-white" (click) = "showLogin()">Đăng nhập</a></li>
+        <li class="nav-item "><a class="nav-link cursor-pointer" (click)="showSignUp()">Đăng ký</a></li>
+      </ng-container>
+      <li class="nav-item" id="CartBtn">
+        <a href="/gio-hang" class="nav-link">
+          <i class="icon icon-shopping-cart icon-20"></i>
+          <span class="badge badge-light item-counter">
+            {{itemCount}}
+          </span>
+        </a>
+      </li>
+    </ul>
+  </div>
+</nav>

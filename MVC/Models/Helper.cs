@@ -10,30 +10,29 @@ using System.Reflection;
 using MVC.Areas.Admin.Models;
 using System.Text.RegularExpressions;
 using System.IO;
+using Microsoft.Ajax.Utilities;
 
 namespace MVC.Models
 {
     public class Helper
     {
-        protected static DatabaseDetailsContext db = new DatabaseDetailsContext();
-
         protected static IEnumerable<T> Search<T>(IEnumerable<T> items, string searchString)
         {
             if (String.IsNullOrEmpty(searchString))
-                return items;
+                return items.ToList();
             List<string> searchStrings = searchString.ToLower().Split(' ').ToList();
             List<T> result = new List<T>();
+            PropertyInfo[] property = typeof(T).GetProperties();
             foreach (string str in searchStrings)
             {
-                result.AddRange(items.Where(x =>
+                items.ForEach(x =>
                 {
-                    foreach (var prop in x.GetType().GetProperties())
-                        if (prop.GetValue(x).ToString().ToLower().Contains(str))
-                            return true;
-                    return false;
-                }).ToList());
+                    foreach (PropertyInfo prop in property)
+                        if (prop.GetValue(x) != null && prop.GetValue(x).ToString().ToLower().Contains(str))
+                            result.Add(x);
+                });
             }
-            return result.Distinct();
+            return result.Distinct().ToList();
         }
 
         protected static IEnumerable<T> Search<T, TKey>(IEnumerable<T> items, Func<T, TKey> keySelector, string searchString)
@@ -43,13 +42,17 @@ namespace MVC.Models
             List<string> searchStrings = searchString.ToLower().Split(' ').ToList();
             List<T> result = new List<T>();
             foreach (string str in searchStrings)
-                result.AddRange(items.Where(x => keySelector(x).ToString().ToLower().Contains(str)).ToList());
-            return result.Distinct();
+                items.ForEach(x =>
+                {
+                    if (keySelector(x) != null && keySelector(x).ToString().ToLower().Contains(str))
+                        result.Add(x);
+                });
+            return result.Distinct().ToList();
         }
 
         protected static IEnumerable<TKey> GetPropertyValue<T, TKey>(IEnumerable<T> items, Func<T, TKey> keySelector)
         {
-            return items.Select(keySelector).Distinct();
+            return items.Select(keySelector).Distinct().ToList();
         }
 
         protected static string EncodePassword(string password)
@@ -84,7 +87,7 @@ namespace MVC.Models
             return statisticalViewModel;
         }
 
-        private static IEnumerable<ChartData> AmountSoldAndRevenueByMonth()
+        private static List<ChartData> AmountSoldAndRevenueByMonth()
         {
             List<ChartData> chartDatas = new List<ChartData>();
             var data = OrderHelper.GetOrders().Where(x => x.Complete.HasValue).OrderBy(x => x.Complete)
@@ -111,7 +114,7 @@ namespace MVC.Models
             return chartDatas;
         }
 
-        private static IEnumerable<ChartData> AmountSoldAndRevenueByYear()
+        private static List<ChartData> AmountSoldAndRevenueByYear()
         {
             List<ChartData> chartDatas = new List<ChartData>();
             var data = OrderHelper.GetOrders().Where(x => x.Complete.HasValue).OrderBy(x => x.Complete)
@@ -138,7 +141,7 @@ namespace MVC.Models
             return chartDatas;
         }
 
-        private static IEnumerable<ChartData> AmountSoldAndRevenueByQuarters()
+        private static List<ChartData> AmountSoldAndRevenueByQuarters()
         {
             List<ChartData> chartDatas = new List<ChartData>();
             var data = OrderHelper.GetOrders().Where(x => x.Complete.HasValue).OrderBy(x => x.Complete)
@@ -232,7 +235,7 @@ namespace MVC.Models
             return chartData;
         }
 
-        private static IEnumerable<ChartData> AmountSoldAndRevenueByCategory()
+        private static List<ChartData> AmountSoldAndRevenueByCategory()
         {
             List<ChartData> chartDatas = new List<ChartData>();
             var data = ProductDetailHelper.GetProductDetails().Join(OrderDetailHelper.GetOrderDetails(), x => x.ProductID, y => y.ProductID, (x, y) => new
@@ -293,29 +296,41 @@ namespace MVC.Models
 
     public class UserHelper : Helper
     {
-        public static IEnumerable<User> GetUsers()
+        public static bool CheckValidCode(string userId, string code)
         {
-            return db.Users.Where(x => x.Status == true);
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                var users = db.Users.ToList();
+
+                return users.Where(x => x.UserID == userId.Trim() && x.Verification == code.Trim() && DateTime.Now < x.ExprireTime).Any();
+            }
+        }
+        public static List<User> GetUsers()
+        {
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.Users.ToList();
+            }
         }
 
-        public static IEnumerable<User> GetUsers(string searchString)
+        public static List<User> GetUsers(string searchString)
         {
-            return Search(GetUsers(), searchString);
+            return Search(GetUsers(), searchString).ToList();
         }
 
-        public static IEnumerable<User> GetUsersExcludeAdmins()
+        public static List<User> GetUsersExcludeAdmins()
         {
-            return GetUsers().Where(x => x.Role.ToLower() != "admin");
+            return GetUsers().Where(x => x.Role.ToLower() != "admin").ToList();
         }
 
-        public static IEnumerable<User> GetUsersExcludeAdmins(string searchString)
+        public static List<User> GetUsersExcludeAdmins(string searchString)
         {
-            return Search(GetUsersExcludeAdmins(), searchString);
+            return Search(GetUsersExcludeAdmins(), searchString).ToList();
         }
 
         public static User GetUserByID(int id)
         {
-            return GetUsers().SingleOrDefault(x => x.ID == id && x.Status == true);
+            return GetUsers().SingleOrDefault(x => x.ID == id);
         }
 
         public static IEnumerable<TKey> GetPropertyValue<TKey>(Func<User, TKey> keySelector)
@@ -344,14 +359,20 @@ namespace MVC.Models
         }
         public static bool IsValidUser(string userId, string password)
         {
-            password = EncodePassword(password);
-            return GetUsers().Where(x => x.UserID == userId && x.Password == password).Count() > 0;
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                password = EncodePassword(password);
+                return db.Users.Any(x => x.Status.Value && x.UserID == userId && x.Password == password && x.Active.Value);
+            }
         }
 
         public static void ModifyActive(string userId, bool active)
         {
-            GetUserByUserID(userId).Active = active;
-            db.SaveChanges();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                GetUserByUserID(userId.Trim()).Active = active;
+                db.SaveChanges();
+            }
         }
 
         public static bool UserIDExisted(string userId)
@@ -361,107 +382,145 @@ namespace MVC.Models
 
         public static bool AddUser(User user)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                if (GetUsers().Where(x => x.UserID == user.UserID).Count() > 0)
+                try
+                {
+                    if (GetUsers().Where(x => x.UserID == user.UserID).Count() > 0)
+                        return false;
+                    user.Status = true;
+                    user.Image = String.IsNullOrEmpty(user.Image) ? "Resource/Avatar/avatar.png" : ImageResourceManagement(user.Image, "Resource/Avatar/");
+                    user.Password = EncodePassword(user.Password);
+                    db.Users.Add(user);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
                     return false;
-                user.Status = true;
-                user.Image = String.IsNullOrEmpty(user.Image) ? "Resource/Avatar/avatar.png" : ImageResourceManagement(user.Image, "Resource/Avatar/");
-                user.Password = EncodePassword(user.Password);
-                db.Users.Add(user);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                }
             }
         }
 
         public static bool DeleteUser(int id)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var user = GetUserByID(id);
-                if (user != null)
+                try
                 {
-                    user.Status = false;
-                    db.SaveChanges();
-                    return true;
+                    var user = GetUserByID(id);
+                    if (user != null)
+                    {
+                        user.Status = false;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateUser(User user)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldUser = GetUserByID(user.ID);
-                if (oldUser != null)
+                try
                 {
-                    user.Password = oldUser.Password;
-                    user.Status = true;
-                    db.Users.AddOrUpdate(x => x.ID, user);
-                    db.SaveChanges();
-                    return true;
+                    var oldUser = GetUserByID(user.ID);
+                    if (oldUser != null)
+                    {
+                        user.Password = oldUser.Password;
+                        user.Status = true;
+                        db.Users.AddOrUpdate(x => x.ID, user);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool ChangePassword(string userId, string oldPass, string newPass)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var user = GetUserByUserID(userId);
-                if (user != null)
+                try
                 {
-                    if (user.Password != EncodePassword(oldPass))
-                        return false;
-                    user.Password = EncodePassword(newPass);
-                    db.Users.AddOrUpdate(x => x.ID, user);
-                    db.SaveChanges();
-                    return true;
+                    var user = GetUserByUserID(userId);
+                    if (user != null)
+                    {
+                        if (user.Password != EncodePassword(oldPass))
+                            return false;
+                        user.Password = EncodePassword(newPass);
+                        db.Users.AddOrUpdate(x => x.ID, user);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
-            catch
+        }
+
+        public static bool ChangePassword(string userId, string newPass)
+        {
+            using (ApplicationContext db = new ApplicationContext())
             {
-                return false;
+                try
+                {
+                    var user = GetUserByUserID(userId);
+                    if (user != null)
+                    {
+                        user.Password = EncodePassword(newPass);
+                        db.Users.AddOrUpdate(x => x.ID, user);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
     }
 
     public class ProductHelper : Helper
     {
-        public static IEnumerable<Product> GetProducts()
+        public static List<Product> GetProducts()
         {
-            return db.Products.Where(x => x.Status == true);
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.Products.Where(x => x.Status == true).ToList();
+            }
         }
 
-        public static IEnumerable<Product> GetProducts(string searchString)
+        public static List<Product> GetProducts(string searchString)
         {
-            return Search(GetProducts(), searchString);
+            return Search(GetProducts(), searchString).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetProductsByCategoryID(int id)
+        public static List<ProductOnPage> GetProductsByCategoryID(int id)
         {
             var productIDs = ProductDetailHelper.GetProductIDsByProductCategoryID(id);
             return GetProductOnPages().Where(x => productIDs.Contains(x.ProductID)).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetProductsByCategoryID(int id, string searchString)
+        public static List<ProductOnPage> GetProductsByCategoryID(int id, string searchString)
         {
-            return Search(GetProductsByCategoryID(id), x => x.ProductName, searchString);
+            return Search(GetProductsByCategoryID(id), x => x.ProductName, searchString).ToList();
         }
 
         public static IEnumerable<TKey> GetPropertyValue<TKey>(Func<Product, TKey> keySelector)
@@ -474,7 +533,7 @@ namespace MVC.Models
             return keySelector(GetProductByID(id));
         }
 
-        public static IEnumerable<ProductOnPage> GetProductOnPages()
+        public static List<ProductOnPage> GetProductOnPages()
         {
             return GetProducts().OrderByDescending(x => x.CreatedDate).Select(x => new ProductOnPage()
             {
@@ -487,49 +546,49 @@ namespace MVC.Models
             }).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetProductOnPages(string searchString)
+        public static List<ProductOnPage> GetProductOnPages(string searchString)
         {
-            return Search(GetProductOnPages(), x => x.ProductName, searchString);
+            return Search(GetProductOnPages(), x => x.ProductName, searchString).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetProductsByCategoryMetaTitle(string metaTitle)
+        public static List<ProductOnPage> GetProductsByCategoryMetaTitle(string metaTitle)
         {
             return GetProductOnPages().Where(x => ProductDetailHelper.GetProductIDsByProductCategoryID(ProductCategoryHelper.GetProductCategoryIDByMetaTitle(metaTitle)).Contains(x.ProductID)).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetProductsByCategoryMetaTitle(string metaTitle, string searchString)
+        public static List<ProductOnPage> GetProductsByCategoryMetaTitle(string metaTitle, string searchString)
         {
-            return Search(GetProductsByCategoryMetaTitle(metaTitle), x => x.ProductName, searchString);
+            return Search(GetProductsByCategoryMetaTitle(metaTitle), x => x.ProductName, searchString).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetNewProducts()
+        public static List<ProductOnPage> GetNewProducts()
         {
             return GetProductOnPages().ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetNewProducts(string searchString)
+        public static List<ProductOnPage> GetNewProducts(string searchString)
         {
-            return Search(GetNewProducts(), x => x.ProductName, searchString);
+            return Search(GetNewProducts(), x => x.ProductName, searchString).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetHotProducts()
+        public static List<ProductOnPage> GetHotProducts()
         {
             return GetProductOnPages().Where(x => x.Tag.ToLower() == "hot").ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetHotProducts(string searchString)
+        public static List<ProductOnPage> GetHotProducts(string searchString)
         {
-            return Search(GetHotProducts(), x => x.ProductName, searchString);
+            return Search(GetHotProducts(), x => x.ProductName, searchString).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetBestSalerProducts()
+        public static List<ProductOnPage> GetBestSalerProducts()
         {
             return GetProductOnPages().OrderByDescending(x => OrderDetailHelper.AmountSoldOfProduct(x.ProductID)).ToList();
         }
 
-        public static IEnumerable<ProductOnPage> GetBestSalerProducts(string searchString)
+        public static List<ProductOnPage> GetBestSalerProducts(string searchString)
         {
-            return Search(GetBestSalerProducts(), x => x.ProductName, searchString);
+            return Search(GetBestSalerProducts(), x => x.ProductName, searchString).ToList();
         }
 
         public static DetailViewModel GetProductDetail(int productId, string userId)
@@ -559,7 +618,7 @@ namespace MVC.Models
             return mainProduct;
         }
 
-        public static IEnumerable<ProductOnPage> GetRalateProduct(int productId)
+        public static List<ProductOnPage> GetRalateProduct(int productId)
         {
             return GetProductOnPages(GetProductByID(productId).Name);
         }
@@ -569,75 +628,84 @@ namespace MVC.Models
             return GetProducts().SingleOrDefault(x => x.ID == id);
         }
 
-        public IEnumerable<int> GetProductCategoryIDsByProductID(int id)
+        public List<int> GetProductCategoryIDsByProductID(int id)
         {
             return ProductDetailHelper.GetProductCategoryIDsByProductID(id);
         }
 
         public static bool AddProduct(Product product)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                product.Status = true;
-                product.CreatedDate = DateTime.Now;
-                product.ModifiedDate = DateTime.Now;
-                if (!product.PromotionPrice.HasValue)
-                    product.PromotionPrice = product.Price;
-                db.Products.Add(product);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    product.Status = true;
+                    product.CreatedDate = DateTime.Now;
+                    product.ModifiedDate = DateTime.Now;
+                    if (!product.PromotionPrice.HasValue)
+                        product.PromotionPrice = product.Price;
+                    db.Products.Add(product);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteProduct(int id)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var product = GetProductByID(id);
-                if (product != null)
+                try
                 {
-                    product.Status = false;
-                    db.SaveChanges();
-                    return true;
+                    var product = GetProductByID(id);
+                    if (product != null)
+                    {
+                        product.Status = false;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateProduct(Product product)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldProduct = GetProductByID(product.ID);
-                if (oldProduct != null)
+                try
                 {
-                    product.Status = true;
-                    product.ModifiedDate = DateTime.Now;
-                    db.Products.AddOrUpdate(x => x.ID, product);
-                    db.SaveChanges();
-                    if (!OrderDetailHelper.UpdateOderDatailPriceForProductID(product.ID, product.Price, product.PromotionPrice))
-                        return false;
-                    return true;
+                    var oldProduct = GetProductByID(product.ID);
+                    if (oldProduct != null)
+                    {
+                        product.Status = true;
+                        product.ModifiedDate = DateTime.Now;
+                        db.Products.AddOrUpdate(x => x.ID, product);
+                        db.SaveChanges();
+                        if (!OrderDetailHelper.UpdateOderDatailPriceForProductID(product.ID, product.Price, product.PromotionPrice))
+                            return false;
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         private static string GetTag(Product product)
         {
-            if (product.PromotionPrice < product.Price)
+            if (product.PromotionPrice < product.Price/2)
                 return "hot";
             return "normal";
         }
@@ -645,22 +713,25 @@ namespace MVC.Models
 
     public class ProductDetailHelper : Helper
     {
-        public static IEnumerable<ProductDetail> GetProductDetails()
+        public static List<ProductDetail> GetProductDetails()
         {
-            return db.ProductDetails.ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.ProductDetails.ToList();
+            }
         }
 
-        public static IEnumerable<ProductDetail> GetProductDetails(string searchString)
+        public static List<ProductDetail> GetProductDetails(string searchString)
         {
-            return Search(GetProductDetails(), searchString);
+            return Search(GetProductDetails(), searchString).ToList();
         }
 
-        public static IEnumerable<int> GetProductCategoryIDsByProductID(int id)
+        public static List<int> GetProductCategoryIDsByProductID(int id)
         {
             return GetProductDetails().Where(x => x.ProductID == id).Select(x => x.ProductCategoryID).ToList();
         }
 
-        public static IEnumerable<int> GetProductIDsByProductCategoryID(int id)
+        public static List<int> GetProductIDsByProductCategoryID(int id)
         {
             return GetProductDetails().Where(x => x.ProductCategoryID == id).Select(x => x.ProductID).ToList();
         }
@@ -672,81 +743,96 @@ namespace MVC.Models
 
         public static bool AddProductDetail(int productId, int productCategoryId)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                db.ProductDetails.Add(new ProductDetail() { ProductID = productId, ProductCategoryID = productCategoryId });
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    db.ProductDetails.Add(new ProductDetail() { ProductID = productId, ProductCategoryID = productCategoryId });
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool AddProductDetail(ProductDetail productDetail)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                db.ProductDetails.Add(productDetail);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    db.ProductDetails.Add(productDetail);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteProductDetail(int productId, int productCategoryId)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var productDetail = GetProductDetails().SingleOrDefault(x => x.ProductID == productId && x.ProductCategoryID == productCategoryId);
-                if (productDetail != null)
+                try
                 {
-                    db.ProductDetails.Remove(productDetail);
-                    db.SaveChanges();
-                    return true;
+                    var productDetail = GetProductDetails().SingleOrDefault(x => x.ProductID == productId && x.ProductCategoryID == productCategoryId);
+                    if (productDetail != null)
+                    {
+                        db.ProductDetails.Remove(productDetail);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteProductDetail(ProductDetail productDetail)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldProductDetail = GetProductDetails().SingleOrDefault(x => x.ProductID == productDetail.ProductID && x.ProductCategoryID == productDetail.ProductCategoryID);
-                if (oldProductDetail != null)
+                try
                 {
-                    db.ProductDetails.Remove(oldProductDetail);
-                    db.SaveChanges();
-                    return true;
+                    var oldProductDetail = GetProductDetails().SingleOrDefault(x => x.ProductID == productDetail.ProductID && x.ProductCategoryID == productDetail.ProductCategoryID);
+                    if (oldProductDetail != null)
+                    {
+                        db.ProductDetails.Remove(oldProductDetail);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
     }
 
     public class ProductCategoryHelper : Helper
     {
-        public static IEnumerable<ProductCategory> GetProductCategories()
+        public static List<ProductCategory> GetProductCategories()
         {
-            return db.ProductCategories.Where(x => x.Status == true);
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.ProductCategories.Where(x => x.Status == true).ToList();
+            }
         }
 
-        public static IEnumerable<ProductCategory> GetProductCategories(string searchString)
+        public static List<ProductCategory> GetProductCategories(string searchString)
         {
-            return Search(GetProductCategories(), searchString);
+            return Search(GetProductCategories(), searchString).ToList();
         }
 
         public static ProductCategory GetProductCategoryByID(int id)
@@ -771,67 +857,79 @@ namespace MVC.Models
 
         public static bool AddProductCategory(ProductCategory productCategory)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                productCategory.Status = true;
-                productCategory.CreatedDate = DateTime.Now;
-                productCategory.ModifiedDate = DateTime.Now;
-                db.ProductCategories.Add(productCategory);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    productCategory.Status = true;
+                    productCategory.CreatedDate = DateTime.Now;
+                    productCategory.ModifiedDate = DateTime.Now;
+                    db.ProductCategories.Add(productCategory);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteProductCategory(int id)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var productCategory = GetProductCategoryByID(id);
-                if (productCategory != null)
+                try
                 {
-                    productCategory.Status = false;
-                    db.SaveChanges();
-                    return true;
+                    var productCategory = GetProductCategoryByID(id);
+                    if (productCategory != null)
+                    {
+                        productCategory.Status = false;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateProductCategory(ProductCategory productCategory)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldProductCategory = GetProductCategoryByID(productCategory.ID);
-                if (oldProductCategory != null)
+                try
                 {
-                    productCategory.Status = true;
-                    productCategory.ModifiedDate = DateTime.Now;
-                    db.ProductCategories.AddOrUpdate(x => x.ID, productCategory);
-                    db.SaveChanges();
-                    return true;
+                    var oldProductCategory = GetProductCategoryByID(productCategory.ID);
+                    if (oldProductCategory != null)
+                    {
+                        productCategory.Status = true;
+                        productCategory.ModifiedDate = DateTime.Now;
+                        db.ProductCategories.AddOrUpdate(x => x.ID, productCategory);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
     }
 
     public class OrderHelper : Helper
     {
-        public static IEnumerable<Order> GetOrders()
+        public static List<Order> GetOrders()
         {
-            return db.Orders.Where(x => x.Status == true).ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.Orders.Where(x => x.Status == true).ToList();
+            }
         }
 
         public static IEnumerable<Order> GetOrders(string searchString)
@@ -839,14 +937,14 @@ namespace MVC.Models
             return Search(GetOrders(), searchString);
         }
 
-        private static IEnumerable<OrderManagementViewModel> GetOrderManagementViewModels()
+        private static List<OrderManagementViewModel> GetOrderManagementViewModels()
         {
             return GetOrderViewModels().Select(x => new OrderManagementViewModel()
             {
                 Name = UserHelper.GetPropertyValue((int)GetPropertyValue(x.ID, y => y.CreateBy), y => y.Name),
                 Image = UserHelper.GetPropertyValue((int)GetPropertyValue(x.ID, y => y.CreateBy), y => y.Image),
                 OrderViewModel = x
-            });
+            }).ToList();
         }
 
         public static IEnumerable<OrderManagementViewModel> GetOrderManagementViewModels(string tag = "All", string searchString = null)
@@ -885,9 +983,9 @@ namespace MVC.Models
             return GetOrderViewModels(userId).SingleOrDefault(x => x.ID == orderId);
         }
 
-        public static IEnumerable<OrderViewModel> GetOrderViewModels(string userId, string tag = "All", string searchString = null)
+        public static List<OrderViewModel> GetOrderViewModels(string userId, string tag = "All", string searchString = null)
         {
-            return Search(GetOrderViewModels(userId).Where(x => tag == "All" || x.Tag == tag), x => x.AllNames, searchString);
+            return Search(GetOrderViewModels(userId).Where(x => tag == "All" || x.Tag == tag), x => x.AllNames, searchString).ToList();
         }
 
         public static ShoppingCart GetShoppingCart(string userId)
@@ -926,61 +1024,67 @@ namespace MVC.Models
 
         public static bool Confirmed(int orderId)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var order = GetOrderByID(orderId);
-                if (order != null)
+                try
                 {
-                    if (!order.Ordered.HasValue)
+                    var order = GetOrderByID(orderId);
+                    if (order != null)
                     {
-                        order.Ordered = DateTime.Now;
-                        db.SaveChanges();
+                        if (!order.Ordered.HasValue)
+                        {
+                            order.Ordered = DateTime.Now;
+                            db.SaveChanges();
+                            return true;
+                        }
+                        if (!order.Confirmed.HasValue)
+                        {
+                            order.Confirmed = DateTime.Now;
+                            db.SaveChanges();
+                            return true;
+                        }
+                        if (!order.TookProducts.HasValue)
+                        {
+                            order.TookProducts = DateTime.Now;
+                            db.SaveChanges();
+                            return true;
+                        }
+                        if (!order.Complete.HasValue)
+                        {
+                            order.Complete = DateTime.Now;
+                            db.SaveChanges();
+                            return true;
+                        }
                         return true;
                     }
-                    if (!order.Confirmed.HasValue)
-                    {
-                        order.Confirmed = DateTime.Now;
-                        db.SaveChanges();
-                        return true;
-                    }
-                    if (!order.TookProducts.HasValue)
-                    {
-                        order.TookProducts = DateTime.Now;
-                        db.SaveChanges();
-                        return true;
-                    }
-                    if (!order.Complete.HasValue)
-                    {
-                        order.Complete = DateTime.Now;
-                        db.SaveChanges();
-                        return true;
-                    }
-                    return true;
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool Canceled(int orderId)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var order = GetOrderByID(orderId);
-                if (order != null && !order.Canceled.HasValue)
+                try
                 {
-                    order.Canceled = DateTime.Now;
-                    db.SaveChanges();
-                    return true;
+                    var order = GetOrderByID(orderId);
+                    if (order != null && !order.Canceled.HasValue)
+                    {
+                        order.Canceled = DateTime.Now;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
@@ -1042,9 +1146,9 @@ namespace MVC.Models
             return GetOrders().SingleOrDefault(x => x.ID == id);
         }
 
-        public static IEnumerable<Order> GetOrdersOf(string userId)
+        public static List<Order> GetOrdersOf(string userId)
         {
-            return GetOrders().Where(x => String.IsNullOrEmpty(userId) || UserHelper.GetPropertyValue((int)x.CreateBy, y => y.UserID) == userId);
+            return GetOrders().Where(x => String.IsNullOrEmpty(userId) || UserHelper.GetUserByID((int)x.CreateBy).UserID == userId).ToList();
         }
 
         public static IEnumerable<TKey> GetPropertyValue<TKey>(Func<Order, TKey> keySelector)
@@ -1059,75 +1163,87 @@ namespace MVC.Models
 
         public static bool AddOrder(Order order)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                order.Status = true;
-                order.TransportationFee = GetTransportationFee(order.Transport);
-                order.CreateDate = DateTime.Now;
-                db.Orders.Add(order);
-                db.SaveChanges();
-                return true;
-            }
-            catch (Exception e)
-            {
-                
-                return false;
+                try
+                {
+                    order.Status = true;
+                    order.TransportationFee = GetTransportationFee(order.Transport);
+                    order.CreateDate = DateTime.Now;
+                    db.Orders.Add(order);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch (Exception e)
+                {
+
+                    return false;
+                }
             }
         }
 
         public static bool DeleteOrder(int id)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var order = GetOrderByID(id);
-                if (order != null)
+                try
                 {
-                    order.Status = false;
-                    db.SaveChanges();
-                    return true;
+                    var order = GetOrderByID(id);
+                    if (order != null)
+                    {
+                        order.Status = false;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateOder(Order order)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldOrder = GetOrderByID(order.ID);
-                if (oldOrder != null)
+                try
                 {
-                    order.Status = true;
-                    db.Orders.AddOrUpdate(x => x.ID, order);
-                    db.SaveChanges();
-                    return true;
+                    var oldOrder = GetOrderByID(order.ID);
+                    if (oldOrder != null)
+                    {
+                        order.Status = true;
+                        db.Orders.AddOrUpdate(x => x.ID, order);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
     }
 
     public class OrderDetailHelper : Helper
     {
-        public static IEnumerable<OrderDetail> GetOrderDetails()
+        public static List<OrderDetail> GetOrderDetails()
         {
-            return db.OrderDetails.ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.OrderDetails.ToList();
+            }
         }
 
-        public static IEnumerable<OrderDetail> GetOrderDetails(string searchString)
+        public static List<OrderDetail> GetOrderDetails(string searchString)
         {
-            return Search(GetOrderDetails(), searchString);
+            return Search(GetOrderDetails(), searchString).ToList();
         }
 
-        public static IEnumerable<ProductOnOrder> GetProductOnOrder(int orderId)
+        public static List<ProductOnOrder> GetProductOnOrder(int orderId)
         {
             return GetOrderDetailByOrderID(orderId).Select(x => new ProductOnOrder()
             {
@@ -1140,19 +1256,28 @@ namespace MVC.Models
             }).ToList();
         }
 
-        public static IEnumerable<OrderDetail> GetOrderDetailByOrderID(int id)
+        public static List<OrderDetail> GetOrderDetailByOrderID(int id)
         {
-            return db.OrderDetails.Where(x => x.OrderID == id).ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.OrderDetails.Where(x => x.OrderID == id).ToList();
+            }
         }
 
-        public static IEnumerable<OrderDetail> GetOrderDetailByProductID(int id)
+        public static List<OrderDetail> GetOrderDetailByProductID(int id)
         {
-            return db.OrderDetails.Where(x => x.ProductID == id).ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.OrderDetails.Where(x => x.ProductID == id).ToList();
+            }
         }
 
-        public static IEnumerable<OrderDetail> GetOrderDetailsByCategoryID(int id)
+        public static List<OrderDetail> GetOrderDetailsByCategoryID(int id)
         {
-            return db.OrderDetails.Where(x => ProductDetailHelper.GetProductIDsByProductCategoryID(id).Contains(x.ProductID)).ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.OrderDetails.Where(x => ProductDetailHelper.GetProductIDsByProductCategoryID(id).Contains(x.ProductID)).ToList();
+            }
         }
 
         public static OrderDetail GetOrderDetailByID(int orderId, int productId)
@@ -1187,113 +1312,131 @@ namespace MVC.Models
 
         public static bool AddOrderDetail(OrderDetail orderDetail)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                orderDetail.Price = ProductHelper.GetProductByID(orderDetail.ProductID).Price;
-                orderDetail.PromotionPrice = ProductHelper.GetProductByID(orderDetail.ProductID).PromotionPrice;
-                db.OrderDetails.Add(orderDetail);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    orderDetail.Price = ProductHelper.GetProductByID(orderDetail.ProductID).Price;
+                    orderDetail.PromotionPrice = ProductHelper.GetProductByID(orderDetail.ProductID).PromotionPrice;
+                    db.OrderDetails.Add(orderDetail);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool AddOrderDetail(int orderId, int productId, int count)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                OrderDetail orderDetail = new OrderDetail();
-                orderDetail.OrderID = orderId;
-                orderDetail.ProductID = productId;
-                orderDetail.Count = count;
-                orderDetail.Price = ProductHelper.GetProductByID(productId).Price;
-                orderDetail.PromotionPrice = ProductHelper.GetProductByID(orderDetail.ProductID).PromotionPrice;
-                db.OrderDetails.Add(orderDetail);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    OrderDetail orderDetail = new OrderDetail();
+                    orderDetail.OrderID = orderId;
+                    orderDetail.ProductID = productId;
+                    orderDetail.Count = count;
+                    orderDetail.Price = ProductHelper.GetProductByID(productId).Price;
+                    orderDetail.PromotionPrice = ProductHelper.GetProductByID(orderDetail.ProductID).PromotionPrice;
+                    db.OrderDetails.Add(orderDetail);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteOrderDetail(int orderId, int productId)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var orderDetail = GetOrderDetailByID(orderId, productId);
-                if (orderDetail != null)
+                try
                 {
-                    db.OrderDetails.Remove(orderDetail);
-                    db.SaveChanges();
-                    return true;
+                    var orderDetail = GetOrderDetailByID(orderId, productId);
+                    if (orderDetail != null)
+                    {
+                        db.OrderDetails.Remove(orderDetail);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteOrderDetail(OrderDetail orderDetail)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldOrderDetail = GetOrderDetailByID(orderDetail.OrderID, orderDetail.ProductID);
-                if (oldOrderDetail != null)
+                try
                 {
-                    db.OrderDetails.Remove(oldOrderDetail);
-                    db.SaveChanges();
-                    return true;
+                    var oldOrderDetail = GetOrderDetailByID(orderDetail.OrderID, orderDetail.ProductID);
+                    if (oldOrderDetail != null)
+                    {
+                        db.OrderDetails.Remove(oldOrderDetail);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateOderDatail(int orderId, int productId, int count)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldOrderDetail = GetOrderDetailByID(orderId, productId);
-                if (oldOrderDetail != null)
+                try
                 {
-                    oldOrderDetail.Count = count;
-                    db.SaveChanges();
-                    return true;
+                    var oldOrderDetail = GetOrderDetailByID(orderId, productId);
+                    if (oldOrderDetail != null)
+                    {
+                        oldOrderDetail.Count = count;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateOderDatail(OrderDetail orderDetail)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldOrderDetail = GetOrderDetailByID(orderDetail.OrderID, orderDetail.ProductID);
-                if (oldOrderDetail != null)
+                try
                 {
-                    db.OrderDetails.AddOrUpdate(x => new { x.OrderID, x.ProductID }, orderDetail);
-                    db.SaveChanges();
-                    return true;
+                    var oldOrderDetail = GetOrderDetailByID(orderDetail.OrderID, orderDetail.ProductID);
+                    if (oldOrderDetail != null)
+                    {
+                        db.OrderDetails.AddOrUpdate(x => new { x.OrderID, x.ProductID }, orderDetail);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
@@ -1314,14 +1457,17 @@ namespace MVC.Models
 
     public class RateHelper : Helper
     {
-        public static IEnumerable<Rate> GetRates()
+        public static List<Rate> GetRates()
         {
-            return db.Rates.ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.Rates.ToList();
+            }
         }
 
-        public static IEnumerable<Rate> GetRates(string searchString)
+        public static List<Rate> GetRates(string searchString)
         {
-            return Search(GetRates(), searchString);
+            return Search(GetRates(), searchString).ToList();
         }
 
         public static Rate GetRateByID(int id)
@@ -1379,122 +1525,139 @@ namespace MVC.Models
 
         public static bool AddRate(Rate rate)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldRate = GetRates().SingleOrDefault(x => x.CreateBy == rate.CreateBy && x.ProductID == rate.ProductID);
-                if (oldRate != null)
+                try
                 {
-                    oldRate.RatePoint = rate.RatePoint;
-                    oldRate.CreateDate = DateTime.Now;
-                    return UpdateRate(oldRate);
+                    var oldRate = GetRates().SingleOrDefault(x => x.CreateBy == rate.CreateBy && x.ProductID == rate.ProductID);
+                    if (oldRate != null)
+                    {
+                        oldRate.RatePoint = rate.RatePoint;
+                        oldRate.CreateDate = DateTime.Now;
+                        return UpdateRate(oldRate);
+                    }
+                    rate.CreateDate = DateTime.Now;
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+                    return true;
                 }
-                rate.CreateDate = DateTime.Now;
-                db.Rates.Add(rate);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool AddRate(string userId, int productId, int ratePoint)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                
-                Rate rate = new Rate();
-                rate.CreateBy = UserHelper.GetPropertyValue(userId, x => x.ID);
-                rate.ProductID = productId;
-                var oldRate = GetRates().SingleOrDefault(x => x.CreateBy == rate.CreateBy && x.ProductID == rate.ProductID);
-                if (oldRate != null)
+                try
                 {
-                    oldRate.RatePoint = ratePoint;
-                    oldRate.CreateDate = DateTime.Now;
-                    return UpdateRate(oldRate);
+                    Rate rate = new Rate();
+                    rate.CreateBy = UserHelper.GetPropertyValue(userId, x => x.ID);
+                    rate.ProductID = productId;
+                    var oldRate = GetRates().SingleOrDefault(x => x.CreateBy == rate.CreateBy && x.ProductID == rate.ProductID);
+                    if (oldRate != null)
+                    {
+                        oldRate.RatePoint = ratePoint;
+                        oldRate.CreateDate = DateTime.Now;
+                        return UpdateRate(oldRate);
+                    }
+                    rate.RatePoint = ratePoint;
+                    rate.CreateDate = DateTime.Now;
+                    db.Rates.Add(rate);
+                    db.SaveChanges();
+                    return true;
                 }
-                rate.RatePoint = ratePoint;
-                rate.CreateDate = DateTime.Now;
-                db.Rates.Add(rate);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteRate(int id)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var rate = GetRateByID(id);
-                if (rate != null)
+                try
                 {
-                    db.Rates.Remove(rate);
-                    db.SaveChanges();
-                    return true;
+                    var rate = GetRateByID(id);
+                    if (rate != null)
+                    {
+                        db.Rates.Remove(rate);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteRate(Rate rate)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldRate = GetRateByID(rate.ID);
-                if (oldRate != null)
+                try
                 {
-                    db.Rates.Remove(oldRate);
-                    db.SaveChanges();
-                    return true;
+                    var oldRate = GetRateByID(rate.ID);
+                    if (oldRate != null)
+                    {
+                        db.Rates.Remove(oldRate);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateRate(Rate rate)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldRate = GetRateByID(rate.ID);
-                if (oldRate != null)
+                try
                 {
-                    rate.CreateDate = DateTime.Now;
-                    db.Rates.AddOrUpdate(x => x.ID, rate);
-                    db.SaveChanges();
-                    return true;
+                    var oldRate = GetRateByID(rate.ID);
+                    if (oldRate != null)
+                    {
+                        rate.CreateDate = DateTime.Now;
+                        db.Rates.AddOrUpdate(x => x.ID, rate);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
     }
 
     public class CommentHelper : Helper
     {
-        public static IEnumerable<Comment> GetComments()
+        public static List<Comment> GetComments()
         {
-            return db.Comments.ToList();
+            using (ApplicationContext db = new ApplicationContext())
+            {
+                return db.Comments.ToList();
+            }
         }
 
-        public static IEnumerable<Comment> GetComments(string searchString)
+        public static List<Comment> GetComments(string searchString)
         {
-            return Search(GetComments(), searchString);
+            return Search(GetComments(), searchString).ToList();
         }
 
         public static Comment GetCommentByID(int id)
@@ -1514,134 +1677,152 @@ namespace MVC.Models
 
         public static IEnumerable<CommentView> GetCommentView(int productId, string userId)
         {
-            return GetComments().Where(x => x.ProductID == productId && !x.ParentID.HasValue).OrderByDescending(x => x.CreateDate).Select(x => new CommentView()
+            return GetComments().Where(x => x.ProductID == productId && !x.ParentID.HasValue && UserHelper.GetUserByID((int)x.CreateBy) != null).OrderByDescending(x => x.CreateDate).Select(x => new CommentView()
             {
                 Comment = x,
-                Name = UserHelper.GetPropertyValue((int)x.CreateBy, y => y.Name),
-                Image = UserHelper.GetPropertyValue((int)x.CreateBy, y => y.Image),
-                Manager = UserHelper.GetPropertyValue((int)x.CreateBy, y => y.Role).ToLower() != "customer",
-                Modify = !String.IsNullOrEmpty(userId) && (UserHelper.GetPropertyValue(userId, y => y.Role).ToLower() != "customer" || UserHelper.GetPropertyValue((int)x.CreateBy, y => y.UserID) == userId),
+                Name = UserHelper.GetUserByID((int)x.CreateBy).Name,
+                Image = UserHelper.GetUserByID((int)x.CreateBy).Image,
+                Manager = UserHelper.GetUserByID((int)x.CreateBy).Role.ToLower() != "customer",
+                Modify = !String.IsNullOrEmpty(userId) && (UserHelper.GetUserByID((int)x.CreateBy).Role.ToLower() != "customer" || UserHelper.GetUserByID((int)x.CreateBy).UserID == userId),
                 ReplyComment = GetComments().Where(y => y.ProductID == productId && y.ParentID == x.ID).OrderBy(y => y.CreateDate).Select(y => new CommentView()
                 {
                     Comment = y,
-                    Name = UserHelper.GetPropertyValue((int)y.CreateBy, z => z.Name),
-                    Image = UserHelper.GetPropertyValue((int)y.CreateBy, z => z.Image),
-                    Manager = UserHelper.GetPropertyValue((int)y.CreateBy, z => z.Role).ToLower() != "customer",
-                    Modify = !String.IsNullOrEmpty(userId) && (UserHelper.GetPropertyValue(userId, z => z.Role).ToLower() != "customer" || UserHelper.GetPropertyValue((int)y.CreateBy, z => z.UserID) == userId)
+                    Name = UserHelper.GetUserByID((int)y.CreateBy).Name,
+                    Image = UserHelper.GetUserByID((int)y.CreateBy).Image,
+                    Manager = UserHelper.GetUserByID((int)y.CreateBy).Role.ToLower() != "customer",
+                    Modify = !String.IsNullOrEmpty(userId) && (UserHelper.GetUserByID((int)y.CreateBy).Role.ToLower() != "customer" || UserHelper.GetUserByID((int)y.CreateBy).UserID == userId)
                 }).ToList()
             });
         }
 
         public static bool AddComment(Comment comment)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                comment.CreateDate = DateTime.Now;
-                db.Comments.Add(comment);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    comment.CreateDate = DateTime.Now;
+                    db.Comments.Add(comment);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool AddComment(int productId, int createBy, string content, int? parentId = null)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                Comment comment = new Comment();
-                comment.ProductID = productId;
-                comment.CreateBy = createBy;
-                comment.Content = content;
-                comment.ParentID = parentId;
-                comment.CreateDate = DateTime.Now;
-                db.Comments.Add(comment);
-                db.SaveChanges();
-                return true;
-            }
-            catch
-            {
-                return false;
+                try
+                {
+                    Comment comment = new Comment();
+                    comment.ProductID = productId;
+                    comment.CreateBy = createBy;
+                    comment.Content = content;
+                    comment.ParentID = parentId;
+                    comment.CreateDate = DateTime.Now;
+                    db.Comments.Add(comment);
+                    db.SaveChanges();
+                    return true;
+                }
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteComment(int id)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var comment = GetCommentByID(id);
-                if (comment != null)
+                try
                 {
-                    db.Comments.Remove(comment);
-                    db.SaveChanges();
-                    return true;
+                    var comment = GetCommentByID(id);
+                    if (comment != null)
+                    {
+                        db.Comments.Remove(comment);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool DeleteComment(Comment comment)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldComment = GetCommentByID(comment.ID);
-                if (oldComment != null)
+                try
                 {
-                    db.Comments.Remove(oldComment);
-                    db.SaveChanges();
-                    return true;
+                    var oldComment = GetCommentByID(comment.ID);
+                    if (oldComment != null)
+                    {
+                        db.Comments.Remove(oldComment);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateComment(Comment comment)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldComment = GetCommentByID(comment.ID);
-                if (oldComment != null)
+                try
                 {
-                    comment.LastModify = DateTime.Now;
-                    db.Comments.AddOrUpdate(x => x.ID, comment);
-                    db.SaveChanges();
-                    return true;
+                    var oldComment = GetCommentByID(comment.ID);
+                    if (oldComment != null)
+                    {
+                        comment.LastModify = DateTime.Now;
+                        db.Comments.AddOrUpdate(x => x.ID, comment);
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
 
         public static bool UpdateComment(int id, string content)
         {
-            try
+            using (ApplicationContext db = new ApplicationContext())
             {
-                var oldComment = GetCommentByID(id);
-                if (oldComment != null)
+                try
                 {
-                    oldComment.Content = content;
-                    oldComment.LastModify = DateTime.Now;
-                    db.SaveChanges();
-                    return true;
+                    var oldComment = GetCommentByID(id);
+                    if (oldComment != null)
+                    {
+                        oldComment.Content = content;
+                        oldComment.LastModify = DateTime.Now;
+                        db.SaveChanges();
+                        return true;
+                    }
+                    return false;
                 }
-                return false;
-            }
-            catch
-            {
-                return false;
+                catch
+                {
+                    return false;
+                }
             }
         }
     }

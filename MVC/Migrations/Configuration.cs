@@ -5,7 +5,7 @@ namespace MVC.Migrations
     using System.Data.Entity.Migrations;
     using System.Linq;
 
-    internal sealed class Configuration : DbMigrationsConfiguration<MVC.Models.DatabaseDetailsContext>
+    internal sealed class Configuration : DbMigrationsConfiguration<MVC.Models.ApplicationContext>
     {
         public Configuration()
         {
@@ -14,7 +14,7 @@ namespace MVC.Migrations
             ContextKey = "MVC.Models.DatabaseDetailsContext";
         }
 
-        protected override void Seed(MVC.Models.DatabaseDetailsContext context)
+        protected override void Seed(MVC.Models.ApplicationContext context)
         {
             //  This method will be called after migrating to the latest version.
 

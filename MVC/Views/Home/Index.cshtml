@@ -7,11 +7,11 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-6 order-last order-lg-first">
-                <p class="big-header">Ốp lưng thời trang<br />cho riêng bạn</p>
+                <p class="big-header">Phong cách <br /> thời trang <br /> cho riêng bạn</p>
                 <p class="smaller-header">Trùng lặp phong cách? Không còn là vấn đề</p>
                 <div class="row w-100 m-auto">
                     <div class="col-auto mx-auto mx-lg-0">
-                        <a class="btn-pick-your-case text-decoration-none" href="/Product">CHỌN NGAY ỐP LƯNG</a>
+                        <a class="btn-pick-your-case text-decoration-none" href="/Product">CHỌN NGAY PHONG CÁCH</a>
                     </div>
                 </div>
 
@@ -21,7 +21,7 @@
                     <div class="col-auto flow-card">
                         <ul class="text-decoration-none group-text">
                             <li><div class="circle-bullet"></div> <span>Bạn là người thích sự duy nhất</span></li>
-                            <li><div class="circle-bullet circle-bullet-2"></div> <span>Bạn muốn thiết kế chiếc ốp lưng<br />cho riêng mình?</span></li>
+                            <li><div class="circle-bullet circle-bullet-2"></div> <span>Bạn muốn mẫu thiết kế phù hợp với <br/>bản thân mình?</span></li>
                             <li><div class="circle-bullet"></div> <span>Hãy để chúng tôi giúp bạn. <a href="/Design">Click!</a></span></li>
                         </ul>
                     </div>
@@ -42,16 +42,16 @@
                 </ol>
                 <div class="carousel-inner">
                     <div class="carousel-item active">
-                        <img src="~/Resource/BANNERR_2048x.png" class=" w-100 d-block" alt="SlideShow Pictures">
+                        <img src="~/Resource/banner1.jpg" class=" w-100 d-block vh-75" alt="SlideShow Pictures">
                     </div>
                     <div class="carousel-item">
-                        <img src="~/Resource/PHONE-BANNER_2000x.png" class="w-100 d-block" alt="SlideShow Pictures">
+                        <img src="~/Resource/banner2.jpg" class="w-100 d-block vh-75" alt="SlideShow Pictures">
                     </div>
                     <div class="carousel-item">
-                        <img src="~/Resource/phone-case-banner.jpg" class="d-block w-100" alt="SlideShow Pictures">
+                        <img src="~/Resource/banner3.jpg" class="d-block w-100 vh-75" alt="SlideShow Pictures">
                     </div>
                     <div class="carousel-item">
-                        <img src="~/Resource/phone-cases-banner_1024x1024.gif" class="d-block w-100" alt="SlideShow Pictures">
+                        <img src="~/Resource/banner4.jpg" class="d-block w-100 vh-75" alt="SlideShow Pictures">
                     </div>
                 </div>
                 <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
@@ -71,7 +71,7 @@
 <div class="container px-0">
     <div class="container container-recommend">
         <div class="row w-100 pr-0">
-            <a href="#" class="text-decoration-none"><h2 class="pl-4 pt-3 text-recommend">Ốp lưng đề cử</h2></a>
+            <a href="#" class="text-decoration-none"><h2 class="pl-4 pt-3 text-recommend">Thời trang đề cử</h2></a>
             <div class="ml-auto col-auto align-self-end pr-0">
 
                 <a href="/Product/Index?metaTitle=Best-Saler" class="text-decoration-none text-recommend float-right">Click to check it out! <i class="fas fa-angle-right"></i></a>
@@ -86,7 +86,7 @@
                             <div class="carousel-item active">
                                 <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 d-block float-left">
                                     <a href="/Product/Detail/@Model.ListBestSaler[0].ProductID">
-                                        <img src="@Url.Content("~/"+Model.ListBestSaler[0].ImageLink)" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
+                                        <img src="@Model.ListBestSaler[0].ImageLink" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
                                     </a>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                 <div class="carousel-item ">
                                     <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 d-block float-left">
                                         <a href="/Product/Detail/@Model.ListBestSaler[i].ProductID">
-                                            <img src="@Url.Content("~/"+Model.ListBestSaler[i].ImageLink)" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
+                                            <img src="@Model.ListBestSaler[i].ImageLink" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
                                         </a>
                                     </div>
                                 </div>
@@ -116,7 +116,7 @@
     </div>
     <div class="container container-lasted">
         <div class="row w-100 pr-0">
-            <a href="#" class="text-decoration-none"><h2 class="pl-4 pt-3 text-lasted">Ốp lưng mới nhất!</h2></a>
+            <a href="#" class="text-decoration-none"><h2 class="pl-4 pt-3 text-lasted">Phong cách thời trang trending!</h2></a>
             <div class="ml-auto col-auto align-self-end pr-0">
 
                 <a href="/Product/Index?metaTitle=Lasted" class="text-decoration-none text-lasted float-right">Click to check it out! <i class="fas fa-angle-right"></i></a>
@@ -131,7 +131,7 @@
                             <div class="carousel-item active">
                                 <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 d-block float-left">
                                     <a href="/Product/Detail/@Model.ListNew[0].ProductID">
-                                        <img src="@Url.Content("~/"+Model.ListNew[0].ImageLink)" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
+                                        <img src="@Model.ListNew[0].ImageLink" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
                                     </a>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@
                                 <div class="carousel-item ">
                                     <div class="col-6 col-sm-4 col-md-3 col-lg-3 col-xl-2 d-block float-left">
                                         <a href="/Product/Detail/@Model.ListNew[i].ProductID">
-                                            <img src="@Url.Content("~/"+Model.ListNew[i].ImageLink)" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
+                                            <img src="@Model.ListNew[i].ImageLink" alt="Alternate Text" class="image-on-home d-block img-fluid m-auto" />
                                         </a>
                                     </div>
                                 </div>
@@ -180,7 +180,7 @@
         <div class="col-12 col-sm-6 col-lg-3">
             <img src="~/Resource/trust.png" alt="Trust" class="rounded-circle mx-auto d-block" width="100px" height="100px" />
             <h5 class="text-center my-3 text-info">UY TÍN VỮNG NIỀM TIN</h5>
-            <p class="text-justify">Sàn giao dịch thương mại điện tử opxin.com mong muốn đem lại một tiện ích mua hàng trực tuyến tin cậy, tiết kiệm và thấu hiểu người dùng. Cam kết bảo mật thông tin cá nhân của khách hàng khi khách hàng tin vào chúng tôi cung cấp thông tin cá nhân của khách hàng cho chúng tôi khi mua sắm</p>
+            <p class="text-justify">Sàn giao dịch thương mại điện tử doxin.com mong muốn đem lại một tiện ích mua hàng trực tuyến tin cậy, tiết kiệm và thấu hiểu người dùng. Cam kết bảo mật thông tin cá nhân của khách hàng khi khách hàng tin vào chúng tôi cung cấp thông tin cá nhân của khách hàng cho chúng tôi khi mua sắm</p>
         </div>
     </div>
 </div>

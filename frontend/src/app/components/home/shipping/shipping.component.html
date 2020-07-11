@@ -1,0 +1,57 @@
+<ng-container *ngIf="!user">
+  <shipping-input (callback) = "moveToCheckout($event)">
+
+  </shipping-input>
+</ng-container>
+<ng-container *ngIf="user">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        Chọn địa chỉ giao hàng bên dưới:
+      </div>
+    </div>
+    <div class="row">
+      <ng-container *ngFor="let shipping of shippings; let i = index">
+        <div class="col bg-dark-light d-flex flex-column my-2" [class.mr-2] = "i%2==0" [class.ml-2] = "i%2==1">
+          <span>
+            <strong>{{shipping.name}}</strong>
+          </span>
+          <span>
+            Email: {{shipping.email}}
+          </span>
+          <span>
+            Địa chỉ: {{shipping.address}}
+          </span>
+          <span>
+            Điện thoại: {{shipping.phoneNumber}}
+          </span>
+          <div>
+            <div class="row py-2">
+              <div class="col-auto">
+
+                <button class="btn mr-2" [class.btn-primary] = "i==0" [class.btn-secondary] = "i!=0" (click)="moveToCheckout(shipping)">Giao đến địa chỉ này</button>
+                <button class="btn btn-light" (click)="updateShipping(shipping)">Sửa</button>
+                <button class="btn btn-light ml-2" *ngIf="i!=0" (click)="onDelete(shipping.id)">Xóa</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="w-100" *ngIf="i%2==1">
+
+        </div>
+        <div class="col ml-2" *ngIf="i == shippings.length-1"></div>
+      </ng-container>
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-12">
+      Bạn muốn giao đến địa chỉ khác? <span class="text-info cursor-pointer" (click)="updateShipping(undefined)">Thêm địa chỉ giao hàng mới</span>
+    </div>
+  </div>
+  <div class="collapse" id="shippingCollapse">
+    <shipping-input [shippingInput] = "selectedShipping" (cancel) = "closeCollapse()" (callback) = "moveToCheckout($event)" (updated) = "getShipmentDetails()">
+
+    </shipping-input>
+  </div>
+</ng-container>

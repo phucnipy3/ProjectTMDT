@@ -1,0 +1,113 @@
+<div class="container">
+  <div class="container bg-dark-light my-4 px-5 py-4">
+    <div class="row">
+      <div class="col-5">
+        <div class="row">
+          <div class="col-12 py-2">
+            <span class="h6">{{order.shipmentDetail.name}}</span>
+          </div>
+          <div class="col-12  py-2">
+            <span>{{order.shipmentDetail.phoneNumber}}</span>
+          </div>
+          <div class="col-12  py-2">
+            <span>
+              {{order.shipmentDetail.address}}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="col-5 ml-auto">
+        <div class="row">
+          <ng-container *ngFor="let item of order.timeLogs">
+            <div class="col-12 py-1">
+              <div class="row">
+                <div class="col-auto">
+                  <span>{{item.timeLine}} </span>
+                </div>
+                <div class="col-auto">
+                  -
+                </div>
+                <div class="col-auto">
+                  <span> {{item.event}}</span>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container py-2 bg-dark-light">
+    <div class="row">
+      <div class="col-12 px-4">
+        <span class="text-danger float-right h6">
+          {{order.status}}
+        </span>
+      </div>
+    </div>
+    <ng-container *ngFor="let product of order.products">
+      <div class="row pb-1">
+        <div class="col-1">
+          <div class="row">
+            <div class="col-auto mx-auto">
+              <a href="{{'/chi-tiet/' + product.id}}">
+                <img src="{{product.image}}" alt="Alternate Text" width="80" height="130" />
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-9 px-4 align-self-center">
+          <span class="h5">{{product.name}}</span>
+          <br />
+          <span>x{{product.count}}</span>
+        </div>
+        <div class="col-2 align-self-center px-4">
+          <span class="float-right text-right">
+            <ng-container *ngIf="product.promotionPrice">
+              <del>{{product.price | number}}đ</del> <br />
+              <span class="text-danger">{{product.promotionPrice | number}}đ</span>
+            </ng-container>
+            <ng-container *ngIf="!product.promotionPrice">
+              <span>{{product.price | number}}đ</span>
+
+            </ng-container>
+          </span>
+        </div>
+      </div>
+    </ng-container>
+
+    <div class="row mt-3">
+      <div class="col-4 offset-6">
+        <div class="row">
+          <div class="col-12">
+            <span class="text-danger h6 float-right">Tổng tiền hàng:</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h6 float-right">Vận chuyển - {{order.deliveryMethod}}:</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h5 float-right">Tổng tiền:</span>
+          </div>
+        </div>
+      </div>
+      <div class="col-2 px-4">
+        <div class="row">
+          <div class="col-12">
+            <span class="text-danger h6 float-right">{{order.totalProductMoney | number}}đ</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h6 float-right">{{order.totalShipping | number }}đ</span>
+          </div>
+          <div class="col-12">
+            <span class="text-danger h5 float-right">{{order.totalMoney | number}}đ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-auto ml-auto pr-4">
+        <button class="btn btn-outline-secondary" *ngIf="order.canCancel" (click)="cancelOrder()">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,39 @@
+@import url("style.css");
+
+.icon{
+    cursor: pointer;
+
+    &.icon-10{
+        font-size: 0.625rem;
+    }
+    &.icon-12{
+        font-size: 0.75rem;
+    }
+    &.icon-14{
+        font-size: 0.875rem;
+    }
+    &.icon-16{
+        font-size: 1rem;
+    }
+    &.icon-18{
+        font-size: 1.125rem;
+    }
+    &.icon-20{
+        font-size: 1.25rem;
+    }
+    &.icon-22{
+        font-size: 1.325rem;
+    }
+    &.icon-24{
+        font-size: 1.5rem;
+    }
+    &.icon-26{
+        font-size: 1.625rem;
+    }
+    &.icon-36{
+        font-size: 2.25rem;
+    }
+    &.icon-48{
+        font-size: 3rem;
+    }
+}

@@ -1,0 +1,17 @@
+login-popup{
+    .forget-password{
+        font-size: .8rem;
+        color: #428bca;
+        cursor: pointer;
+        &:hover{
+            color: lighten($color: #428bca, $amount: 15);
+        }
+    }
+    .sign-up-now{
+        color: #428bca;
+        cursor: pointer;
+        &:hover{
+            color: lighten($color: #428bca, $amount: 15);
+        }
+    }
+}

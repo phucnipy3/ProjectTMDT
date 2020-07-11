@@ -1,0 +1,89 @@
+<div class="navbar order-navbar navbar-expand-md">
+  <button class="navbar-toggler ml-auto" type="button" data-toggle="collapse" data-target="#navbarOrderContent"
+    aria-controls="navbarOrderContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarOrderContent">
+    <ul class="navbar-nav mr-auto order-navbar-nav">
+      <li *ngFor="let status of orderStatus" class="nav-item order-bar" (click)="changeStatus(status)"><a
+          class="nav-link cursor-pointer">{{status.description}}</a></li>
+    </ul>
+  </div>
+</div>
+<div class="container px-5 py-4 ">
+  <div class="my-3">
+    <div class="form-row">
+      <div class="col-3">
+        <input class="form-control" type="text" [(ngModel)]="tempString" placeholder="Tìm kiếm..." />
+      </div>
+      <div class="col-auto">
+        <button class="btn btn-secondary" (click)="search()">Tìm kiếm</button>
+      </div>
+    </div>
+  </div>
+  <ng-container *ngIf="!orders.length">
+    Không có đơn hàng nào
+  </ng-container>
+  
+  <ng-container
+    *ngFor="let order of orders | paginate : {itemsPerPage: pageSize, currentPage: pageNumber, totalItems: totalCount}">
+    <div class="container py-2 bg-dark-light my-3">
+      <div class="row">
+        <div class="col-12 px-4">
+          <span class="text-danger float-right h6">
+            {{order.status}}
+          </span>
+        </div>
+      </div>
+      <ng-container *ngFor="let product of order.products ">
+        <div class="row pb-1">
+          <div class="col-1">
+            <div class="row">
+              <div class="col-auto mx-auto ">
+                <a href="{{'/chi-tiet/'+product.id}}">
+                  <img src="{{product.image}}" alt="Alternate Text" width="80" height="130" />
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="col-9 px-4 align-self-center">
+            <span class="h5">{{product.name}}</span>
+            <br />
+            <span>x {{product.count}}</span>
+          </div>
+          <div class="col-2 align-self-center px-4">
+            <span class="float-right text-right">
+              <ng-container *ngIf="product.promotionPrice">
+                <del>{{product.price | number}}đ</del> <br />
+                <span class="text-danger">{{product.promotionPrice | number}}đ</span>
+              </ng-container>
+              <ng-container *ngIf="!product.promotionPrice">
+                <span>{{product.price | number}}đ</span>
+
+              </ng-container>
+
+            </span>
+          </div>
+        </div>
+      </ng-container>
+      <div class="row mt-3">
+        <div class="col-2 offset-8">
+          <span class="text-danger h5 float-right">Tổng tiền:</span>
+        </div>
+        <div class="col-2 px-4">
+          <span class="text-danger h5 float-right">{{order.totalMoney | number}}</span>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-auto ml-auto">
+          <div class="w-auto">
+            <button class="btn btn-outline-secondary mr-3" *ngIf="order.canCancel" (click)="cancelOrder(order.id)">Hủy</button>
+            <button class="btn btn-info" (click)="moveToDetail(order.id)">Xem chi tiết</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+</div>
+<pagination-controls *ngIf="orders.length" (pageChange)="changePage($event)"></pagination-controls>
